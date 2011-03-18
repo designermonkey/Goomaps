@@ -12,15 +12,22 @@
 	/**
 	 *	Google Maps API v3 for jQuery
 	 */
-	$.fn.googlemaps = function(options){
+	$.fn.goomaps = function(options){
 
 		options = $.extend({}, $.fn.googlemaps.defaults, options);
+
+		return this.each(function(){
+			var goomap = new google.maps.Map(this);
+			$(this).data('goomaps', {
+				map: goomap
+			});
+		});
 	}
 
 	/**
 	 *	@name defaults
 	 */
-	$.fn.googlemaps.defaults = {
+	$.fn.goomaps.defaults = {
 		center: new google.maps.LatLng(0,0),
 		zoom: 1,
 		MapTypeId: google.maps.MapTypeId.ROADMAP
@@ -29,8 +36,8 @@
 	/**
 	 *	@name getMap
 	 */
-	$.fn.googlemaps.getMap = function(){
-
+	$.fn.goomaps.getMap = function(){
+		return $(this).data('goomap').map;
 	}
 
 })(jQuery);

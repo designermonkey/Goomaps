@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <title><!-- Insert your title here --></title>
+	<script type="text/javascript" src="jquery-1.5.1.min.js"></script>
+	<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false&language=en"></script>
+	<script type="text/javascript" src="jquery.goomaps.js"></script>
+	<style>
+		body {font: 12px Verdana;}
+		#map {height: 500px;}
+	</style>
+</head>
+<body>
+	<div id="map"></div>
+	<div id="dir"></div>
+	<div id="info">This is test info!</div>
+    <script type="text/javascript">
+		o = {
+			// Default initialisation options.
+			center: [52.40364, 0.29626],
+			//center: "14 Stevensons Road, Longstanton, CB24 3GY",
+			zoom: 10,
+			type: 'ROADMAP', // ROADMAP, HYBRID, SATELLITE, TERRAIN
+			/*markers: function(){ // a function returning markers
+				return {
+					position: o.center,
+					title: 'test title',
+					info: '#info'
+				};
+			},*/
+			// Rectangle Options
+			rectangles: [
+				{
+					// Required
+					bounds: [
+						[51.257347,0.054666],
+						[52.257347,0.154988]
+					],
+					fillColor: '#ff0000',
+					fillOpacity: 0.4,
+					strokeColor: '#00ff00',
+					strokeOpacity: 1,
+					strokeWeight: 2,
+					// Optional
+					clickable: true
+				}
+			]
+		};
+		$(document).ready(function(){
+			$('#map').googlemaps(o);
+		});
+	</script>
+</body>
+</html>
