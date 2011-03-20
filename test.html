@@ -8,7 +8,7 @@
 	<script type="text/javascript" src="jquery.goomaps.js"></script>
 	<style>
 		body {font: 12px Verdana;}
-		#map {height: 500px;}
+		#map {height: 200px;}
 	</style>
 </head>
 <body>
@@ -16,39 +16,44 @@
 	<div id="dir"></div>
 	<div id="info">This is test info!</div>
     <script type="text/javascript">
-		o = {
-			// Default initialisation options.
-			center: [52.40364, 0.29626],
-			//center: "14 Stevensons Road, Longstanton, CB24 3GY",
+		var options = {
+			debug: true,
+		//	center: [15.12345, 1.12345],
+			center: "14 Stevensons Road, Longstanton, Cambridge, CB24 3GY",
 			zoom: 10,
-			type: 'ROADMAP', // ROADMAP, HYBRID, SATELLITE, TERRAIN
-			/*markers: function(){ // a function returning markers
-				return {
-					position: o.center,
-					title: 'test title',
-					info: '#info'
-				};
-			},*/
-			// Rectangle Options
-			rectangles: [
-				{
-					// Required
-					bounds: [
-						[51.257347,0.054666],
-						[52.257347,0.154988]
-					],
-					fillColor: '#ff0000',
-					fillOpacity: 0.4,
-					strokeColor: '#00ff00',
-					strokeOpacity: 1,
-					strokeWeight: 2,
-					// Optional
-					clickable: true
-				}
-			]
-		};
+			MapTypeId: "roadmap"
+		}
+var marker = [
+	{
+		options: {
+			// Required
+		//	position: [52.257347,0.054988],
+			position: '14 Stevensons Road, Longstanton, Cambridge, CB24 3GY',
+			title: 'A Test Marker',
+			// Optional
+			// Custom icon, either string or object of options
+			clickable: true,
+			dragable: true,
+			info: 'This is test Marker Info'
+		}
+	},
+	{
+		options: {
+			// Required
+		//	position: [52.257347,0.054988],
+			position: '10 Bullen Close, Longstanton, Cambridge, CB24 3GT',
+			title: 'Another Test Marker',
+			// Optional
+			// Custom icon, either string or object of options
+			clickable: true,
+			dragable: true,
+			info: 'This is more test Marker Info'
+		}
+	}
+];
 		$(document).ready(function(){
-			$('#map').googlemaps(o);
+			$('#map').goomaps(options);
+			$('#map').goomaps('markers', marker);
 		});
 	</script>
 </body>

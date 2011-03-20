@@ -1,6 +1,7 @@
 
 // Options to initialise a simple map
 var goomap = {
+	debug: true;
 	center: [15.12345, 1.12345],
 //	center: "14 Stevensons Road, Longstanton, Cambridge, CB24 3GY",
 	zoom: 10,
@@ -38,12 +39,12 @@ var marker = {
 	},
 	events: {
 		click: function(event){},
-		dblclick: function(){},
+		dblclick: function(event){},
 		rightclick: function(event){},
-		mousedown: function(){},
-		mouseup: function(){},
-		mouseover: function(){},
-		mouseout: function(){},
+		mousedown: function(event){},
+		mouseup: function(event){},
+		mouseover: function(event){},
+		mouseout: function(event){},
 		drag: function(event){},
 		dragstart: function(event){},
 		dragend: function(event){}
@@ -157,6 +158,3 @@ var polygons = [
 ]
 // Function returning either Array or Object
 var polygonfunc = function(){}
-
-
-
