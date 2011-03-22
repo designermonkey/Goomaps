@@ -133,8 +133,8 @@
 					if(marker.options.position && $.isArray(marker.options.position)){
 						marker.options.position = $.fn.goomaps.latlng(marker.options.position);
 						add.markers[i] = new google.maps.Marker(marker.options);
-						if(marker.events){
-							$.fn.goomaps.setevents(add.markers[i], marker.events);
+						if(marker.options.events){
+							$.fn.goomaps.setevents(add.markers[i], marker.options.events);
 						}
 						if(marker.options.info) $.fn.goomaps.infowindow(add.markers[i], marker.options.info, map);
 						$.extend($this.data('goomaps'), add);
@@ -142,8 +142,8 @@
 						$.fn.goomaps.geocode(marker.options.position, function(result){
 							marker.options.position = result;
 							add.markers[i] = new google.maps.Marker(marker.options);
-							if(marker.events){
-								$.fn.goomaps.setevents(add.markers[i], marker.events);
+							if(marker.options.events){
+								$.fn.goomaps.setevents(add.markers[i], marker.options.events);
 							}
 							if(marker.options.info) $.fn.goomaps.infowindow(add.markers[i], marker.options.info, map);
 							//console.log(add);
