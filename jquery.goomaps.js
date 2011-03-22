@@ -313,9 +313,9 @@
 		}else{
 			infowindow = new google.maps.InfoWindow({content: info});
 		}
-		google.maps.event.addListener(marker, 'click', function(){
+		$.fn.goomaps.setevents(marker, { 'click': function(){
 			infowindow.open(map, marker);
-		});
+		}});
 	};
 
 
@@ -327,8 +327,8 @@
 	 *
 	 */
 	$.fn.goomaps.setevents = function(target, events){
-		events.each(function(event, callback){
-			google.maps.events.addListener(target, event, callback);
+		$.each(events, function(event, callback){
+			google.maps.event.addListener(target, event, callback);
 		});
 	};
 	/**
