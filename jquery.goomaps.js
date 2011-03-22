@@ -104,18 +104,23 @@
 		},
 
 		/**
-		 * Add Markers to the map
+		 * Add Markers to an existing Google Map object.
+		 *
+		 * Markers are stored with the element containing the map, as an array
+		 * of Google Maps Marker objects. Markers may not save in the same order
+		 * that they are passed in to the method. They can be identified by their
+		 * latitude and longitue coordinates.
 		 *
 		 * @param   {Array} markers   Array of Marker options
 		 *
 		 * @returns {Object}   Returns the object passed in, for chainability
 		 */
-		markers: function(markers){
+		setmarkers: function(markers){
 			return this.each(function(){
 				$this = $(this);
-				var map = $(this).data('goomaps').map;
-				var add = {markers:{}};
 				if(!$.isArray(markers)) markers = [markers];
+				var map = $(this).data('goomaps').map;
+				var add = {markers:[]};
 				$.each(markers, function(i, marker){
 					var marked;
 					marker.options.map = map;
@@ -127,20 +132,21 @@
 					}
 					if(marker.options.position && $.isArray(marker.options.position)){
 						marker.options.position = $.fn.goomaps.latlng(marker.options.position);
-						add.markers['marker_'+i] = new google.maps.Marker(marker.options);
+						add.markers[i] = new google.maps.Marker(marker.options);
 						if(marker.events){
-							$.fn.goomaps.setevents(add.markers['marker_'+i], marker.events);
+							$.fn.goomaps.setevents(add.markers[i], marker.events);
 						}
-						if(marker.options.info) $.fn.goomaps.infowindow(add.markers['marker_'+i], marker.options.info, map);
+						if(marker.options.info) $.fn.goomaps.infowindow(add.markers[i], marker.options.info, map);
 						$.extend($this.data('goomaps'), add);
 					}else if(marker.options.position && typeof marker.options.position === 'string'){
 						$.fn.goomaps.geocode(marker.options.position, function(result){
 							marker.options.position = result;
-							add.markers['marker_'+i] = new google.maps.Marker(marker.options);
+							add.markers[i] = new google.maps.Marker(marker.options);
 							if(marker.events){
-								$.fn.goomaps.setevents(add.markers['marker_'+i], marker.events);
+								$.fn.goomaps.setevents(add.markers[i], marker.events);
 							}
-							if(marker.options.info) $.fn.goomaps.infowindow(add.markers['marker_'+i], marker.options.info, map);
+							if(marker.options.info) $.fn.goomaps.infowindow(add.markers[i], marker.options.info, map);
+							//console.log(add);
 							$.extend($this.data('goomaps'), add);
 						});
 					}else{
@@ -151,12 +157,60 @@
 		},
 
 		/**
-		 * Get all the markers attached to an element
+		 * Get all the markers attached to the Google Map object
 		 *
-		 * @returns {Object}   All the markers attached to the passed in element
+		 * This method retrieves all the markers attached to an element (map).
+		 * This can be used to iterate over all the markers for that element.
+		 *
+		 * This is a termnating method and will not allow chainability passed it's
+		 * call, i.e. it doesn't return 'this' jQuery object in favour of
+		 * returning a jQuery array of markers.
+		 *
+		 * @returns {Array}   Array of Google Maps Marker objects
 		 */
 		getmarkers: function(){
-			return $(this).data('goomaps').markers;
+			return $(this.data('goomaps').markers);
+		},
+		/**
+		 * Get a specific marker attached to the Google Map object
+		 *
+		 * Providing an integer, or array of latitude longitude coordinates will
+		 * retreive the relevant marker from the markers attached to the Google
+		 * Map object. Integer for array index, latitude longitude coordinates
+		 * for the matched marker.
+		 *
+		 * This is a termnating method and will not allow chainability passed it's
+		 * call, i.e. it doesn't return 'this' jQuery object in favour of
+		 * returning a jQuery array of markers.
+		 *
+		 * @param {Array} data   Array of latitude longitude coordinates
+		 * @param {Integer} data   Number to match against array index
+		 * @param {String} data   Address to geocode and find
+		 *
+		 * @returns {Marker}  Google Maps Marker object
+		 */
+		getmarker: function(data){
+			if($.isArray(data)){
+				var position = $.fn.goomaps.latlng(data);
+				$.each(this.data('goomaps').markers, function(i, marker){
+					if(position == marker.getPosition()){
+						return $(marker);
+					}
+				});
+			}else if(typeof data === 'string'){
+				$this = $(this);
+				$.fn.goomaps.geocode(data, function(result){
+					$.each($this.data('goomaps').markers, function(i, marker){
+						var position = marker.getPosition();
+						// This doesn't work but it should technically! The coords are exactly the same!
+						if(result == position){
+							return marker;
+						}
+					});
+				});
+			}else if(typeof data === 'number'){
+				return $(this.data('goomaps').markers[data]);
+			}
 		},
 
 		events: function(options){
@@ -181,6 +235,14 @@
 		}
 	};
 
+	/**
+	 * Create a Google Maps LatLngBounds object from array of coordinates
+	 */
+	$.fn.goomaps.latlngbounds = function(coords){
+		var a = $.fn.goomaps.latlng(coords[0]);
+		var b = $.fn.goomaps.latlng(coords[1]);
+		return new google.maps.LatLngBounds(a, b);
+	};
 	/**
 	 * Google Maps Geocoder object
 	 */
