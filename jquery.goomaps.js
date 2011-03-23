@@ -102,7 +102,6 @@
 				}
 			});
 		},
-
 		/**
 		 * Add Markers to an existing Google Map object.
 		 *
@@ -111,7 +110,7 @@
 		 * that they are passed in to the method. They can be identified by their
 		 * latitude and longitue coordinates.
 		 *
-		 * @param   {Array} markers   Array of Marker options
+		 * @param   {Array} markers   Array of Marker objects
 		 *
 		 * @returns {Object}   Returns the object passed in, for chainability
 		 */
@@ -122,7 +121,6 @@
 				var map = $(this).data('goomaps').map;
 				var add = {markers:[]};
 				$.each(markers, function(i, marker){
-					var marked;
 					marker.options.map = map;
 					if(marker.options.icon && typeof marker.options.icon != 'string'){
 						marker.options.icon = $.fn.goomaps.markerimage(marker.options.icon);
@@ -155,14 +153,13 @@
 				});
 			});
 		},
-
 		/**
 		 * Get all the markers attached to the Google Map object
 		 *
 		 * This method retrieves all the markers attached to an element (map).
 		 * This can be used to iterate over all the markers for that element.
 		 *
-		 * This is a termnating method and will not allow chainability passed it's
+		 * This is a terminating method and will not allow chainability past it's
 		 * call, i.e. it doesn't return 'this' jQuery object in favour of
 		 * returning a jQuery array of markers.
 		 *
@@ -179,7 +176,7 @@
 		 * Map object. Integer for array index, latitude longitude coordinates
 		 * for the matched marker.
 		 *
-		 * This is a termnating method and will not allow chainability passed it's
+		 * This is a terminating method and will not allow chainability past it's
 		 * call, i.e. it doesn't return 'this' jQuery object in favour of
 		 * returning a jQuery array of markers.
 		 *

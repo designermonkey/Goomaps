@@ -158,3 +158,43 @@ var polygons = [
 ]
 // Function returning either Array or Object
 var polygonfunc = function(){}
+
+// Options to add layers to a map
+// Single layer
+var layer = {
+	options: {
+		type: '', // bicycling, traffic, fusion, kml
+		// Fusion Options
+		id: 0, // Fusion table ID
+		query: '',
+		heatmap: false,
+		// KML Options
+		url: '',
+		// Fusion & KML Options
+		clickable: true
+	},
+	// For KML and Fusion Table layers
+	events: {
+		click: function(event){}
+	}
+}
+
+var layers = [
+	{
+		options: {
+			type: '', // bicycling, traffic, fusion, kml
+			// Fusion Options
+			id: 0, // Fusion table ID
+			query: '',
+			heatmap: false,
+			// KML Options
+			url: '',
+			// Fusion & KML Options
+			clickable: true
+		},
+		// For KML and Fusion Table layers
+		events: {
+			click: function(event){}
+		}
+	}
+]
