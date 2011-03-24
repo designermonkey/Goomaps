@@ -1,6 +1,38 @@
 
 (function($) {
 
+	/**
+	 * Checks if all properties in obj1 exists in obj2
+	 * @param {Object} obj1
+	 * @param {Object} obj2
+	 * @returns true if obj1 is in to obj2
+	 */
+	isin = function(obj1, obj2){
+		for (prop in obj1){
+
+			if (typeof(obj2[prop]) == 'undefined') {
+				return false;
+			}
+
+			for (prop in obj1){
+				if (obj1[prop]){
+
+					if (typeof(obj1[prop]) == 'object'){
+						if (!isin(obj1[prop], obj2[prop])) {
+							return false;
+						}
+					}
+				} else {
+					if (obj2[prop]){
+						return false;
+					}
+				}
+			}
+
+			return true;
+		}
+	}
+
 	$.fn.goomaps = function(method){
 
 		if($.fn.goomaps.methods[method]){
@@ -168,6 +200,43 @@
 		getmarkers: function(){
 			return $(this.data('goomaps').markers);
 		},
+
+		/**
+		 * 	Get all markers of the Google Map object which fulfill the given selection
+		 *
+		 * 	A given selection could look like this:
+		 * 	{
+		 *		userdefined: { identity: 'id_0815' },
+		 *		hello: 'world'
+		 *		...
+		 * 	}
+		 *
+		 *	If no selection is given it returns all markers
+		 *
+		 */
+		getmarkers2: function(selection){
+			allmarkers = $(this).data('goomaps').markers;
+
+			if (!selection) return allmarkers;
+
+			result = [];
+
+			if (typeof selection === 'object'){
+				$.each(allmarkers, function(i, marker){
+
+					if (isin(selection, marker)){
+						result.push(marker);
+					}
+
+				});
+
+			} else {
+				if($.fn.goomaps.debug && window.console) console.log('selection must be an object');
+			}
+
+			return result;
+		},
+
 		/**
 		 * Get a specific marker attached to the Google Map object
 		 *
