@@ -101,6 +101,7 @@
 					}else if($.isArray(options.center)){
 						map.setCenter($.fn.goomaps.latlng(options.center));
 					}else{
+						// Expand the error console logging
 						if($.fn.goomaps.debug && window.console) console.log('options.center must be either type Array or String');
 					}
 				}
@@ -134,9 +135,7 @@
 		 * Add Markers to an existing Google Map object.
 		 *
 		 * Markers are stored with the element containing the map, as an array
-		 * of Google Maps Marker objects. Markers may not save in the same order
-		 * that they are passed in to the method. They can be identified by their
-		 * latitude and longitue coordinates.
+		 * of Google Maps Marker objects.
 		 *
 		 * @param   {Array} markers   Array of Marker objects
 		 *
@@ -164,19 +163,6 @@
 						}
 						if(marker.options.info) $.fn.goomaps.infowindow(add.markers[i], marker.options.info, map);
 						$.extend($this.data('goomaps'), add);
-					// This will be removed shortly. All Geocoding should be done prior to calling the plugin, so to not
-					// abuse the Google Geocoding service.
-					}else if(marker.options.position && typeof marker.options.position === 'string'){
-						$.fn.goomaps.geocode(marker.options.position, function(result){
-							marker.options.position = result;
-							add.markers[i] = new google.maps.Marker(marker.options);
-							if(marker.options.events){
-								$.fn.goomaps.setevents(add.markers[i], marker.options.events);
-							}
-							if(marker.options.info) $.fn.goomaps.infowindow(add.markers[i], marker.options.info, map);
-							//console.log(add);
-							$.extend($this.data('goomaps'), add);
-						});
 					}else{
 						if($.fn.goomaps.debug && window.console) console.log('Markers must be provided with a position.');
 					}
@@ -249,7 +235,6 @@
 		 *
 		 * @param {Array} data   Array of latitude longitude coordinates
 		 * @param {Integer} data   Number to match against array index
-		 * @param {String} data   Address to geocode and find
 		 *
 		 * @returns {Marker}  Google Maps Marker object
 		 */
@@ -259,22 +244,10 @@
 			if($.isArray(data)){
 				var position = $.fn.goomaps.latlng(data);
 				$.each(this.data('goomaps').markers, function(i, marker){
-					if(position == marker.getPosition()){
+					var mpos = marker.getPosition();
+					if(mpos.equals(position)){
 						return $(marker);
 					}
-				});
-			// This will be removed shortly. All Geocoding should be done prior to calling the plugin, so to not
-			// abuse the Google Geocoding service.
-			}else if(typeof data === 'string'){
-				$this = $(this);
-				$.fn.goomaps.geocode(data, function(result){
-					$.each($this.data('goomaps').markers, function(i, marker){
-						var position = marker.getPosition();
-						// This doesn't work but it should technically! The coords are exactly the same!
-						if(result == position){
-							return marker;
-						}
-					});
 				});
 			}else if(typeof data === 'number'){
 				return $(this.data('goomaps').markers[data]);
