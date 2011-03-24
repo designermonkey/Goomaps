@@ -7,31 +7,27 @@
 	 * @param {Object} obj2
 	 * @returns true if obj1 is in to obj2
 	 */
-	isin = function(obj1, obj2){
-		for (prop in obj1){
-
-			if (typeof(obj2[prop]) == 'undefined') {
+	var isin = function(obj1, obj2){
+		for(prop in obj1){
+			if (typeof(obj2[prop]) == 'undefined'){
 				return false;
 			}
-
-			for (prop in obj1){
-				if (obj1[prop]){
-
-					if (typeof(obj1[prop]) == 'object'){
-						if (!isin(obj1[prop], obj2[prop])) {
+			for(prop in obj1){	// I don't nderstand why the same for loop is being done inside another??
+				if(obj1[prop]){	// And then asking if it exists, which it does as you're looping over it??
+					if(typeof(obj1[prop]) == 'object'){
+						if(!isin(obj1[prop], obj2[prop])) {
 							return false;
 						}
 					}
-				} else {
+				}else{
 					if (obj2[prop]){
 						return false;
 					}
 				}
 			}
-
 			return true;
 		}
-	}
+	};
 
 	$.fn.goomaps = function(method){
 
@@ -168,6 +164,8 @@
 						}
 						if(marker.options.info) $.fn.goomaps.infowindow(add.markers[i], marker.options.info, map);
 						$.extend($this.data('goomaps'), add);
+					// This will be removed shortly. All Geocoding should be done prior to calling the plugin, so to not
+					// abuse the Google Geocoding service.
 					}else if(marker.options.position && typeof marker.options.position === 'string'){
 						$.fn.goomaps.geocode(marker.options.position, function(result){
 							marker.options.position = result;
@@ -256,6 +254,8 @@
 		 * @returns {Marker}  Google Maps Marker object
 		 */
 		getmarker: function(data){
+			// TODO:	Should this be looking for a uid property set for each
+			//			marker? Easy to do, and will always return a marker!
 			if($.isArray(data)){
 				var position = $.fn.goomaps.latlng(data);
 				$.each(this.data('goomaps').markers, function(i, marker){
@@ -263,6 +263,8 @@
 						return $(marker);
 					}
 				});
+			// This will be removed shortly. All Geocoding should be done prior to calling the plugin, so to not
+			// abuse the Google Geocoding service.
 			}else if(typeof data === 'string'){
 				$this = $(this);
 				$.fn.goomaps.geocode(data, function(result){
