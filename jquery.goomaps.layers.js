@@ -1,8 +1,8 @@
 
 (function($){
 
-	if($.fn.goomaps & $.fn.goomaps.methods){
-
+	if($.fn.goomaps && $.fn.goomaps.methods){
+		console.log('methods exist');
 		var layermethods = {
 			/**
 			 * Add Google Map Layers to a Google Map object
@@ -19,7 +19,7 @@
 					var add = {layers:[]};
 					$.each(layers, function(i, layer){
 						if(layer.options.type == 'bicycling'){
-							add.layers[i] = new gogle.maps.BicyclingLayer();
+							add.layers[i] = new google.maps.BicyclingLayer();
 						}else if(layer.options.type == 'traffic'){
 							add.layers[i] = new google.maps.TrafficLayer();
 						}else if(layer.options.type == 'fusion'){
@@ -29,6 +29,7 @@
 						}
 						add.layers[i].setMap(map);
 					});
+					$.extend($this.data('goomaps'), add);
 				});
 			},
 
