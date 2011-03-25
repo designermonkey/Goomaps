@@ -2,7 +2,6 @@
 (function($){
 
 	if($.fn.goomaps && $.fn.goomaps.methods){
-		console.log('methods exist');
 		var layermethods = {
 			/**
 			 * Add Google Map Layers to a Google Map object

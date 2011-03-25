@@ -28,7 +28,14 @@
 			return true;
 		}
 	};
-
+	/**
+	 * Goomaps function. Checks for method and applies the correct method. Falls
+	 * back to init method.
+	 *
+	 * @param   {method} method   Method to initiate on the jQuery object
+	 *
+	 * @returns {Object}   Returns the passed in jQuery object for chainability
+	 */
 	$.fn.goomaps = function(method){
 
 		if($.fn.goomaps.methods[method]){
@@ -149,24 +156,39 @@
 				var add = {markers:[]};
 				$.each(markers, function(i, marker){
 					marker.options.map = map;
+					// UID
+					if(marker.options.uid){
+						//i = marker.options.uid;	// Sets the iterator to the UID passed by the user.
+					}
+					// Custom Icon
 					if(marker.options.icon && typeof marker.options.icon != 'string'){
 						marker.options.icon = $.fn.goomaps.markerimage(marker.options.icon);
 					}
+					// Custom Shadow
 					if(marker.options.shadow && typeof marker.options.shadow != 'string'){
 						marker.options.shadow = $.fn.goomaps.markerimage(marker.options.shadow);
 					}
+					// Position
 					if(marker.options.position && $.isArray(marker.options.position)){
 						marker.options.position = $.fn.goomaps.latlng(marker.options.position);
 						add.markers[i] = new google.maps.Marker(marker.options);
-						if(marker.options.events){
-							$.fn.goomaps.setevents(add.markers[i], marker.options.events);
-						}
-						if(marker.options.info) $.fn.goomaps.infowindow(add.markers[i], marker.options.info, map);
-						$.extend($this.data('goomaps'), add);
 					}else{
 						if($.fn.goomaps.debug && window.console) console.log('Markers must be provided with a position.');
 					}
+					// Events
+					if(marker.events){
+						$.fn.goomaps.setevents(add.markers[i], marker.events);
+					}
+					// Infowindow
+					if(marker.options.info){
+						$.fn.goomaps.infowindow(add.markers[i], marker.options.info, map);
+						// Open the info window straight away
+						if(marker.options.initialopen){
+							google.maps.event.trigger(add.markers[i], 'click');
+						}
+					}
 				});
+				$.extend($this.data('goomaps'), add);
 			});
 		},
 		/**
@@ -239,14 +261,15 @@
 		 * @returns {Marker}  Google Maps Marker object
 		 */
 		getmarker: function(data){
-			// TODO:	Should this be looking for a uid property set for each
-			//			marker? Easy to do, and will always return a marker!
-			if($.isArray(data)){
+			// TODO:	Test this function
+			if($.isArray(data) || typeof data === 'string'){
 				var position = $.fn.goomaps.latlng(data);
 				$.each(this.data('goomaps').markers, function(i, marker){
-					var mpos = marker.getPosition();
-					if(mpos.equals(position)){
-						return $(marker);
+					if($.isArray(data)){
+						var mpos = marker.getPosition();
+						if(mpos.equals(position)) return $(marker);
+					}else{
+						if(marker.uid == data) return $(marker);
 					}
 				});
 			}else if(typeof data === 'number'){
@@ -254,8 +277,11 @@
 			}
 		},
 
-		events: function(options){
+		addevents: function(events){
+			return this.each(function(){
+				$.fn.goomaps.setevents($(this), events);
 
+			});
 		}
 	};
 
@@ -349,7 +375,7 @@
 	$.fn.goomaps.infowindow = function(marker, info, map){
 		var infowindow;
 		if(typeof info === 'string' && info.match('^#')){
-			$(i).hide();
+			$(info).hide();
 			infowindow = new google.maps.InfoWindow({content: $(info).html()});
 		}else{
 			infowindow = new google.maps.InfoWindow({content: info});

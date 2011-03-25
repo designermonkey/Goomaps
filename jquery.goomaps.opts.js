@@ -34,11 +34,11 @@ var marker = {
 			anchor: [0,0]
 		},
 		clickable: true,
-		dragable: false,
+		draggable: false,
 		info: ''
 	},
 	events: {
-		click: function(event){},
+		click: function(event){},	// Returns LatLng
 		dblclick: function(event){},
 		rightclick: function(event){},
 		mousedown: function(event){},
