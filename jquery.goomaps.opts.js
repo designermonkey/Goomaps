@@ -36,6 +36,11 @@ var marker = {
 		clickable: true,
 		draggable: false,
 		info: ''
+		uid: '',	// string unique identifier, even numbers must be a string!!!
+		// user supplied data for storage
+		data: {
+			key: 'value'
+		}
 	},
 	events: {
 		click: function(event){},	// Returns LatLng

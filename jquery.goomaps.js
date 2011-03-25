@@ -7,19 +7,17 @@
 	 * @param 	{Object} 	obj2
 	 * @returns {Boolean}	true if obj2 contains all values of obj1
 	 */
-	var isin = function(obj1, obj2){
-		for(prop in obj1){
-			if (typeof(obj2[prop]) == 'undefined'){
+	var isin = function(needle, haystack){
+		for(prop in needle){
+			if (typeof(haystack[prop]) == 'undefined'){
 				return false;
 			}
-
-			if(typeof(obj1[prop]) == 'object'){
-				if(!isin(obj1[prop], obj2[prop])) {
+			if(typeof(needle[prop]) == 'object'){
+				if(!isin(needle[prop], haystack[prop])) {
 					return false;
 				}
 			}
-
-			if(obj1[prop] != obj2[prop]) { return false; }
+			if(needle[prop] != haystack[prop]) { return false; }
 		}
 		return true;
 	};
@@ -218,27 +216,27 @@
 		 *	@returns	{Array}		Array of all markers that have defined all values of the given selection-object. If there is no
 		 *											matching marker it returns an empty array
 		 */
-		getmarkers: function(selection){
-			allmarkers = $(this).data('goomaps').markers;
-
-			if(!selection) return allmarkers;
-
-			result = [];
-
-			if(typeof selection === 'object'){
-				$.each(allmarkers, function(i, marker){
-
-					if(isin(selection, marker)){
-						result.push(marker);
+		getmarkers: function(data){
+			var markers = $(this).data('goomaps').markers;
+			if(!data) return $(markers);
+			var results = [];
+			// Check for object of data, array of coords or string uid
+			if($.isPlainObject(data) || $.isArray(data) || typeof data === 'string'){
+				if($.isArray(data)) var position = $.fn.goomaps.latlng(data); // Get LatLng of array
+				$.each(markers, function(i, marker){
+					if($.isArray(data)){
+						var mpos = marker.getPosition(); // Get marker position LatLng
+						if(mpos.equals(position)) results.push(marker); // check it equals position, add to results
+					}else if(typeof data === 'string'){
+						if(marker.uid && marker.uid == data) results.push(marker); // check supplied uid
+					}else if(isin(data, marker)){
+						results.push(marker); // check supplied data object
 					}
-
 				});
-
-			} else {
-				if($.fn.goomaps.debug && window.console) console.log('selection must be an object');
+			}else if(typeof data === 'number'){
+				results.push(markers[data]);
 			}
-
-			return result;
+			return $(results);
 		},
 
 		/**
