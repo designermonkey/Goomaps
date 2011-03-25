@@ -2,31 +2,26 @@
 (function($) {
 
 	/**
-	 * Checks if all properties in obj1 exists in obj2
-	 * @param {Object} obj1
-	 * @param {Object} obj2
-	 * @returns true if obj1 is in to obj2
+	 * Checks if all properties in obj1 exists in obj2 and are of the same value
+	 * @param 	{Object} 	obj1
+	 * @param 	{Object} 	obj2
+	 * @returns {Boolean}	true if obj2 contains all values of obj1
 	 */
 	var isin = function(obj1, obj2){
 		for(prop in obj1){
 			if (typeof(obj2[prop]) == 'undefined'){
 				return false;
 			}
-			for(prop in obj1){	// I don't nderstand why the same for loop is being done inside another??
-				if(obj1[prop]){	// And then asking if it exists, which it does as you're looping over it??
-					if(typeof(obj1[prop]) == 'object'){
-						if(!isin(obj1[prop], obj2[prop])) {
-							return false;
-						}
-					}
-				}else{
-					if (obj2[prop]){
-						return false;
-					}
+
+			if(typeof(obj1[prop]) == 'object'){
+				if(!isin(obj1[prop], obj2[prop])) {
+					return false;
 				}
 			}
-			return true;
+
+			if(obj1[prop] != obj2[prop]) { return false; }
 		}
+		return true;
 	};
 	/**
 	 * Goomaps function. Checks for method and applies the correct method. Falls
@@ -191,46 +186,49 @@
 				$.extend($this.data('goomaps'), add);
 			});
 		},
-		/**
-		 * Get all the markers attached to the Google Map object
-		 *
-		 * This method retrieves all the markers attached to an element (map).
-		 * This can be used to iterate over all the markers for that element.
-		 *
-		 * This is a terminating method and will not allow chainability past it's
-		 * call, i.e. it doesn't return 'this' jQuery object in favour of
-		 * returning a jQuery array of markers.
-		 *
-		 * @returns {Array}   Array of Google Maps Marker objects
-		 */
-		getmarkers: function(){
-			return $(this.data('goomaps').markers);
-		},
 
 		/**
-		 * 	Get all markers of the Google Map object which fulfill the given selection
-		 *
-		 * 	A given selection could look like this:
-		 * 	{
+		 *	Select all markers by a given selection-object.
+		 *	If you want to find a marker that is defined as:
+		 *	{
+		 *		position: [0, 0],
 		 *		userdefined: { identity: 'id_0815' },
 		 *		hello: 'world'
-		 *		...
+		 *	}
+		 *
+		 * 	You can use one of following selection objects
+		 *
+		 * 	{
+		 *		userdefined: { identity: 'id_0815' },
 		 * 	}
 		 *
-		 *	If no selection is given it returns all markers
+		 * 	{
+		 *		hello: 'world',
+		 * 	}
 		 *
+		 *	TODO: currently you can't select by position.
+		 *
+		 *	This method will return all markers that define a subset of the given selection-object.
+		 *	If a marker doesn't contain all values of the given selection-object it wont't be returned.
+		 *	But be aware, if there are many markers this method can be very slow as it iterates over all markers.
+		 *	If no selection is given it returns all markers.
+		 *
+		 *	@param		{Object}	selection	is a subset of all values for the returned markers (optional). If no selection is given
+		 *											it returns all markers of a map
+		 *	@returns	{Array}		Array of all markers that have defined all values of the given selection-object. If there is no
+		 *											matching marker it returns an empty array
 		 */
-		getmarkers2: function(selection){
+		getmarkers: function(selection){
 			allmarkers = $(this).data('goomaps').markers;
 
-			if (!selection) return allmarkers;
+			if(!selection) return allmarkers;
 
 			result = [];
 
-			if (typeof selection === 'object'){
+			if(typeof selection === 'object'){
 				$.each(allmarkers, function(i, marker){
 
-					if (isin(selection, marker)){
+					if(isin(selection, marker)){
 						result.push(marker);
 					}
 
