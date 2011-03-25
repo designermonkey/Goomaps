@@ -12,10 +12,12 @@ Google Maps is awesomely powerful. We just want to help you not burn your finger
 
 ####Core:
 
-0.	Remove geocoding from internal methods.
-0.	Streamline `getmarkers`, `getmarkers2` and `getmarker` into one method with results dependant on user input. Discuss first.
+0.	<del>Remove geocoding from internal methods.</del> done. Still available on init and update for map center.
+0.	<del>Streamline `getmarkers`, `getmarkers2` and `getmarker` into one method with results dependant on user input. Discuss first.
 	-	Set a `uid` for each marker, user provided. Users can search on this uid to return a specific marker, or return all if not set.
-	-	Continue current dev of `getmarkers2` style to add user defined data sets to markers.
+	-	Continue current dev of `getmarkers2` style to add user defined data sets to markers.</del>
+	Done. Moved all `getmarker` functionality accross, Adrian has merged `getmarkers` with `getmarkers2` into `getmarkers`. Will test before removing `getmarker`.
+0.	Considering adding searching for all markers within a drawn polygon, circle or rectangle. Will rely on those methods being created first. Suggested by Adrian.
 
 ####Layers:
 
