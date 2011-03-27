@@ -9,7 +9,7 @@
 	<script type="text/javascript" src="jquery/jquery.goomaps.layers.js"></script>
 	<style>
 		body {font: 12px Verdana;}
-		#map {height: 200px;}
+		#map {height: 400px;}
 	</style>
 </head>
 <body>
@@ -18,10 +18,10 @@
 	<div id="info">This is test info!</div>
     <script type="text/javascript">
 		var options = {
-			//debug: true,
-			//center: [52.257347,0.054988],
-			//zoom: 10,
-			//MapTypeId: "roadmap"
+			debug: true,
+			center: [52.257347,0.054988],
+			zoom: 10,
+			MapTypeId: "roadmap"
 		};
 		var markers = [
 			{options: {
@@ -53,7 +53,7 @@
 				draggable: true,
 				info: 'Girton Marker',
 				initialopen: false
-			}},
+			}}
 		];
 		$(document).ready(function(){
 			$('#map').goomaps(options).goomaps('setmarkers', markers);

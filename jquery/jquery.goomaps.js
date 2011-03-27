@@ -176,7 +176,7 @@
 					if(marker.options.info){
 						$.fn.goomaps.infowindow(add.markers[i], marker.options.info, map);
 						// Open the info window straight away
-						if(marker.options.initialopen){
+						if(marker.options.initialopen == true){
 							google.maps.event.trigger(add.markers[i], 'click');
 						}
 					}
@@ -217,9 +217,12 @@
 		 *											matching marker it returns an empty array
 		 */
 		getmarkers: function(data){
-			var markers = $(this).data('goomaps').markers;
-			if(!data) return $(markers);
 			var results = [];
+			var markers = $(this).data('goomaps').markers;
+			if(typeof data === 'number' || data === 0){
+				return $(markers[data]);
+			}
+			if(data !== 0 || !data) return $(markers);
 			// Check for object of data, array of coords or string uid
 			if($.isPlainObject(data) || $.isArray(data) || typeof data === 'string'){
 				if($.isArray(data)) var position = $.fn.goomaps.latlng(data); // Get LatLng of array
@@ -233,10 +236,7 @@
 						results.push(marker); // check supplied data object
 					}
 				});
-			}else if(typeof data === 'number'){
-				results.push(markers[data]);
 			}
-			return $(results);
 		},
 
 		/**
