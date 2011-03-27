@@ -219,12 +219,11 @@
 		getmarkers: function(data){
 			var results = [];
 			var markers = $(this).data('goomaps').markers;
-			if(typeof data === 'number' || data === 0){
-				return $(markers[data]);
-			}
-			if(data !== 0 || !data) return $(markers);
-			// Check for object of data, array of coords or string uid
-			if($.isPlainObject(data) || $.isArray(data) || typeof data === 'string'){
+			// Check for array number
+			if(data === 0 || typeof data === 'number'){
+				results.push(markers[data]);
+				console.log('number');
+			}else if($.isPlainObject(data) || $.isArray(data) || typeof data === 'string'){
 				if($.isArray(data)) var position = $.fn.goomaps.latlng(data); // Get LatLng of array
 				$.each(markers, function(i, marker){
 					if($.isArray(data)){
@@ -237,6 +236,9 @@
 					}
 				});
 			}
+			// Check for no data, also check that a number of 0 isn't passed
+			if(data !== 0 && !data) results.push(markers);
+			console.log(data, results);
 		},
 
 
