@@ -239,39 +239,6 @@
 			}
 		},
 
-		/**
-		 * Get a specific marker attached to the Google Map object
-		 *
-		 * Providing an integer, or array of latitude longitude coordinates will
-		 * retreive the relevant marker from the markers attached to the Google
-		 * Map object. Integer for array index, latitude longitude coordinates
-		 * for the matched marker.
-		 *
-		 * This is a terminating method and will not allow chainability past it's
-		 * call, i.e. it doesn't return 'this' jQuery object in favour of
-		 * returning a jQuery array of markers.
-		 *
-		 * @param {Array} data   Array of latitude longitude coordinates
-		 * @param {Integer} data   Number to match against array index
-		 *
-		 * @returns {Marker}  Google Maps Marker object
-		 */
-		getmarker: function(data){
-			// TODO:	Test this function
-			if($.isArray(data) || typeof data === 'string'){
-				var position = $.fn.goomaps.latlng(data);
-				$.each(this.data('goomaps').markers, function(i, marker){
-					if($.isArray(data)){
-						var mpos = marker.getPosition();
-						if(mpos.equals(position)) return $(marker);
-					}else{
-						if(marker.uid == data) return $(marker);
-					}
-				});
-			}else if(typeof data === 'number'){
-				return $(this.data('goomaps').markers[data]);
-			}
-		},
 
 		addevents: function(events){
 			return this.each(function(){
