@@ -3,10 +3,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
     <title><!-- Insert your title here --></title>
-	<script type="text/javascript" src="jquery-1.5.1.min.js"></script>
+	<script type="text/javascript" src="jquery/jquery-1.5.1.min.js"></script>
 	<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false&language=en"></script>
-	<script type="text/javascript" src="jquery.goomaps.js"></script>
-	<script type="text/javascript" src="jquery.goomaps.layers.js"></script>
+	<script type="text/javascript" src="jquery/jquery.goomaps.js"></script>
+	<script type="text/javascript" src="jquery/jquery.goomaps.layers.js"></script>
 	<style>
 		body {font: 12px Verdana;}
 		#map {height: 200px;}
@@ -25,15 +25,35 @@
 		};
 		var markers = [
 			{options: {
-				uid: 'unique_marker',
+				uid: 'longstanton',
 				// Required
-				position: [52.257347,0.054988],
-				title: 'A Test Marker',
+				position: [52.29633,0.05004],
+				title: 'Longstanton Marker',
 				clickable: true,
 				draggable: true,
-				info: '#info',
-				initialopen: true
-			}}
+				info: 'Longstanton Marker',
+				initialopen: false
+			}},
+			{options: {
+				uid: 'oakington',
+				// Required
+				position: [52.260170,0.068300],
+				title: 'Oakington Marker',
+				clickable: true,
+				draggable: true,
+				info: 'Oakington Marker',
+				initialopen: false
+			}},
+			{options: {
+				uid: 'girton',
+				// Required
+				position: [52.24226,0.08179],
+				title: 'Girton Marker',
+				clickable: true,
+				draggable: true,
+				info: 'Girton Marker',
+				initialopen: false
+			}},
 		];
 		$(document).ready(function(){
 			$('#map').goomaps(options).goomaps('setmarkers', markers);
