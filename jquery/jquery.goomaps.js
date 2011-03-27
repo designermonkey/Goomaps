@@ -186,17 +186,32 @@
 		 *
 		 *	TODO: currently you can't select by position.
 		 *
-		 *	This method will return all markers that define a subset of the given selection-object.
-		 *	If a marker doesn't contain all values of the given selection-object it wont't be returned.
+		 *	This method will return all markers that define a subset of the given data-object.
+		 *	If a marker doesn't contain all values of the given data-object it wont't be returned.
 		 *	But be aware, if there are many markers this method can be very slow as it iterates over all markers.
-		 *	If no selection is given it returns all markers.
+		 *	If no data is given it returns all markers.
+		 *	If data is a function it will be used to filter the markers.
 		 *
-		 *	@param		{Object}	selection	is a subset of all values for the returned markers (optional). If no selection is given
-		 *											it returns all markers of a map
-		 *	@returns	{Array}		Array of all markers that have defined all values of the given selection-object. If there is no
-		 *											matching marker it returns an empty array
+		 *	@param		{Object|Function}	data	is a subset of all values for the returned markers (optional). If no data is given
+		 *																		it returns all markers of a map.
+		 *
+		 *																		If data is a function this function will be used as a filter on the markerlist.
+		 *																		The data-function should return a boolean-value and must be defined as 'function(marker, ...)'
+		 *																		If the filter-function returns true for a given marker/any the marker will be pushed onto
+		 *																		the results. A possible call can look like this:
+		 *																			$('#map').goomaps('getmarkers', $.fn.goomaps.incircle, { center: [0, 0], radius: '10km' });
+		 *																		With this you can define your own filter-functions or use the built-in-filter-functions like incircle.
+		 *
+		 *	@param		{Any}			The parameter 'any' will be used as the second parameter for a filter-function and is specific to the filter-function.
+		 *											It's not required if:
+		 *												- the filter-function don't need another parameter or
+		 *												- there is no filter-function in the data-parameter
+		 *
+		 *	@returns	{Array}		Array of all markers that have defined all values of the given data-object. If there is no
+		 *											matching marker it returns an empty array. If data is a filter-function this array will contain
+		 *											all markers where the filter has returned true.
 		 */
-		getmarkers: function(data){
+		getmarkers: function(data, any){
 			var markers = $(this).data('goomaps').markers;
 			if(!data) return $(markers);
 			var results = [];
@@ -215,6 +230,13 @@
 				});
 			}else if(typeof data === 'number'){
 				results.push(markers[data]);
+			}else if($.isFunction(data)){
+				// use data as a filter-function (the filter function must be defined as 'function(marker, ...)' and must return a boolean-value
+				$.each(markers, function(i, marker){
+					if(data(marker, any)){
+						results.push(marker);
+					}
+				});
 			}
 			return $(results);
 		},
@@ -288,6 +310,7 @@
 
 	/*
 	 *	Is a given marker within a circle?
+	 *	Note: This is a filter-function for the getmarkers-method.
 	 *	circle must be defined as:
 	 *	{
 	 *		center: [0, 0],
@@ -300,19 +323,19 @@
 	$.fn.goomaps.incircle = function(marker, circle){
 		// TODO: this function needs to be tested
 		if(marker && circle){
-
+			r = 0;
 			with(circle.radius){
 				if(indexOf('km') > 0) {
-					circle.radius = parseFloat(circle.radius);
+					r = parseFloat(circle.radius);
 				} else if(indexOf('m') > 0) {
-					circle.radius = parseFloat(circle.radius) / 1000;
+					r = parseFloat(circle.radius) / 1000;
 				} else {
-					circle.radius = parseFloat(circle.radius);
+					r = parseFloat(circle.radius);
 				}
 			}
-			lat = marker.lat();
-			lng = marker.lng();
-			return $.fn.goomaps.distance(circle.center, [lat, lng]) <= circle.radius;
+			lat = marker.getPosition().lat();
+			lng = marker.getPosition().lng();
+			return $.fn.goomaps.distance(circle.center, [lat, lng]) <= r;
 		}
 	};
 
