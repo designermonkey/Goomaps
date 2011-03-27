@@ -1,6 +1,5 @@
 
 (function($) {
-
 	/**
 	 * Goomaps function. Checks for method and applies the correct method. Falls
 	 * back to init method.
@@ -10,7 +9,6 @@
 	 * @returns {Object}   Returns the passed in jQuery object for chainability
 	 */
 	$.fn.goomaps = function(method){
-
 		if($.fn.goomaps.methods[method]){
 			return $.fn.goomaps.methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
 		}else if(typeof method === 'object' || !method){
@@ -18,9 +16,7 @@
 		}else{
 			$.error('Method ' + method + ' does not exist on jQuery.goomaps');
 		}
-
 	};
-
 	$.fn.goomaps.methods = {
 		/**
 		 * Initialise the Google Map and store it in the element. If there are options
@@ -164,7 +160,6 @@
 				$.extend($this.data('goomaps'), add);
 			});
 		},
-
 		/**
 		 *	Select all markers by a given selection-object.
 		 *	If you want to find a marker that is defined as:
@@ -308,7 +303,7 @@
 		return true;
 	};
 
-	/*
+	/**
 	 *	Is a given marker within a circle?
 	 *	Note: This is a filter-function for the getmarkers-method.
 	 *	circle must be defined as:
