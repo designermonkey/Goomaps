@@ -323,7 +323,6 @@
 		}
 		return new google.maps.MarkerImage(options);
 	};
-
 	/**
 	 * Create a Google Maps InfoWindow attached to the provided Marker
 	 *
@@ -340,12 +339,10 @@
 		}else{
 			infowindow = new google.maps.InfoWindow({content: info});
 		}
-		$.fn.goomaps.setevents(marker, { 'click': function(){
+		$.fn.goomaps.setevents(marker, {'click': function(){
 			infowindow.open(map, marker);
 		}});
 	};
-
-
 	/**
 	 * Set events from an object containing event callbacks
 	 *
@@ -366,17 +363,14 @@
 		zoom: 10,
 		MapTypeId: google.maps.MapTypeId.ROADMAP
 	};
-
 	/**
 	 * Goomaps debugger switch
 	 */
 	$.fn.goomaps.debug = false;
-
 	/**
 	 * Goomaps plugin version number
 	 */
 	$.fn.goomaps.pluginVersion = "1.0";
-
 	/**
 	 * Google Maps API version number
 	 */

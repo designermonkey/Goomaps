@@ -5,7 +5,30 @@ var goomap = {
 	center: [15.12345, 1.12345],
 //	center: "14 Stevensons Road, Longstanton, Cambridge, CB24 3GY",
 	zoom: 10,
-	type: "roadmap"
+	MapTypeId: "roadmap",
+	MapTypeControlOptions: {
+		MapTypeIds: '',
+		position: '',
+		style: ''
+	},
+	OverviewMapControlOptions: false,
+	PanControlOptions: '',
+	RotateControlOptions: '',
+	ScaleControlOptions: '',
+	StreetViewControlOptions: '',
+	ZoomControlOptions: ''
+	events: {
+
+	}
+}
+
+// Global events for Map overlays
+var globalevents = {
+	map: {},
+	markers: {},
+	polylines: {},
+	polygons: {},
+	layers: {}
 }
 
 // Options to add Markers to a map.
@@ -14,7 +37,6 @@ var marker = {
 	options: {
 		// Required
 		position: [52.257347,0.054988],
-	//	position: 'Address string',
 		title: '',
 		// Optional
 		// Custom icon, either string or object of options
@@ -67,10 +89,7 @@ var markers = [
 	}
 ]
 // Function returning either Array or Object
-var markerfunc = function(){
-	//blah code here
-	return {};
-}
+var markerfunc = function(){}
 
 
 // Options to add Polylines to a map
@@ -183,7 +202,7 @@ var layer = {
 		click: function(event){}
 	}
 }
-
+// Array of layers
 var layers = [
 	{
 		options: {
@@ -202,4 +221,6 @@ var layers = [
 			click: function(event){}
 		}
 	}
-]
+];
+// Function returning either Array or Object
+var leyersfunc = function(){}
