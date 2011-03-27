@@ -286,6 +286,36 @@
 		return true;
 	};
 
+	/*
+	 *	Is a given marker within a circle?
+	 *	circle must be defined as:
+	 *	{
+	 *		center: [0, 0],
+	 *		radius: '5.0km' // length-units: m, km
+	 *	}
+	 *
+	 *	@param	{google.maps.Marker}	marker
+	 *	@param	{Object}							circle
+	 */
+	$.fn.goomaps.incircle = function(marker, circle){
+		// TODO: this function needs to be tested
+		if(marker && circle){
+
+			with(circle.radius){
+				if(indexOf('km') > 0) {
+					circle.radius = parseFloat(circle.radius);
+				} else if(indexOf('m') > 0) {
+					circle.radius = parseFloat(circle.radius) / 1000;
+				} else {
+					circle.radius = parseFloat(circle.radius);
+				}
+			}
+			lat = marker.lat();
+			lng = marker.lng();
+			return $.fn.goomaps.distance(circle.center, [lat, lng]) <= circle.radius;
+		}
+	};
+
 	/**
 	 *	Calculates the distance between two points
 	 *
@@ -330,7 +360,6 @@
 		}
 		return -1.0; // failure
 	};
-
 
 	/**
 	 * Create a Google Maps LatLng object from array of coordinates
