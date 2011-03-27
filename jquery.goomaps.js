@@ -2,26 +2,6 @@
 (function($) {
 
 	/**
-	 * Checks if all properties in obj1 exists in obj2 and are of the same value
-	 * @param 	{Object} 	obj1
-	 * @param 	{Object} 	obj2
-	 * @returns {Boolean}	true if obj2 contains all values of obj1
-	 */
-	var isin = function(needle, haystack){
-		for(prop in needle){
-			if (typeof(haystack[prop]) == 'undefined'){
-				return false;
-			}
-			if(typeof(needle[prop]) == 'object'){
-				if(!isin(needle[prop], haystack[prop])) {
-					return false;
-				}
-			}
-			if(needle[prop] != haystack[prop]) { return false; }
-		}
-		return true;
-	};
-	/**
 	 * Goomaps function. Checks for method and applies the correct method. Falls
 	 * back to init method.
 	 *
@@ -282,6 +262,75 @@
 	};
 
 // -----------------------------------------------------------------------------
+
+	var R = 6371; // mean radius of the earth (km)
+
+	/**
+	 * Checks if all properties in needle exists in haystack and are of the same value
+	 * @param 	{Object} 	needle
+	 * @param 	{Object} 	haystack
+	 * @returns {Boolean}	true if haystack contains all values of needle
+	 */
+	var isin = function(needle, haystack){
+		for(prop in needle){
+			if (typeof(haystack[prop]) == 'undefined'){
+				return false;
+			}
+			if(typeof(needle[prop]) == 'object'){
+				if(!isin(needle[prop], haystack[prop])) {
+					return false;
+				}
+			}
+			if(needle[prop] != haystack[prop]) { return false; }
+		}
+		return true;
+	};
+
+	/**
+	 *	Calculates the distance between two points
+	 *
+	 *	@param		{LatLng|Array}	p1	first point; [lat, lng]
+	 *	@param		{LatLng|Array}	p2	second point; [lat, lng]
+	 *	@returns	{float}					the distance in km between the given points
+	 */
+	$.fn.goomaps.distance = function(p1, p2){
+		// for the mathematical background of this routine have a look at spherical trigonometry (law of cosines)
+
+		conv = function(p){
+			lat = undefined;
+			lng = undefined;
+			if(p[lat]) { lat = p.lat(); }
+			if(p[lng]) { lng = p.lng(); }
+			return 	[
+								lat || p[0] || 0,
+								lng || p[1] || 0
+							];
+		}
+
+		to_rad = function(deg){ // convert degrees in radiant
+			return (Math.PI/180) * deg;
+		}
+
+		if(p1 && p2){
+			point1 = conv(p1);
+			point2 = conv(p2);
+
+			lat1	= to_rad(point1[0]);
+			lng1	= to_rad(point1[1]);
+
+			lat2	= to_rad(point2[0]);
+			lng2	= to_rad(point2[1]);
+
+			with(Math){
+				cos_e =	sin(lat1) * sin(lat2) +
+								cos(lat1) * cos(lat2) * cos(lng2 - lng1);
+				e			= acos(cos_e);
+				return	R * e;
+			}
+		}
+		return -1.0; // failure
+	};
+
 
 	/**
 	 * Create a Google Maps LatLng object from array of coordinates
