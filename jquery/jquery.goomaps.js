@@ -76,6 +76,9 @@
 				if(options && options.MapTypeId){
 					map.setMapTypeId(options.MapTypeId);
 				}
+				if(options && options.events){
+					$.fn.goomaps.setevents(map, options.events);
+				}
 				var add = {
 					map: map
 				}
@@ -222,7 +225,6 @@
 			// Check for array number
 			if(data === 0 || typeof data === 'number'){
 				results.push(markers[data]);
-				console.log('number');
 			}else if($.isPlainObject(data) || $.isArray(data) || typeof data === 'string'){
 				if($.isArray(data)) var position = $.fn.goomaps.latlng(data); // Get LatLng of array
 				$.each(markers, function(i, marker){
@@ -238,16 +240,9 @@
 			}
 			// Check for no data, also check that a number of 0 isn't passed
 			if(data !== 0 && !data) results.push(markers);
-			console.log(data, results);
 		},
 
 
-		addevents: function(events){
-			return this.each(function(){
-				$.fn.goomaps.setevents($(this), events);
-
-			});
-		}
 	};
 
 // -----------------------------------------------------------------------------

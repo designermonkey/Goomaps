@@ -21,7 +21,12 @@
 			debug: true,
 			center: [52.257347,0.054988],
 			zoom: 10,
-			MapTypeId: "roadmap"
+			MapTypeId: "roadmap",
+			events: {
+				click: function(event){
+					console.log(event);
+				}
+			}
 		};
 		var markers = [
 			{options: {
