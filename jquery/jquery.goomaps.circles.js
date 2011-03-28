@@ -18,17 +18,18 @@
 					var add = {circles:[]};
 					$.each(circles, function(i, circle){
 						add.circles[i] = new google.maps.Circle();
+						add.circles[i].setMap(map);
 						if(circle.center && $.isArray(circle.center)){
 							add.circles[i].setCenter($.fn.goomaps.latlng(circle.center));
 						}else{
 							if($.fn.goomaps.debug && window.console) console.log('setcircle: must be provided with a center.');
 						}
 						if(circle.options){
+							console.log(circle.options);
 							add.circles[i].setOptions(circle.options);
 						}else{
 							if($.fn.goomaps.debug && window.console) console.log('setcircle: must be provided with required options.');
 						}
-						add.circles[i].setMap(map);
 						if(circle.events){
 							$.fn.goomaps.setevents(add.circles[i], circle.events);
 						}

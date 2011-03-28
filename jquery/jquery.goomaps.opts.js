@@ -232,11 +232,11 @@ var circle = {
 	center: [52.257347,0.054988],
 	options: {
 		// Required
-		raduis: 5, // meters
+		radius: 5, // meters
 		fillColor: '',
 		fillOpacity: 1,
 		strokeColor: '',
-		strokeOpacity 1,
+		strokeOpacity: 1,
 		strokeWeight: 2,
 		// Optional
 		clickable: true,
