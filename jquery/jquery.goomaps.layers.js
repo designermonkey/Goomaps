@@ -30,14 +30,6 @@
 					});
 					$.extend($this.data('goomaps'), add);
 				});
-			},
-
-			getlayers: function(){
-
-			},
-
-			getlayer: function(){
-
 			}
 		};
 
