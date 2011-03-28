@@ -43,7 +43,9 @@
 					}else if($.isArray(options.center)){
 						map.setCenter($.fn.goomaps.latlng(options.center));
 					}else{
-						if($.fn.goomaps.debug && window.console) console.log('options.center must be either type Array or String');
+						if($.fn.goomaps.debug && window.console){
+							console.log('init: options.center must be either type Array or String');
+						}
 					}
 				}
 				if(options && options.zoom){
@@ -81,7 +83,9 @@
 						map.setCenter($.fn.goomaps.latlng(options.center));
 					}else{
 						// Expand the error console logging
-						if($.fn.goomaps.debug && window.console) console.log('options.center must be either type Array or String');
+						if($.fn.goomaps.debug && window.console){
+							console.log('options.center must be either type Array or String');
+						}
 					}
 				}
 				if(options && options.zoom){
@@ -89,6 +93,9 @@
 				}
 				if(options && options.MapTypeId){
 					map.setMapTypeId(options.MapTypeId);
+				}
+				if(options && options.events){
+					$.fn.goomaps.setevents(map, options.events);
 				}
 			});
 		},
@@ -128,10 +135,6 @@
 				var add = {markers:[]};
 				$.each(markers, function(i, marker){
 					marker.options.map = map;
-					// UID
-					if(marker.options.uid){
-						//i = marker.options.uid;	// Sets the iterator to the UID passed by the user.
-					}
 					// Custom Icon
 					if(marker.options.icon && typeof marker.options.icon != 'string'){
 						marker.options.icon = $.fn.goomaps.markerimage(marker.options.icon);
@@ -240,7 +243,6 @@
 // -----------------------------------------------------------------------------
 
 	var R = 6371; // mean radius of the earth (km)
-
 	/**
 	 * Checks if all properties in needle exists in haystack and are of the same value
 	 * @param 	{Object} 	needle
@@ -261,7 +263,6 @@
 		}
 		return true;
 	};
-
 	/**
 	 *	Is a given marker within a circle?
 	 *	Note: This is a filter-function for the getmarkers-method.
@@ -305,7 +306,6 @@
 	 */
 	$.fn.goomaps.distance = function(p1, p2){
 		// for the mathematical background of this routine have a look at spherical trigonometry (law of cosines)
-
 		conv = function(p){
 			lat = undefined;
 			lng = undefined;
@@ -316,11 +316,9 @@
 								lng || p[1] || 0
 							];
 		}
-
 		to_rad = function(deg){ // convert degrees in radiant
 			return (Math.PI/180) * deg;
 		}
-
 		if(p1 && p2){
 			point1 = conv(p1);
 			point2 = conv(p2);

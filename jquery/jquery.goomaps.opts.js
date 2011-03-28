@@ -224,3 +224,33 @@ var layers = [
 ];
 // Function returning either Array or Object
 var leyersfunc = function(){}
+
+// Options to add circles to a map
+// Single circle
+var circle = {
+	// Required
+	center: [52.257347,0.054988],
+	options: {
+		// Required
+		raduis: 5, // meters
+		fillColor: '',
+		fillOpacity: 1,
+		strokeColor: '',
+		strokeOpacity 1,
+		strokeWeight: 2,
+		// Optional
+		clickable: true,
+		geodesic: false
+	},
+	// Optional
+	events: {
+		click: function(event){},
+		dblclick: function(event){},
+		rightclick: function(event){},
+		mouseover: function(event){},
+		mouseout: function(event){},
+		mousedown: function(event){},
+		mouseup: function(event){},
+		mousemove: function(event){},
+	}
+}
