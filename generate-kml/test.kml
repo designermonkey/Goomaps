@@ -16,7 +16,7 @@
 				<textColor></textColor><!-- kml:color -->
 				<text>
 					<![CDATA[
-					  
+
 					]]>
 				</text>
 				<displayMode></displayMode><!-- kml:displayModeEnum, default to show balloon, hide to hide the balloon permanently -->
@@ -36,9 +36,32 @@
 		<!--
 			Repeat for each marker
 		-->
-		<Placemark id="ID">
-			<!-- inherited from Feature element -->
-			<name>...</name><!-- string -->
+		<Placemark id="longstanton">
+			<name>Longstanton</name><!-- string -->
+			<visibility>1</visibility><!-- boolean -->
+			<open>0</open><!-- boolean -->
+			<address>...</address>                <!-- string -->
+			<description>...</description>        <!-- string -->
+			<styleUrl>...</styleUrl>              <!-- anyURI -->
+			<StyleSelector>...</StyleSelector>
+			<Point id="ID">
+			  <coordinates>...</coordinates><!-- lon,lat[,alt] -->
+			</Point>
+		</Placemark>
+		<Placemark id="oakington">
+			<name>Oakington</name><!-- string -->
+			<visibility>1</visibility><!-- boolean -->
+			<open>0</open><!-- boolean -->
+			<address>...</address>                <!-- string -->
+			<description>...</description>        <!-- string -->
+			<styleUrl>...</styleUrl>              <!-- anyURI -->
+			<StyleSelector>...</StyleSelector>
+			<Point id="ID">
+			  <coordinates>...</coordinates><!-- lon,lat[,alt] -->
+			</Point>
+		</Placemark>
+		<Placemark id="girton">
+			<name>Girton</name><!-- string -->
 			<visibility>1</visibility><!-- boolean -->
 			<open>0</open><!-- boolean -->
 			<address>...</address>                <!-- string -->

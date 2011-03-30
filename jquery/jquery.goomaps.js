@@ -135,6 +135,11 @@
 				var add = {markers:[]};
 				$.each(markers, function(i, marker){
 					marker.options.map = map;
+					// Animation
+					if(marker.options.animation){
+						if(marker.options.animation == 'drop') marker.options.animation = google.maps.Animation.DROP;
+						if(marker.options.animation == 'bounce') marker.options.animation = google.maps.Animation.BOUNCE;
+					}
 					// Custom Icon
 					if(marker.options.icon && typeof marker.options.icon != 'string'){
 						marker.options.icon = $.fn.goomaps.markerimage(marker.options.icon);
@@ -184,8 +189,6 @@
 		 * 	{
 		 *		hello: 'world',
 		 * 	}
-		 *
-		 *	TODO: currently you can't select by position.
 		 *
 		 *	This method will return all markers that define a subset of the given data-object.
 		 *	If a marker doesn't contain all values of the given data-object it wont't be returned.

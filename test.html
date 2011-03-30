@@ -30,7 +30,7 @@
 			}
 		};
 		var markers = [
-			{options: {
+		/*	{options: {
 				uid: 'longstanton',
 				// Required
 				position: [52.29633,0.05004],
@@ -38,8 +38,9 @@
 				clickable: true,
 				draggable: true,
 				info: 'Longstanton Marker',
-				initialopen: false
-			}},
+				initialopen: false,
+				animation: 'drop'
+			}},*/
 			{options: {
 				uid: 'oakington',
 				// Required
@@ -48,7 +49,8 @@
 				clickable: true,
 				draggable: true,
 				info: 'Oakington Marker',
-				initialopen: false
+				initialopen: false,
+				animation: 'drop'
 			}},
 			{options: {
 				uid: 'girton',
@@ -58,9 +60,21 @@
 				clickable: true,
 				draggable: true,
 				info: 'Girton Marker',
-				initialopen: false
+				initialopen: false,
+				animation: 'drop'
 			}}
 		];
+		var layer = {
+			options: {
+				type: 'kml',
+				url: 'http://test:test@funeralmap.chameleonstudios.net/kml/sample.kml',
+				clickable: true
+			},
+			// For KML and Fusion Table layers
+			events: {
+				click: function(event){}
+			}
+		};
 		var circle = {
 			// Required
 			center: [52.29633,0.05004],
