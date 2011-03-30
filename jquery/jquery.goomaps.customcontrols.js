@@ -73,4 +73,4 @@
 
 	}
 
-})(jQuery)
+})(jQuery);

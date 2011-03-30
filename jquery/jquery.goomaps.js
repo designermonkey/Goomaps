@@ -1,4 +1,14 @@
-
+/*!
+ *	@name					jQuery Goomaps
+ *								based on Google Maps APIv3
+ *
+ *	@author				John Porter 		https://github.com/designermonkey
+ *	@author				Adrian Weimann	https://github.com/awde
+ *	@description	Makes using the Google Maps API easier with jQuery
+ *	@version			Alpha-0.0.1
+ *
+ *	@license			Dual licensed under MIT and GPLv2
+ */
 (function($) {
 	/**
 	 * Goomaps function. Checks for method and applies the correct method. Falls
