@@ -244,6 +244,13 @@
 			// Check for no data, also check that a number of 0 isn't passed
 			if(data !== 0 && !data) results.push(markers);
 			return $(results);
+		},
+		/**
+		 *	Returns the Google Map of the element
+		 *	@returns The Google Map of the selected element
+		 */
+		getmap: function(){
+			return $(this).data('goomaps').map;
 		}
 	};
 
