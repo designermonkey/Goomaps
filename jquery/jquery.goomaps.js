@@ -443,6 +443,7 @@
 					return true;
 				}else{
 					if($.fn.goomaps.debug && window.console) console.log('Geocoder status returned: '+status);
+					callback(results);
 					return false;
 				}
 			});
