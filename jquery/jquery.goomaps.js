@@ -147,6 +147,7 @@
 					if(marker.options.position && $.isArray(marker.options.position)){
 						marker.options.position = $.fn.goomaps.latlng(marker.options.position);
 						add.markers[i] = new google.maps.Marker(marker.options);
+						ExtendMarker(map, add.markers[i]);
 					}else{
 						if($.fn.goomaps.debug && window.console) console.log('Markers must be provided with a position.');
 					}
@@ -340,6 +341,36 @@
 	};
 
 	/**
+	 *	Extends a Marker with several functions:
+	 *		- getInfoWindow(): gets the infowindow which is assigned to a marker; if there is no infowindow, an infowindow will be created first.
+	 *
+	 *	Note: This is an internal function and will be used in:
+	 *		- $.fn.goomaps.methods.setmarkers
+	 *
+	 *	@param	{Map}			the Google Map Object
+	 *	@param	{Marker}	the Marker which will be extended
+	 */
+	var ExtendMarker = function(map, marker){
+
+		marker.getInfoWindow = function(){
+			// Return the markers infowindow if it exists.
+			// If there is no infowindow create one first, append it to the marker and return the newly created.
+			// with this it's possible to reuse an infowindow
+			if(this.infowindow){
+				return this.infowindow;
+			} else {
+				this.infowindow = new google.maps.InfoWindow();
+
+				$.fn.goomaps.setevents(this, {'click': function(){
+					this.infowindow.open(map, this);
+				}});
+
+				return this.infowindow;
+			}
+		};
+	}
+
+	/**
 	 * Create a Google Maps LatLng object from array of coordinates
 	 *
 	 * @param   {Array} coords   Array of coordinates as [lat,lng]
@@ -432,12 +463,12 @@
 		var infowindow;
 		if(typeof info === 'string' && info.match('^#')){
 			$(info).hide();
-			infowindow = new google.maps.InfoWindow({content: $(info).html()});
+			marker.getInfoWindow().setContent($(info).html());
 		}else{
-			infowindow = new google.maps.InfoWindow({content: info});
+			marker.getInfoWindow().setContent(info);
 		}
 		$.fn.goomaps.setevents(marker, {'click': function(){
-			infowindow.open(map, marker);
+			marker.getInfoWindow().open(map, marker);
 		}});
 	};
 	/**
