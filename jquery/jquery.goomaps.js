@@ -1,4 +1,14 @@
-
+/*!
+ *	@name					jQuery Goomaps
+ *								based on Google Maps APIv3
+ *
+ *	@author				John Porter 		https://github.com/designermonkey
+ *	@author				Adrian Weimann	https://github.com/awde
+ *	@description	Makes using the Google Maps API easier with jQuery
+ *	@version			Alpha-0.0.1
+ *
+ *	@license			Dual licensed under MIT and GPLv2
+ */
 (function($) {
 	/**
 	 * Goomaps function. Checks for method and applies the correct method. Falls
@@ -152,6 +162,7 @@
 					if(marker.options.position && $.isArray(marker.options.position)){
 						marker.options.position = $.fn.goomaps.latlng(marker.options.position);
 						add.markers[i] = new google.maps.Marker(marker.options);
+						ExtendMarker(map, add.markers[i]);
 					}else{
 						if($.fn.goomaps.debug && window.console) console.log('Markers must be provided with a position.');
 					}
@@ -222,9 +233,16 @@
 			if(data === 0 || typeof data === 'number'){
 				results.push(markers[data]);
 			}else if($.isPlainObject(data) || $.isArray(data) || typeof data === 'string' || $.isFunction(data)){
-				if($.isArray(data)) var position = $.fn.goomaps.latlng(data); // Get LatLng of array
+				if($.isArray(data) || ($.isPlainObject(data) && data.position && $.isArray(data.position))){
+					var position;
+					if($.isArray(data)) {
+						position = $.fn.goomaps.latlng(data); // Get LatLng of array
+					} else {
+						position = $.fn.goomaps.latlng(data.position); // Get LatLng of array
+					}
+				}
 				$.each(markers, function(i, marker){
-					if($.isArray(data)){
+					if($.isArray(data) || ($.isPlainObject(data) && data.position && $.isArray(data.position))){
 						var mpos = marker.getPosition(); // Get marker position LatLng
 						if(mpos.equals(position)) results.push(marker); // check it equals position, add to results
 					}else if(typeof data === 'string'){
@@ -240,6 +258,13 @@
 			// Check for no data, also check that a number of 0 isn't passed
 			if(data !== 0 && !data) results.push(markers);
 			return $(results);
+		},
+		/**
+		 *	Returns the Google Map of the element
+		 *	@returns The Google Map of the selected element
+		 */
+		getmap: function(){
+			return $(this).data('goomaps').map;
 		}
 	};
 
@@ -343,6 +368,36 @@
 	};
 
 	/**
+	 *	Extends a Marker with several functions:
+	 *		- getInfoWindow(): gets the infowindow which is assigned to a marker; if there is no infowindow, an infowindow will be created first.
+	 *
+	 *	Note: This is an internal function and will be used in:
+	 *		- $.fn.goomaps.methods.setmarkers
+	 *
+	 *	@param	{Map}			the Google Map Object
+	 *	@param	{Marker}	the Marker which will be extended
+	 */
+	var ExtendMarker = function(map, marker){
+
+		marker.getInfoWindow = function(){
+			// Return the markers infowindow if it exists.
+			// If there is no infowindow create one first, append it to the marker and return the newly created.
+			// with this it's possible to reuse an infowindow
+			if(this.infowindow){
+				return this.infowindow;
+			} else {
+				this.infowindow = new google.maps.InfoWindow();
+
+				$.fn.goomaps.setevents(this, {'click': function(){
+					this.infowindow.open(map, this);
+				}});
+
+				return this.infowindow;
+			}
+		};
+	}
+
+	/**
 	 * Create a Google Maps LatLng object from array of coordinates
 	 *
 	 * @param   {Array} coords   Array of coordinates as [lat,lng]
@@ -435,12 +490,12 @@
 		var infowindow;
 		if(typeof info === 'string' && info.match('^#')){
 			$(info).hide();
-			infowindow = new google.maps.InfoWindow({content: $(info).html()});
+			marker.getInfoWindow().setContent($(info).html());
 		}else{
-			infowindow = new google.maps.InfoWindow({content: info});
+			marker.getInfoWindow().setContent(info);
 		}
 		$.fn.goomaps.setevents(marker, {'click': function(){
-			infowindow.open(map, marker);
+			marker.getInfoWindow().open(map, marker);
 		}});
 	};
 	/**

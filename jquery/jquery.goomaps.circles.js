@@ -70,4 +70,4 @@
 
 	}
 
-})(jQuery)
+})(jQuery);

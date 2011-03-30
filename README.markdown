@@ -10,6 +10,11 @@ Google Maps is awesomely powerful. We just want to help you not burn your finger
 
 ## Development list
 
+####Build (on Linux):
+
+0. Install yui-compress
+0. type `make`. Now you'll find a minified and non-minified version in build/
+
 ####Core:
 
 0.	<del>Remove geocoding from internal methods.</del> done. Still available on init and update for map center.
@@ -26,3 +31,7 @@ Google Maps is awesomely powerful. We just want to help you not burn your finger
 ####Circles:
 
 0.	Waiting on completion of Markers (core) and Layers.
+
+####Custom Controls:
+
+0. <del>Adding Custom-Controls to a map</del>
