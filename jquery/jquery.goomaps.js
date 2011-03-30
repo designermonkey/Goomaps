@@ -186,7 +186,6 @@
 		 *		hello: 'world',
 		 * 	}
 		 *
-		 *	TODO: currently you can't select by position.
 		 *
 		 *	This method will return all markers that define a subset of the given data-object.
 		 *	If a marker doesn't contain all values of the given data-object it wont't be returned.
@@ -220,9 +219,16 @@
 			if(data === 0 || typeof data === 'number'){
 				results.push(markers[data]);
 			}else if($.isPlainObject(data) || $.isArray(data) || typeof data === 'string' || $.isFunction(data)){
-				if($.isArray(data)) var position = $.fn.goomaps.latlng(data); // Get LatLng of array
+				if($.isArray(data) || ($.isPlainObject(data) && data.position && $.isArray(data.position))){
+					var position;
+					if($.isArray(data)) {
+						position = $.fn.goomaps.latlng(data); // Get LatLng of array
+					} else {
+						position = $.fn.goomaps.latlng(data.position); // Get LatLng of array
+					}
+				}
 				$.each(markers, function(i, marker){
-					if($.isArray(data)){
+					if($.isArray(data) || ($.isPlainObject(data) && data.position && $.isArray(data.position))){
 						var mpos = marker.getPosition(); // Get marker position LatLng
 						if(mpos.equals(position)) results.push(marker); // check it equals position, add to results
 					}else if(typeof data === 'string'){
