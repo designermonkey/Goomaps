@@ -226,31 +226,44 @@
 		 *											matching marker it returns an empty array. If data is a filter-function this array will contain
 		 *											all markers where the filter has returned true.
 		 */
-		getmarkers: function(data, any){
+		/**
+		 * Filter all markers on supplied parameters to return matched results
+		 *
+		 * Passing a number to this method will return the specific marker stored at that index in the Array of markers.
+		 * Passing an object will return an Array of markers that matched the properties of that object. The more properties, the harder the match.
+		 * Passing a function will enable true|false matching on each marker in the Array of markers. The marker object, along with any extra arguments added to the method, are passed into this function for each iteration.
+		 * Passing nothing into this method, will return all markers.
+		 *
+		 * Remember, the more markers you have stored, the longer the filtering process.
+		 *
+		 * @param   {Object|Function|Number} data   Object containing parameters to match or, Function returning true|false (boolean) per marker or, Number to match index of markers array
+		 * @param	{Unknown} arguments   Extra arguments are all passed to the data paramm if it is a Function
+		 *
+		 * @returns {Array}   Array of matched markers, or empty Array
+		 */
+		getmarkers: function(data){
+			var args = arguments;
 			var results = [];
 			var markers = $(this).data('goomaps').markers;
 			// Check for array number
 			if(data === 0 || typeof data === 'number'){
 				results.push(markers[data]);
-			}else if($.isPlainObject(data) || $.isArray(data) || typeof data === 'string' || $.isFunction(data)){
-				if($.isArray(data) || ($.isPlainObject(data) && data.position && $.isArray(data.position))){
-					var position;
-					if($.isArray(data)) {
-						position = $.fn.goomaps.latlng(data); // Get LatLng of array
-					} else {
-						position = $.fn.goomaps.latlng(data.position); // Get LatLng of array
-					}
+			}else if($.isPlainObject(data) || $.isFunction(data)){
+				var position;
+				if(data.position && $.isArray(data.position)){
+					position = $.fn.goomaps.latlng(data.position); // Get LatLng of position array
+				}else if(!$.isArray(data.position)){
+					if($.fn.goomaps.debug && window.console) console.log('getmarkers: Matching on position requires an array of coordinates');
+					position = false;
 				}
 				$.each(markers, function(i, marker){
-					if($.isArray(data) || ($.isPlainObject(data) && data.position && $.isArray(data.position))){
+					if(position)){
 						var mpos = marker.getPosition(); // Get marker position LatLng
 						if(mpos.equals(position)) results.push(marker); // check it equals position, add to results
-					}else if(typeof data === 'string'){
-						if(marker.uid && marker.uid == data) results.push(marker); // check supplied uid
 					}else if(isin(data, marker)){
 						results.push(marker); // check supplied data object
-					}else if($.isFunction(data) && data(marker, any)){
-						// use data as a filter-function (the filter function must be defined as 'function(marker, ...)' and must return a boolean-value
+					}else if($.isFunction(data) && data(marker, args)){
+						// use data as a filter-function (the filter function must be defined as 'function(marker, args)' and must return a boolean-value
 						results.push(marker);
 					}
 				});
@@ -270,7 +283,6 @@
 
 // -----------------------------------------------------------------------------
 
-	var R = 6371; // mean radius of the earth (km)
 	/**
 	 * Checks if all properties in needle exists in haystack and are of the same value
 	 * @param 	{Object} 	needle
@@ -334,34 +346,32 @@
 	 */
 	$.fn.goomaps.distance = function(p1, p2){
 		// for the mathematical background of this routine have a look at spherical trigonometry (law of cosines)
-		conv = function(p){
-			lat = undefined;
-			lng = undefined;
+		var conv = function(p){
+			var lat = undefined,
+				lng = undefined;
 			if(p[lat]) { lat = p.lat(); }
 			if(p[lng]) { lng = p.lng(); }
 			return 	[
-								lat || p[0] || 0,
-								lng || p[1] || 0
-							];
+				lat || p[0] || 0,
+				lng || p[1] || 0
+			];
 		}
-		to_rad = function(deg){ // convert degrees in radiant
+		var to_rad = function(deg){ // convert degrees in radiant
 			return (Math.PI/180) * deg;
 		}
 		if(p1 && p2){
-			point1 = conv(p1);
-			point2 = conv(p2);
+			var point1 = conv(p1),
+				point2 = conv(p2);
 
-			lat1	= to_rad(point1[0]);
-			lng1	= to_rad(point1[1]);
-
-			lat2	= to_rad(point2[0]);
-			lng2	= to_rad(point2[1]);
+			var lat1 = to_rad(point1[0]),
+				lng1 = to_rad(point1[1]),
+				lat2 = to_rad(point2[0]),
+				lng2 = to_rad(point2[1]);
 
 			with(Math){
-				cos_e =	sin(lat1) * sin(lat2) +
-								cos(lat1) * cos(lat2) * cos(lng2 - lng1);
-				e			= acos(cos_e);
-				return	R * e;
+				var cos_e = sin(lat1) * sin(lat2) + cos(lat1) * cos(lat2) * cos(lng2 - lng1),
+					e = acos(cos_e);
+				return	$.fn.goomaps.EARTH_RADIUS * e;
 			}
 		}
 		return -1.0; // failure
@@ -412,7 +422,6 @@
 			return false;
 		}
 	};
-
 	/**
 	 * Create a Google Maps LatLngBounds object from array of coordinates
 	 */
@@ -425,7 +434,6 @@
 	 * Google Maps Geocoder object
 	 */
 	$.fn.goomaps.geocoder = {};
-
 	/**
 	 * Geocode addresses using the Google Maps Geocoder service
 	 *
@@ -520,16 +528,20 @@
 		MapTypeId: google.maps.MapTypeId.ROADMAP
 	};
 	/**
+	 * Goomaps Earth Radius
+	 */
+	$.fn.goomaps.EARTH_RADIUS = 6378137;
+	/**
 	 * Goomaps debugger switch
 	 */
-	$.fn.goomaps.debug = false;
+	$.fn.goomaps.DEBUG = false;
 	/**
 	 * Goomaps plugin version number
 	 */
-	$.fn.goomaps.pluginVersion = "1.0";
+	$.fn.goomaps.PLUGIN_VERSION = "1.0";
 	/**
 	 * Google Maps API version number
 	 */
-	$.fn.goomaps.apiVersion = "3.4";
+	$.fn.goomaps.API_VERSION = "3.4";
 
 })(jQuery);
