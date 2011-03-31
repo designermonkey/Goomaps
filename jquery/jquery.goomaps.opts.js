@@ -194,6 +194,8 @@ var layer = {
 		heatmap: false,
 		// KML Options
 		url: '',
+		preserveViewport: false,
+		suppressInfoWindows: false,	// Setting this option, it is advisable to add a click event to display the featureData somewhere on the page
 		// Fusion & KML Options
 		clickable: true
 	},
@@ -204,23 +206,7 @@ var layer = {
 }
 // Array of layers
 var layers = [
-	{
-		options: {
-			type: '', // bicycling, traffic, fusion, kml
-			// Fusion Options
-			id: 0, // Fusion table ID
-			query: '',
-			heatmap: false,
-			// KML Options
-			url: '',
-			// Fusion & KML Options
-			clickable: true
-		},
-		// For KML and Fusion Table layers
-		events: {
-			click: function(event){}
-		}
-	}
+	{}
 ];
 // Function returning either Array or Object
 var leyersfunc = function(){}

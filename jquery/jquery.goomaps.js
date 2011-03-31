@@ -130,8 +130,7 @@
 		/**
 		 * Add Markers to an existing Google Map object.
 		 *
-		 * Markers are stored with the element containing the map, as an array
-		 * of Google Maps Marker objects.
+		 * Markers are stored with the element containing the map, as an array of Google Maps Marker objects.
 		 *
 		 * @param   {Array} markers   Array of Marker objects
 		 *
@@ -183,50 +182,6 @@
 			});
 		},
 		/**
-		 *	Select all markers by a given selection-object.
-		 *	If you want to find a marker that is defined as:
-		 *	{
-		 *		position: [0, 0],
-		 *		userdefined: { identity: 'id_0815' },
-		 *		hello: 'world'
-		 *	}
-		 *
-		 * 	You can use one of following selection objects
-		 *
-		 * 	{
-		 *		userdefined: { identity: 'id_0815' },
-		 * 	}
-		 *
-		 * 	{
-		 *		hello: 'world',
-		 * 	}
-		 *
-		 *	This method will return all markers that define a subset of the given data-object.
-		 *	If a marker doesn't contain all values of the given data-object it wont't be returned.
-		 *	But be aware, if there are many markers this method can be very slow as it iterates over all markers.
-		 *	If no data is given it returns all markers.
-		 *	If data is a function it will be used to filter the markers.
-		 *
-		 *	@param		{Object|Function}	data	is a subset of all values for the returned markers (optional). If no data is given
-		 *																		it returns all markers of a map.
-		 *
-		 *																		If data is a function this function will be used as a filter on the markerlist.
-		 *																		The data-function should return a boolean-value and must be defined as 'function(marker, ...)'
-		 *																		If the filter-function returns true for a given marker/any the marker will be pushed onto
-		 *																		the results. A possible call can look like this:
-		 *																			$('#map').goomaps('getmarkers', $.fn.goomaps.incircle, { center: [0, 0], radius: '10km' });
-		 *																		With this you can define your own filter-functions or use the built-in-filter-functions like incircle.
-		 *
-		 *	@param		{Any}			The parameter 'any' will be used as the second parameter for a filter-function and is specific to the filter-function.
-		 *											It's not required if:
-		 *												- the filter-function don't need another parameter or
-		 *												- there is no filter-function in the data-parameter
-		 *
-		 *	@returns	{Array}		Array of all markers that have defined all values of the given data-object. If there is no
-		 *											matching marker it returns an empty array. If data is a filter-function this array will contain
-		 *											all markers where the filter has returned true.
-		 */
-		/**
 		 * Filter all markers on supplied parameters to return matched results
 		 *
 		 * Passing a number to this method will return the specific marker stored at that index in the Array of markers.
@@ -257,7 +212,7 @@
 					position = false;
 				}
 				$.each(markers, function(i, marker){
-					if(position)){
+					if(position){
 						var mpos = marker.getPosition(); // Get marker position LatLng
 						if(mpos.equals(position)) results.push(marker); // check it equals position, add to results
 					}else if(isin(data, marker)){
@@ -328,8 +283,8 @@
 					r = parseFloat(circle.radius);
 				}
 			}
-			lat = marker.getPosition().lat();
-			lng = marker.getPosition().lng();
+			var lat = marker.getPosition().lat(),
+				lng = marker.getPosition().lng();
 			return $.fn.goomaps.distance(circle.center, [lat, lng]) <= r;
 		}else{
 			// Add console message here

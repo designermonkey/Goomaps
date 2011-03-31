@@ -67,12 +67,15 @@
 		var layer = {
 			options: {
 				type: 'kml',
-				url: 'http://test:test@funeralmap.chameleonstudios.net/kml/sample.kml',
-				clickable: true
+				url: 'http://www.bgs.ac.uk/feeds/MhSeismology.kml',
+				clickable: true,
+				suppressInfoWindows: true
 			},
 			// For KML and Fusion Table layers
 			events: {
-				click: function(event){}
+				click: function(event){
+					console.log(event);
+				}
 			}
 		};
 		var circle = {
@@ -98,7 +101,7 @@
 			}
 		}
 		$(document).ready(function(){
-			$('#map').goomaps(options).goomaps('setmarkers', markers).goomaps('setcircles', circle);
+			$('#map').goomaps(options).goomaps('setlayers', layer);
 
 		});
 	</script>
