@@ -1,32 +1,6 @@
 
 (function($){
 
-	/**
-	 *	Converts a given position-string into a Google Maps Constant
-	 *	@param	{String}	The string to convert into a Google Maps Constant
-	 *	@returns	The corresponding Google Maps Constant; undefined if there is no match
-	 */
-	var convpos = function(pos){
-		switch(pos.toUpperCase()){
-			case 'BOTTOM':
-				return google.maps.ControlPosition.BOTTOM;
-			case 'BOTTOM_LEFT':
-				return google.maps.ControlPosition.BOTTOM_LEFT;
-			case 'BOTTOM_RIGHT':
-				return google.maps.ControlPosition.BOTTOM_RIGHT;
-			case 'LEFT':
-				return google.maps.ControlPosition.LEFT;
-			case 'RIGHT':
-				return google.maps.ControlPosition.RIGHT;
-			case 'TOP':
-				return google.maps.ControlPosition.TOP;
-			case 'TOP_LEFT':
-				return google.maps.ControlPosition.TOP_LEFT;
-			case 'TOP_RIGHT':
-				return google.maps.ControlPosition.TOP_RIGHT;
-		}
-	}
-
 	if($.fn.goomaps && $.fn.goomaps.methods){
 		var customcontrolmethods = {
 			/**
@@ -50,16 +24,11 @@
 
 					$.each(controls, function(i, control){
 						if(control.position){
-							position = convpos(control.position); // convert position-string to Google Maps constant
-							if(position){
-								c = $(control.control).get(0);
-								if(c){
-									map.controls[position].push(c);
-								} else {
-									if($.fn.goomaps.debug && window.console) console.log('setcustomcontrols: unknown control.');
-								}
+							c = $(control.control).get(0);
+							if(c){
+								map.controls[control.position].push(c);
 							} else {
-								if($.fn.goomaps.debug && window.console) console.log('setcustomcontrols: unknown position.');
+								if($.fn.goomaps.debug && window.console) console.log('setcustomcontrols: unknown control.');
 							}
 						} else {
 							if($.fn.goomaps.debug && window.console) console.log('setcustomcontrols: must be provided with a position.');

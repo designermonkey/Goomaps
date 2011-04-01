@@ -1,5 +1,5 @@
 /*!
- *	@name					jQuery Goomaps
+ *	@name					jQuery Goomaps (https://github.com/designermonkey/Goomaps)
  *								based on Google Maps APIv3
  *
  *	@author				John Porter 		https://github.com/designermonkey
@@ -271,7 +271,6 @@
 	 *	@param	{Object}							circle
 	 */
 	$.fn.goomaps.incircle = function(marker, circle){
-		// TODO: this function needs to be tested
 		if(marker && circle){
 			r = 0;
 			with(circle.radius){

@@ -26,11 +26,12 @@ Using `make` to build your copy will add all of the currently available methods,
 
 0.	<del>Remove geocoding from internal methods.</del> done. Still available on init and update for map center.
 0.	Add error handling to replace the simple console logging.
+0.	<del>Calculate the distance between two points</del> done.
 
 #####markers
 
-0.	<del>Streamline `getmarkers`, `getmarkers2` and `getmarker` into one method with results dependant on user input. Discuss first.</del>
-0.	Considering adding searching for all markers within a drawn polygon, circle or rectangle. Will rely on those methods being created first. Suggested by Adrian.
+0.	<del>Streamline `getmarkers`, `getmarkers2` and `getmarker` into one method with results dependant on user input. Discuss first.</del> done.
+0.	Searching for all markers within a drawn <del>polygon</del>(maybe next release), <del>circle</del>(done) or <del>rectangle</del>(maybe next release).
 
 ###jquery.goomaps.layers.js
 
@@ -42,4 +43,4 @@ Using `make` to build your copy will add all of the currently available methods,
 
 ####Custom Controls:
 
-0. <del>Adding Custom-Controls to a map</del>
+0. <del>Adding Custom-Controls to a map</del> done.
