@@ -20,6 +20,35 @@ Using `make` to build your copy will add all of the currently available methods,
 
 ## Development TODOs
 
+###General
+
+We need to discuss which functions should be defined in `$.fn.goomaps.*` and `$.goomaps.*` before the first release. Currently all functions are in `$.fn.goomaps.*`
+
+####jquery.goomaps.js
+
+0. $.fn.goomaps -> $.goomaps (John: ?, Adrian: no)
+0. $.fn.goomaps.methods -> $.goomaps.methods (John: ?, Adrian: no)
+0. $.fn.goomaps.incircle -> $.goomaps.incircle (John: ?, Adrian: yes)
+0. $.fn.goomaps.distance -> $.goomaps.distance (John: ?, Adrian: yes)
+0. $.fn.goomaps.latlng -> $.goomaps.latlng (John: ?, Adrian: yes)
+0. $.fn.goomaps.latlngbounds -> $.goomaps.latlngbounds (John: ?, Adrian: yes)
+0. $.fn.goomaps.geocoder -> $.goomaps.geocoder (John: ?, Adrian: yes)
+0. $.fn.goomaps.geocode -> $.goomaps.geocode (John: ?, Adrian: yes)
+0. $.fn.goomaps.markerimage -> $.goomaps.markerimage (John: ?, Adrian: yes)
+0. $.fn.goomaps.infowindow -> $.goomaps.infowindow (John: ?, Adrian: yes)
+0. $.fn.goomaps.setevents -> $.goomaps.setevents (John: ?, Adrian: yes)
+0. $.fn.goomaps.mapconstants -> $.goomaps.mapconstants (John: ?, Adrian: yes)
+0. $.fn.goomaps.constants -> $.goomaps.constants (John: ?, Adrian: yes)
+0. $.fn.goomaps.defaults -> $.goomaps.defaults (John: ?, Adrian: yes)
+0. $.fn.goomaps.EARTH_RADIUS -> $.goomaps.EARTH_RADIUS (John: ?, Adrian: yes)
+0. $.fn.goomaps.DEBUG -> $.goomaps.DEBUG (John: ?, Adrian: yes)
+0. $.fn.goomaps.PLUGIN_VERSION -> $.goomaps.PLUGIN_VERSION (John: ?, Adrian: yes)
+0. $.fn.goomaps.API_VERSION -> $.goomaps.API_VERSION (John: ?, Adrian: yes)
+
+####jquery.circles.js
+####jquery.layers.js
+####jquery.customcontrols.js
+
 ###jquery.goomaps.js
 
 #####general
@@ -41,6 +70,6 @@ Using `make` to build your copy will add all of the currently available methods,
 
 0.	Waiting on completion of Markers (core) and Layers.
 
-####Custom Controls:
+####jquery.goomaps.customcontrols.js
 
 0. <del>Adding Custom-Controls to a map</del> done.
