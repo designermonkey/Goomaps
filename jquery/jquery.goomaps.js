@@ -480,7 +480,7 @@
 	 */
 	$.fn.goomaps.constants = {
 		/**
-		 *	Converts a given string into google.Maps.ControlPosition-Constants
+		 *	Converts a given string into google.maps.ControlPosition-Constants
 		 *	@param		{string}	the value to convert into the constant
 		 *	@returns	{google.maps.ControlPosition}	the ControlPosition-Constant for the given string-value; undefined if there is no match
 		 */
@@ -503,6 +503,83 @@
 				case 'TOP_RIGHT':
 					return google.maps.ControlPosition.TOP_RIGHT;
 			}
+		},
+		/**
+		 *	Converts a given string into google.maps.NavigationControlStyle-Constants
+		 *	@param		{string}	the value to convert into the constant
+		 *	@returns	{google.maps.NavigationControlStyle}	the NavigationControlStyle-Constant for the given string-value
+		 */
+		NavigationControlStyle: function(val){
+			switch(val.toUpperCase()){
+				case 'ANDROID':
+					return google.maps.NavigationControlStyle.ANDROID;
+				case 'SMALL':
+					return google.maps.NavigationControlStyle.SMALL;
+				case 'ZOOM_PAN':
+					return google.maps.NavigationControlStyle.ZOOM_PAN;
+				default:
+					return google.maps.NavigationControlStyle.DEFAULT;
+			}
+		},
+		/**
+		 *	Converts a given string into google.maps.MapTypeControlStyle-Constants
+		 *	@param		{string}	the value to convert into the constant
+		 *	@returns	{google.maps.MapTypeControlStyle}	the MapTypeControlStyle-Constant for the given string-value
+		 */
+		MapTypeControlStyle: function(val){
+			switch(val.toUpperCase()){
+				case 'DROPDOWN_MENU':
+					return google.maps.MapTypeControlStyle.DROPDOWN_MENU;
+				case 'HORIZONTAL_BAR':
+					return google.maps.MapTypeControlStyle.HORIZONTAL_BAR;
+				default:
+					return google.maps.MapTypeControlStyle.DEFAULT;
+			}
+		},
+		/**
+		 *	Converts a given string into google.maps.MapTypeId-Constants
+		 *	@param		{string}	the value to convert into the constant
+		 *	@returns	{google.maps.MapTypeId}	the MapTypeId-Constant for the given string-value
+		 */
+		MapTypeId: function(val){
+			switch(val.toUpperCase()){
+				case 'HYBRID':
+					return google.maps.MapTypeId.HYBRID;
+				case 'SATELLITE':
+					return google.maps.MapTypeId.SATELLITE;
+				case 'TERRAIN':
+					return google.maps.MapTypeId.TERRAIN;
+				default:
+					return google.maps.MapTypeId.ROADMAP;
+			}
+		},
+		/**
+		 *	Converts a given string into google.maps.DirectionsTravelMode
+		 *	@param		{string}	the value to convert into the constant
+		 *	@returns	{google.maps.DirectionTravelMode}	the DirectionsTravelMode-Constant for the given string-value
+		 */
+		DirectionsTravelMode: function(val){
+			switch(val.toUpperCase()){
+				case 'BICYCLING':
+					return google.maps.DirectionsTravelMode.BICYCLING;
+				case 'WALKING':
+					return google.maps.DirectionsTravelMode.WALKING;
+				default:
+					return google.maps.DirectionsTravelMode.DRIVING;
+			}
+		},
+		/**
+		 *	Converts a given string into google.maps.DirectionsUnitSystem
+		 *	@param		{string}	the value to convert into the constant
+		 *	@returns	{google.maps.DirectionsUnitSystem}	the DirectionsUnitSystem-Constant for the given string-value
+		 */
+		DirectionsUnitSystem: function(val){
+			switch(val.toUpperCase()){
+				case 'IMPERIAL':
+					return google.maps.DirectionsUnitSystem.IMPERIAL;
+				default:
+					return google.maps.DirectionsUnitSystem.METRIC;
+			}
 		}
 	};
 	/**
@@ -511,7 +588,7 @@
 	$.fn.goomaps.defaults = {
 		center: new google.maps.LatLng(0,0),
 		zoom: 10,
-		MapTypeId: google.maps.MapTypeId.ROADMAP
+		MapTypeId: $.fn.goomaps.constants.MapTypeId('roadmap')
 	};
 	/**
 	 * Goomaps Earth Radius
