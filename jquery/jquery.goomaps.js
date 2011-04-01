@@ -516,7 +516,7 @@
 	/**
 	 * Goomaps Earth Radius
 	 */
-	$.fn.goomaps.EARTH_RADIUS = 6378137;
+	$.fn.goomaps.EARTH_RADIUS = 6371;
 	/**
 	 * Goomaps debugger switch
 	 */
