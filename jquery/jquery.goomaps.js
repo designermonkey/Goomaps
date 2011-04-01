@@ -81,25 +81,22 @@
 			if(options && options.debug === true) $.fn.goomaps.debug = options.debug;
 			return this.each(function(){
 				var map = $(this).data('goomaps').map;
+				$.fn.goomaps.mapconstants(options);
 				if(options && options.center){
 					if(typeof options.center === 'string'){
 						$.fn.goomaps.geocode(options.center, function(result){
-							map.setCenter(result);
+							options.center = result;
+							map.setOptions(options);
 						});
 					}else if($.isArray(options.center)){
-						map.setCenter($.fn.goomaps.latlng(options.center));
+						options.center = $.fn.goomaps.latlng(options.center);
+						map.setOptions(options);
 					}else{
 						// Expand the error console logging
 						if($.fn.goomaps.debug && window.console){
 							console.log('options.center must be either type Array or String');
 						}
 					}
-				}
-				if(options && options.zoom){
-					map.setZoom(options.zoom);
-				}
-				if(options && options.MapTypeId){
-					map.setMapTypeId(options.MapTypeId);
 				}
 				if(options && options.events){
 					$.fn.goomaps.setevents(map, options.events);
