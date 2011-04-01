@@ -45,24 +45,21 @@
 				$(this).goomaps('destroy');
 				// Initialise a map, attach it to the element itself
 				var map = new google.maps.Map(this, $.fn.goomaps.defaults);
+				$.fn.goomaps.mapconstants(options);
 				if(options && options.center){
 					if(typeof options.center === 'string'){
 						$.fn.goomaps.geocode(options.center, function(result){
-							map.setCenter(result);
+							options.center = result;
+							map.setOptions(options);
 						});
 					}else if($.isArray(options.center)){
-						map.setCenter($.fn.goomaps.latlng(options.center));
+						options.center = $.fn.goomaps.latlng(options.center);
+						map.setOptions(options);
 					}else{
 						if($.fn.goomaps.debug && window.console){
 							console.log('init: options.center must be either type Array or String');
 						}
 					}
-				}
-				if(options && options.zoom){
-					map.setZoom(options.zoom);
-				}
-				if(options && options.MapTypeId){
-					map.setMapTypeId(options.MapTypeId);
 				}
 				if(options && options.events){
 					$.fn.goomaps.setevents(map, options.events);
@@ -474,9 +471,41 @@
 		});
 	};
 	/**
+	 *	Convert all values in mapOptions to the corresponding Google Maps Constants
+	 *	@param	{Object}	the options provided for the map
+	 */
+	$.fn.goomaps.mapconstants = function(mapOptions){
+		if(mapOptions){
+			// MapTypeId:
+			if(mapOptions.MapTypeId) mapOptions.MapTypeId = $.fn.goomaps.constants.MapTypeId(mapOptions.MapTypeId);
+
+			// NavigationControlOptions:
+			if(mapOptions.navigationControlOptions){
+				with(mapOptions.navigationControlOptions){
+					if(position)	position 	= $.fn.goomaps.constants.ControlPosition(position);
+					if(style)			style			= $.fn.goomaps.constants.NavigationControlStyle(style);
+				}
+			}
+
+			// MapTypeControlOptions:
+			if(mapOptions.mapTypeControlOptions){
+				with(mapOptions.mapTypeControlOptions){
+					if(position)	position	= $.fn.goomaps.constants.ControlPosition(position);
+					if(style)			style			= $.fn.goomaps.constants.MapTypeControlStyle(style);
+				}
+			}
+
+			// ScaleControlOptions:
+			if(mapOptions.scaleControlOptions){
+				with(mapOptions.scaleControlOptions){
+					if(position)	position	= $.fn.goomaps.constants.ControlPosition(position);
+					if(style)			style			= $.fn.goomaps.constants.ScaleControlStyle(style);
+				}
+			}
+		}
+	};
+	/**
 	 *	Functions to convert values into Google Maps Constants
-	 *
-	 *
 	 */
 	$.fn.goomaps.constants = {
 		/**
@@ -580,6 +609,17 @@
 				default:
 					return google.maps.DirectionsUnitSystem.METRIC;
 			}
+		},
+		/**
+		 *	Converts a given string into google.maps.ScaleControlStyle
+		 *	@param		{string}	the value to convert into the constant
+		 *	@returns	{google.maps.ScaleControlStyle}	the ScaleControlStyle-Constant for the given string-value
+		 */
+		ScaleControlStyle: function(val){
+			switch(val.toUpperCase()){
+				default:
+					return google.maps.ScaleControlStyle.DEFAULT;
+			}
 		}
 	};
 	/**
@@ -588,7 +628,7 @@
 	$.fn.goomaps.defaults = {
 		center: new google.maps.LatLng(0,0),
 		zoom: 10,
-		MapTypeId: $.fn.goomaps.constants.MapTypeId('roadmap')
+		MapTypeId: 'roadmap'
 	};
 	/**
 	 * Goomaps Earth Radius
