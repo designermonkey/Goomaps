@@ -297,8 +297,8 @@
 		var conv = function(p){
 			var lat = undefined,
 				lng = undefined;
-			if(p[lat]) { lat = p.lat(); }
-			if(p[lng]) { lng = p.lng(); }
+			if(p.lat) { lat = p.lat(); }
+			if(p.lng) { lng = p.lng(); }
 			return 	[
 				lat || p[0] || 0,
 				lng || p[1] || 0
