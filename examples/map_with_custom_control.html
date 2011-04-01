@@ -1,0 +1,28 @@
+<script type="text/javascript">
+	$(document).ready(function() {
+		// create a map:
+		$('#canvas').goomaps({
+			center: [52.257347,0.054988],
+			zoom: 6,
+			mapTypeId: 'roadmap'
+		});
+
+		// create a custom control at the bottom of the map:
+		$('#canvas').goomaps('setcustomcontrols', { position: 'bottom', control: '#mycontrol'} );
+	});
+</script>
+<h2>Map with custom control at the bottom</h2>
+<div id="canvas" style="height: 400px;"></div>
+<div id="mycontrol"><input type="text" style="border: 1px solid black; width: 150px;" value="hello world"/></div>
+<h3>Code:</h3>
+<pre class="code">
+// create a map:
+$('#canvas').goomaps({
+	center: [52.257347,0.054988],
+	zoom: 6,
+	mapTypeId: 'roadmap'
+});
+
+// create a custom control at the bottom of the map:
+$('#canvas').goomaps('setcustomcontrols', { position: 'bottom', control: '#mycontrol'} );
+</pre>

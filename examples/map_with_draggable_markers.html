@@ -1,0 +1,87 @@
+<script type="text/javascript">
+	$(document).ready(function() {
+		// create the map:
+		$('#canvas').goomaps({
+			center: [52.257347,0.054988],
+			zoom: 6,
+			mapTypeId: 'roadmap',
+			streetViewControl: false,
+			mapTypeControl: false
+		});
+
+		// add some markers:
+		markers = [
+			{
+				options: {
+					position: [52.257347,0.054988],
+					title: 'A Test Marker',
+					clickable: true,
+					draggable: true,
+					info: '#info',
+					icon: 'http://maps.google.com/mapfiles/arrow.png',
+					shadow: 'http://maps.google.com/mapfiles/arrowshadow.png',
+				},
+				events: {
+					'dragend': function(event){
+						alert(this.getTitle() + ': ' + this.getPosition());
+					}
+				}
+			},
+			{
+				options: {
+					position: [52, 10],
+					title: 'Another Test Marker',
+					draggable: false,
+					info: 'Another Test Marker'
+				}
+			}
+		];
+		$('#canvas').goomaps('setmarkers', markers);
+	});
+</script>
+<h2>Map with draggable Markers, custom icon and infobox, no streetviewcontrol, no maptypecontrol</h2>
+<p>Note: only the arrow-marker is draggable</p>
+<div id="canvas" style="height: 400px;"></div>
+<div id="info" style="width: 300px; height: 160px; ">
+	<a title="jQuery" href="http://jquery.com/" target="_new"><img src="http://static.jquery.com/files/rocker/images/logo_jquery_215x53.gif" style="background-color: black;"></img></a>
+</div>
+<h3>Code:</h3>
+<pre class="code">
+// create the map:
+$('#canvas').goomaps({
+	center: [52.257347,0.054988],
+	zoom: 6,
+	mapTypeId: 'roadmap',
+	streetViewControl: false,
+	mapTypeControl: false
+});
+
+// add some markers:
+markers = [
+	{
+		options: {
+			position: [52.257347,0.054988],
+			title: 'A Test Marker',
+			clickable: true,
+			draggable: true,
+			info: '#info',
+			icon: 'http://maps.google.com/mapfiles/arrow.png',
+			shadow: 'http://maps.google.com/mapfiles/arrowshadow.png',
+		},
+		events: {
+			'dragend': function(event){
+				alert(this.getTitle() + ': ' + this.getPosition());
+			}
+		}
+	},
+	{
+		options: {
+			position: [52, 10],
+			title: 'Another Test Marker',
+			draggable: false,
+			info: 'Another Test Marker'
+		}
+	}
+];
+$('#canvas').goomaps('setmarkers', markers);
+</pre>

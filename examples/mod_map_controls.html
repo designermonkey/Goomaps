@@ -1,0 +1,36 @@
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('#canvas').goomaps({
+			center: [52.257347,0.054988],
+			zoom: 6,
+			type: 'roadmap',
+			navigationControlOptions: {
+				position: "bottom",
+				style: "android"
+			},
+			mapTypeControlOptions: {
+				position: "left",
+				style: "dropdown_menu"
+			}
+		});
+	});
+</script>
+<h2>Map with modified Map-Controls</h2>
+<p>Positioning and styling the navigation-controls and maptype-controls</p>
+<div id="canvas" style="height: 400px;"></div>
+<h3>Code:</h3>
+<pre class="code">
+$('#canvas').goomaps({
+	center: [52.257347,0.054988],
+	zoom: 6,
+	type: 'roadmap',
+	navigationControlOptions: {
+		position: "bottom",
+		style: "android"
+	},
+	mapTypeControlOptions: {
+		position: "left",
+		style: "dropdown_menu"
+	}
+});
+</pre>

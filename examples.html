@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>jquery.goomaps Examples</title>
+	<script type="text/javascript" src="jquery/jquery-1.5.1.min.js"></script>
+	<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false&language=en"></script>
+	<script type="text/javascript" src="build/jquery.goomaps.min.js"></script>
+	<style>
+		body {
+			font: 12px Verdana;
+		}
+		#examplenav {
+			border-bottom: 1px solid green;
+		}
+		#examplenav ul li {
+
+		}
+		pre.code {
+			font-family: Courier;
+			font-size: 14px;
+			border-top: 1px solid green;
+			border-bottom: 1px solid green;
+			padding: 12px 10px 12px 10px
+		}
+		a:link {text-decoration: none; }
+		a:visited {text-decoration: none; }
+		a:active {text-decoration: none; }
+		a:hover {text-decoration: underline; }
+	</style>
+</head>
+<body>
+	<div id="examplenav">
+		<h1>Examples:</h1>
+		<ul>
+			<li><a title="Simple Map" href="examples/simple.html">Simple Map</a></li>
+			<li><a title="Map with draggable Markers, custom icon and infobox, no streetviewcontrol, no maptypecontrol" href="examples/map_with_draggable_markers.html">Map with draggable Markers, custom icon and infobox, no streetviewcontrol, no maptypecontrol</a></li>
+			<li><a title="Map with modified Map-Controls" href="examples/mod_map_controls.html">Map with modified Map-Controls</a></li>
+			<li><a title="Map with custom control" href="examples/map_with_custom_control.html">Map with custom control</a></li>
+			<li><a title="Calculate distance (as the crow flies) between two markers" href="examples/calc_distance_between_two_markers.html">Calculate distance (as the crow flies) between two markers</a></li>
+			<!--
+			<li><a title="" href="examples/.html"></a></li>
+			-->
+		</ul>
+	</div>
+
+	<div id="map"></div>
+
+  <script type="text/javascript">
+		$(function(){
+			$('#examplenav ul li a').bind('click',	function(){
+																								$('#map').load(this.href);
+																								return false;
+																							});
+		});
+	</script>
+</body>
+</html>
