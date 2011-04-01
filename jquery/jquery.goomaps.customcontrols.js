@@ -25,8 +25,13 @@
 					$.each(controls, function(i, control){
 						if(control.position){
 							c = $(control.control).get(0);
+							p = $.fn.goomaps.constants.ControlPosition(control.position);
 							if(c){
-								map.controls[control.position].push(c);
+								if(p){
+									map.controls[p].push(c);
+								} else {
+									if($.fn.goomaps.debug && window.console) console.log('setcustomcontrols: unknown position.');
+								}
 							} else {
 								if($.fn.goomaps.debug && window.console) console.log('setcustomcontrols: unknown control.');
 							}

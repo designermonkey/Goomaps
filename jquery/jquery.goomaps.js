@@ -474,6 +474,38 @@
 		});
 	};
 	/**
+	 *	Functions to convert values into Google Maps Constants
+	 *
+	 *
+	 */
+	$.fn.goomaps.constants = {
+		/**
+		 *	Converts a given string into google.Maps.ControlPosition-Constants
+		 *	@param		{string}	the value to convert into the constant
+		 *	@returns	{google.maps.ControlPosition}	the ControlPosition-Constant for the given string-value; undefined if there is no match
+		 */
+		ControlPosition: function(val){
+			switch(val.toUpperCase()){
+				case 'BOTTOM':
+					return google.maps.ControlPosition.BOTTOM;
+				case 'BOTTOM_LEFT':
+					return google.maps.ControlPosition.BOTTOM_LEFT;
+				case 'BOTTOM_RIGHT':
+					return google.maps.ControlPosition.BOTTOM_RIGHT;
+				case 'LEFT':
+					return google.maps.ControlPosition.LEFT;
+				case 'RIGHT':
+					return google.maps.ControlPosition.RIGHT;
+				case 'TOP':
+					return google.maps.ControlPosition.TOP;
+				case 'TOP_LEFT':
+					return google.maps.ControlPosition.TOP_LEFT;
+				case 'TOP_RIGHT':
+					return google.maps.ControlPosition.TOP_RIGHT;
+			}
+		}
+	};
+	/**
 	 * Goomaps Default options for initialisation of the map
 	 */
 	$.fn.goomaps.defaults = {
