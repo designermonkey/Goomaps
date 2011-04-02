@@ -39,30 +39,30 @@
 		 * @returns {Object} Returns the object passed in, for chainability.
 		 */
 		init: function(options){
-			if(options && options.debug) $.fn.goomaps.debug = options.debug;
+			if(options && options.debug) $.goomaps.DEBUG = options.debug;
 			return this.each(function(){
 				// Remove any map data for this element
 				$(this).goomaps('destroy');
 				// Initialise a map, attach it to the element itself
-				var map = new google.maps.Map(this, $.fn.goomaps.defaults);
-				$.fn.goomaps.mapconstants(options);
+				var map = new google.maps.Map(this, $.goomaps.defaults);
+				$.goomaps.mapconstants(options);
 				if(options && options.center){
 					if(typeof options.center === 'string'){
-						$.fn.goomaps.geocode(options.center, function(result){
+						$.goomaps.geocode(options.center, function(result){
 							options.center = result;
 							map.setOptions(options);
 						});
 					}else if($.isArray(options.center)){
-						options.center = $.fn.goomaps.latlng(options.center);
+						options.center = $.goomaps.latlng(options.center);
 						map.setOptions(options);
 					}else{
-						if($.fn.goomaps.debug && window.console){
+						if($.goomaps.DEBUG && window.console){
 							console.log('init: options.center must be either type Array or String');
 						}
 					}
 				}
 				if(options && options.events){
-					$.fn.goomaps.setevents(map, options.events);
+					$.goomaps.setevents(map, options.events);
 				}
 				var add = {
 					map: map
@@ -78,28 +78,28 @@
 		 * @returns {Object}   Returns the object passed in, for chainability
 		 */
 		update: function(options){
-			if(options && options.debug === true) $.fn.goomaps.debug = options.debug;
+			if(options && options.debug === true) $.goomaps.DEBUG = options.debug;
 			return this.each(function(){
 				var map = $(this).data('goomaps').map;
-				$.fn.goomaps.mapconstants(options);
+				$.goomaps.mapconstants(options);
 				if(options && options.center){
 					if(typeof options.center === 'string'){
-						$.fn.goomaps.geocode(options.center, function(result){
+						$.goomaps.geocode(options.center, function(result){
 							options.center = result;
 							map.setOptions(options);
 						});
 					}else if($.isArray(options.center)){
-						options.center = $.fn.goomaps.latlng(options.center);
+						options.center = $.goomaps.latlng(options.center);
 						map.setOptions(options);
 					}else{
 						// Expand the error console logging
-						if($.fn.goomaps.debug && window.console){
+						if($.goomaps.DEBUG && window.console){
 							console.log('options.center must be either type Array or String');
 						}
 					}
 				}
 				if(options && options.events){
-					$.fn.goomaps.setevents(map, options.events);
+					$.goomaps.setevents(map, options.events);
 				}
 			});
 		},
@@ -145,27 +145,27 @@
 					}
 					// Custom Icon
 					if(marker.options.icon && typeof marker.options.icon != 'string'){
-						marker.options.icon = $.fn.goomaps.markerimage(marker.options.icon);
+						marker.options.icon = $.goomaps.markerimage(marker.options.icon);
 					}
 					// Custom Shadow
 					if(marker.options.shadow && typeof marker.options.shadow != 'string'){
-						marker.options.shadow = $.fn.goomaps.markerimage(marker.options.shadow);
+						marker.options.shadow = $.goomaps.markerimage(marker.options.shadow);
 					}
 					// Position
 					if(marker.options.position && $.isArray(marker.options.position)){
-						marker.options.position = $.fn.goomaps.latlng(marker.options.position);
+						marker.options.position = $.goomaps.latlng(marker.options.position);
 						add.markers[i] = new google.maps.Marker(marker.options);
 						ExtendMarker(map, add.markers[i]);
 					}else{
-						if($.fn.goomaps.debug && window.console) console.log('Markers must be provided with a position.');
+						if($.goomaps.DEBUG && window.console) console.log('Markers must be provided with a position.');
 					}
 					// Events
 					if(marker.events){
-						$.fn.goomaps.setevents(add.markers[i], marker.events);
+						$.goomaps.setevents(add.markers[i], marker.events);
 					}
 					// Infowindow
 					if(marker.options.info){
-						$.fn.goomaps.infowindow(add.markers[i], marker.options.info, map);
+						$.goomaps.infowindow(add.markers[i], marker.options.info, map);
 						// Open the info window straight away
 						if(marker.options.initialopen == true){
 							google.maps.event.trigger(add.markers[i], 'click');
@@ -200,9 +200,9 @@
 			}else if($.isPlainObject(data) || $.isFunction(data)){
 				var position;
 				if(data.position && $.isArray(data.position)){
-					position = $.fn.goomaps.latlng(data.position); // Get LatLng of position array
+					position = $.goomaps.latlng(data.position); // Get LatLng of position array
 				}else if(!$.isArray(data.position)){
-					if($.fn.goomaps.debug && window.console) console.log('getmarkers: Matching on position requires an array of coordinates');
+					if($.goomaps.DEBUG && window.console) console.log('getmarkers: Matching on position requires an array of coordinates');
 					position = false;
 				}
 				$.each(markers, function(i, marker){
@@ -231,6 +231,11 @@
 	};
 
 // -----------------------------------------------------------------------------
+
+	/**
+	 *	The Goomaps-Namespace
+	 */
+	$.goomaps = {};
 
 	/**
 	 * Checks if all properties in needle exists in haystack and are of the same value
@@ -264,7 +269,7 @@
 	 *	@param	{google.maps.Marker}	marker
 	 *	@param	{Object}							circle
 	 */
-	$.fn.goomaps.incircle = function(marker, circle){
+	$.goomaps.incircle = function(marker, circle){
 		if(marker && circle){
 			r = 0;
 			with(circle.radius){
@@ -278,7 +283,7 @@
 			}
 			var lat = marker.getPosition().lat(),
 				lng = marker.getPosition().lng();
-			return $.fn.goomaps.distance(circle.center, [lat, lng]) <= r;
+			return $.goomaps.distance(circle.center, [lat, lng]) <= r;
 		}else{
 			// Add console message here
 			return false;
@@ -292,7 +297,7 @@
 	 *	@param		{LatLng|Array}	p2	second point; [lat, lng]
 	 *	@returns	{float}					the distance in km between the given points
 	 */
-	$.fn.goomaps.distance = function(p1, p2){
+	$.goomaps.distance = function(p1, p2){
 		// for the mathematical background of this routine have a look at spherical trigonometry (law of cosines)
 		var conv = function(p){
 			var lat = undefined,
@@ -319,7 +324,7 @@
 			with(Math){
 				var cos_e = sin(lat1) * sin(lat2) + cos(lat1) * cos(lat2) * cos(lng2 - lng1),
 					e = acos(cos_e);
-				return	$.fn.goomaps.EARTH_RADIUS * e;
+				return	$.goomaps.EARTH_RADIUS * e;
 			}
 		}
 		return -1.0; // failure
@@ -346,7 +351,7 @@
 			} else {
 				this.infowindow = new google.maps.InfoWindow();
 
-				$.fn.goomaps.setevents(this, {'click': function(){
+				$.goomaps.setevents(this, {'click': function(){
 					this.infowindow.open(map, this);
 				}});
 
@@ -362,26 +367,26 @@
 	 *
 	 * @returns {LatLng}   Google Maps LatLng object
 	 */
-	$.fn.goomaps.latlng = function(coords){
+	$.goomaps.latlng = function(coords){
 		if($.isArray(coords)){
 			return new google.maps.LatLng(coords[0], coords[1]);
 		}else{
-			if($.fn.goomaps.debug && window.console) console.log('latlng must be provided with an array of coordinates.');
+			if($.goomaps.DEBUG && window.console) console.log('latlng must be provided with an array of coordinates.');
 			return false;
 		}
 	};
 	/**
 	 * Create a Google Maps LatLngBounds object from array of coordinates
 	 */
-	$.fn.goomaps.latlngbounds = function(coords){
-		var a = $.fn.goomaps.latlng(coords[0]);
-		var b = $.fn.goomaps.latlng(coords[1]);
+	$.goomaps.latlngbounds = function(coords){
+		var a = $.goomaps.latlng(coords[0]);
+		var b = $.goomaps.latlng(coords[1]);
 		return new google.maps.LatLngBounds(a, b);
 	};
 	/**
 	 * Google Maps Geocoder object
 	 */
-	$.fn.goomaps.geocoder = {};
+	$.goomaps.geocoder = {};
 	/**
 	 * Geocode addresses using the Google Maps Geocoder service
 	 *
@@ -390,15 +395,15 @@
 	 *
 	 * @returns {LatLng}   Google Maps LatLng object
 	 */
-	$.fn.goomaps.geocode = function(address, callback){
-		if($.isEmptyObject($.fn.goomaps.geocoder)) $.fn.goomaps.geocoder = new google.maps.Geocoder();
+	$.goomaps.geocode = function(address, callback){
+		if($.isEmptyObject($.goomaps.geocoder)) $.goomaps.geocoder = new google.maps.Geocoder();
 		if(typeof address === 'string' && $.isFunction(callback)){
-			$.fn.goomaps.geocoder.geocode({address: address}, function(results, status){
+			$.goomaps.geocoder.geocode({address: address}, function(results, status){
 				if(status == google.maps.GeocoderStatus.OK){
 					callback(results[0].geometry.location);
 					return true;
 				}else{
-					if($.fn.goomaps.debug && window.console) console.log('Geocoder status returned: '+status);
+					if($.goomaps.DEBUG && window.console) console.log('Geocoder status returned: '+status);
 					callback(results);
 					return false;
 				}
@@ -406,11 +411,11 @@
 			return true;
 		}else{
 			if(typeof address != 'string' && !$.isFunction(callback)){
-				if($.fn.goomaps.debug && window.console) return console.log('Geocoder requires an address string, and a callback function');
+				if($.goomaps.DEBUG && window.console) return console.log('Geocoder requires an address string, and a callback function');
 			}else if(typeof address != 'string'){
-				if($.fn.goomaps.debug && window.console) return console.log('Geocoder requires an address string');
+				if($.goomaps.DEBUG && window.console) return console.log('Geocoder requires an address string');
 			}else if(!$.isFunction(callback)){
-				if($.fn.goomaps.debug && window.console) return console.log('Geocoder requires a callback function');
+				if($.goomaps.DEBUG && window.console) return console.log('Geocoder requires a callback function');
 			}
 			return false;
 		}
@@ -423,7 +428,7 @@
 	 *
 	 * @returns {MarkerImage}   Google Maps MarkerImage object
 	 */
-	$.fn.goomaps.markerimage = function(options){
+	$.goomaps.markerimage = function(options){
 		if(options.size){
 			options.size = new google.maps.Size(options.size[0], options.size[1]);
 		}
@@ -443,7 +448,7 @@
 	 *
 	 * @returns {InfoWindow}   Google Maps InfoWindow object
 	 */
-	$.fn.goomaps.infowindow = function(marker, info, map){
+	$.goomaps.infowindow = function(marker, info, map){
 		var infowindow;
 		if(typeof info === 'string' && info.match('^#')){
 			$(info).hide();
@@ -451,7 +456,7 @@
 		}else{
 			marker.getInfoWindow().setContent(info);
 		}
-		$.fn.goomaps.setevents(marker, {'click': function(){
+		$.goomaps.setevents(marker, {'click': function(){
 			marker.getInfoWindow().open(map, marker);
 		}});
 	};
@@ -462,7 +467,7 @@
 	 * @param   {Object} events   The event callbacks
 	 *
 	 */
-	$.fn.goomaps.setevents = function(target, events){
+	$.goomaps.setevents = function(target, events){
 		$.each(events, function(event, callback){
 			google.maps.event.addListener(target, event, callback);
 		});
@@ -471,32 +476,32 @@
 	 *	Convert all values in mapOptions to the corresponding Google Maps Constants
 	 *	@param	{Object}	the options provided for the map
 	 */
-	$.fn.goomaps.mapconstants = function(mapOptions){
+	$.goomaps.mapconstants = function(mapOptions){
 		if(mapOptions){
 			// MapTypeId:
-			if(mapOptions.MapTypeId) mapOptions.MapTypeId = $.fn.goomaps.constants.MapTypeId(mapOptions.MapTypeId);
+			if(mapOptions.MapTypeId) mapOptions.MapTypeId = $.goomaps.constants.MapTypeId(mapOptions.MapTypeId);
 
 			// NavigationControlOptions:
 			if(mapOptions.navigationControlOptions){
 				with(mapOptions.navigationControlOptions){
-					if(position)	position 	= $.fn.goomaps.constants.ControlPosition(position);
-					if(style)			style			= $.fn.goomaps.constants.NavigationControlStyle(style);
+					if(position)	position 	= $.goomaps.constants.ControlPosition(position);
+					if(style)			style			= $.goomaps.constants.NavigationControlStyle(style);
 				}
 			}
 
 			// MapTypeControlOptions:
 			if(mapOptions.mapTypeControlOptions){
 				with(mapOptions.mapTypeControlOptions){
-					if(position)	position	= $.fn.goomaps.constants.ControlPosition(position);
-					if(style)			style			= $.fn.goomaps.constants.MapTypeControlStyle(style);
+					if(position)	position	= $.goomaps.constants.ControlPosition(position);
+					if(style)			style			= $.goomaps.constants.MapTypeControlStyle(style);
 				}
 			}
 
 			// ScaleControlOptions:
 			if(mapOptions.scaleControlOptions){
 				with(mapOptions.scaleControlOptions){
-					if(position)	position	= $.fn.goomaps.constants.ControlPosition(position);
-					if(style)			style			= $.fn.goomaps.constants.ScaleControlStyle(style);
+					if(position)	position	= $.goomaps.constants.ControlPosition(position);
+					if(style)			style			= $.goomaps.constants.ScaleControlStyle(style);
 				}
 			}
 		}
@@ -504,7 +509,7 @@
 	/**
 	 *	Functions to convert values into Google Maps Constants
 	 */
-	$.fn.goomaps.constants = {
+	$.goomaps.constants = {
 		/**
 		 *	Converts a given string into google.maps.ControlPosition-Constants
 		 *	@param		{string}	the value to convert into the constant
@@ -622,7 +627,7 @@
 	/**
 	 * Goomaps Default options for initialisation of the map
 	 */
-	$.fn.goomaps.defaults = {
+	$.goomaps.defaults = {
 		center: new google.maps.LatLng(0,0),
 		zoom: 10,
 		MapTypeId: 'roadmap'
@@ -630,18 +635,18 @@
 	/**
 	 * Goomaps Earth Radius
 	 */
-	$.fn.goomaps.EARTH_RADIUS = 6371;
+	$.goomaps.EARTH_RADIUS = 6371;
 	/**
 	 * Goomaps debugger switch
 	 */
-	$.fn.goomaps.DEBUG = false;
+	$.goomaps.DEBUG = false;
 	/**
 	 * Goomaps plugin version number
 	 */
-	$.fn.goomaps.PLUGIN_VERSION = "1.0";
+	$.goomaps.PLUGIN_VERSION = "1.0";
 	/**
 	 * Google Maps API version number
 	 */
-	$.fn.goomaps.API_VERSION = "3.4";
+	$.goomaps.API_VERSION = "3.4";
 
 })(jQuery);

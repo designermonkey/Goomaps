@@ -30,7 +30,7 @@
 						}
 						add.layers[i].setMap(map);
 						if(layer.events){
-							$.fn.goomaps.setevents(add.layers[i], layer.events);
+							$.goomaps.setevents(add.layers[i], layer.events);
 						}
 					});
 					$.extend($this.data('goomaps'), add);
@@ -61,15 +61,15 @@
 				}else if($.isPlainObject(data) || $.isFunction(data)){
 					var bounds, center;
 					if(data.bounds && $.isArray(data.bounds)){
-						bounds = $.fn.goomaps.latlngbounds(data.bounds); // Get LatLngBounds of bounds array
+						bounds = $.goomaps.latlngbounds(data.bounds); // Get LatLngBounds of bounds array
 					}else if(!$.isArray(data.bounds)){
-						if($.fn.goomaps.debug && window.console) console.log('getlayers: Matching on bounds requires an array of arrays of coordinates');
+						if($.goomaps.debug && window.console) console.log('getlayers: Matching on bounds requires an array of arrays of coordinates');
 						bounds = false;
 					}
 					if(data.center && $.isArray(data.center)){
-						center = $.fn.goomaps.latlng(data.center); // Get LatLng of center array
+						center = $.goomaps.latlng(data.center); // Get LatLng of center array
 					}else if(!$.isArray(data.center)){
-						if($.fn.goomaps.debug && window.console) console.log('getlayers: Matching on center requires an array of coordinates');
+						if($.goomaps.debug && window.console) console.log('getlayers: Matching on center requires an array of coordinates');
 						center = false;
 					}
 					$.each(layers, function(i, layer){

@@ -25,18 +25,18 @@
 					$.each(controls, function(i, control){
 						if(control.position){
 							c = $(control.control).get(0);
-							p = $.fn.goomaps.constants.ControlPosition(control.position);
+							p = $.goomaps.constants.ControlPosition(control.position);
 							if(c){
 								if(p){
 									map.controls[p].push(c);
 								} else {
-									if($.fn.goomaps.debug && window.console) console.log('setcustomcontrols: unknown position.');
+									if($.goomaps.debug && window.console) console.log('setcustomcontrols: unknown position.');
 								}
 							} else {
-								if($.fn.goomaps.debug && window.console) console.log('setcustomcontrols: unknown control.');
+								if($.goomaps.debug && window.console) console.log('setcustomcontrols: unknown control.');
 							}
 						} else {
-							if($.fn.goomaps.debug && window.console) console.log('setcustomcontrols: must be provided with a position.');
+							if($.goomaps.debug && window.console) console.log('setcustomcontrols: must be provided with a position.');
 						}
 					});
 				});
