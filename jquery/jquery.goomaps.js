@@ -144,11 +144,11 @@
 						if(marker.options.animation == 'bounce') marker.options.animation = google.maps.Animation.BOUNCE;
 					}
 					// Custom Icon
-					if(marker.options.icon && typeof marker.options.icon != 'string'){
+					if(marker.options.icon){
 						marker.options.icon = $.goomaps.markerimage(marker.options.icon);
 					}
 					// Custom Shadow
-					if(marker.options.shadow && typeof marker.options.shadow != 'string'){
+					if(marker.options.shadow){
 						marker.options.shadow = $.goomaps.markerimage(marker.options.shadow);
 					}
 					// Position
