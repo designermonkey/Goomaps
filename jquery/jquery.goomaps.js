@@ -433,10 +433,10 @@
 			options.size = new google.maps.Size(options.size[0], options.size[1]);
 		}
 		if(options.anchor){
-			o.anchor = new google.maps.Point(options.anchor[0], options.anchor[1]);
+			options.anchor = new google.maps.Point(options.anchor[0], options.anchor[1]);
 		}
 		if(options.origin){
-			o.origin = new google.maps.Point(options.origin[0], options.origin[1]);
+			options.origin = new google.maps.Point(options.origin[0], options.origin[1]);
 		}
 		return new google.maps.MarkerImage(options);
 	};
@@ -504,6 +504,14 @@
 					if(style)			style			= $.goomaps.constants.ScaleControlStyle(style);
 				}
 			}
+
+			// ZoomControlOptions:
+			if(mapOptions.zoomControlOptions){
+				with(mapOptions.zoomControlOptions){
+					if(position)	position	= $.goomaps.constants.ControlPosition(position);
+					if(style)			style			= $.goomaps.constants.ZoomControlStyle(style);
+				}
+			}
 		}
 	};
 	/**
@@ -517,18 +525,26 @@
 		 */
 		ControlPosition: function(val){
 			switch(val.toUpperCase()){
-				case 'BOTTOM':
-					return google.maps.ControlPosition.BOTTOM;
+				case 'BOTTOM_CENTER':
+					return google.maps.ControlPosition.BOTTOM_CENTER;
 				case 'BOTTOM_LEFT':
 					return google.maps.ControlPosition.BOTTOM_LEFT;
 				case 'BOTTOM_RIGHT':
 					return google.maps.ControlPosition.BOTTOM_RIGHT;
-				case 'LEFT':
-					return google.maps.ControlPosition.LEFT;
-				case 'RIGHT':
-					return google.maps.ControlPosition.RIGHT;
-				case 'TOP':
-					return google.maps.ControlPosition.TOP;
+				case 'LEFT_BOTTOM':
+					return google.maps.ControlPosition.LEFT_BOTTOM;
+				case 'LEFT_CENTER':
+					return google.maps.ControlPosition.LEFT_CENTER;
+				case 'LEFT_TOP':
+					return google.maps.ControlPosition.LEFT_TOP;
+				case 'RIGHT_BOTTOM':
+					return google.maps.ControlPosition.RIGHT_BOTTOM;
+				case 'RIGHT_CENTER':
+					return google.maps.ControlPosition.RIGHT_CENTER;
+				case 'RIGHT_TOP':
+					return google.maps.ControlPosition.RIGHT_TOP;
+				case 'TOP_CENTER':
+					return google.maps.ControlPosition.TOP_CENTER;
 				case 'TOP_LEFT':
 					return google.maps.ControlPosition.TOP_LEFT;
 				case 'TOP_RIGHT':
@@ -621,6 +637,21 @@
 			switch(val.toUpperCase()){
 				default:
 					return google.maps.ScaleControlStyle.DEFAULT;
+			}
+		},
+		/**
+		 *	Converts a given string into google.maps.ZoomControlStyle
+		 *	@param		{string}	the value to convert into the constant
+		 *	@returns	{google.maps.ZoomControlStyle} the ZoomControlStyle-Constant for the given string-value
+		 */
+		ZoomControlStyle: function(val){
+			switch(val.toUpperCase()){
+				case 'LARGE':
+					return google.maps.ZoomControlStyle.LARGE;
+				case 'SMALL':
+					return google.maps.ZoomControlStyle.SMALL;
+				default:
+					return google.maps.ZoomControlStyle.DEFAULT;
 			}
 		}
 	};
