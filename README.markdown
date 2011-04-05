@@ -22,32 +22,7 @@ Using `make` to build your copy will add all of the currently available methods,
 
 ###General
 
-We need to discuss which functions should be defined in `$.fn.goomaps.*` and `$.goomaps.*` before the first release. Currently all functions are in `$.fn.goomaps.*`
-
-####jquery.goomaps.js
-
-0. $.fn.goomaps -> $.goomaps (John: no, Adrian: no)
-0. $.fn.goomaps.methods -> $.goomaps.methods (John: no, Adrian: no)
-0. $.fn.goomaps.incircle -> $.goomaps.incircle (John: yes, Adrian: yes)
-0. $.fn.goomaps.distance -> $.goomaps.distance (John: yes, Adrian: yes)
-0. $.fn.goomaps.latlng -> $.goomaps.latlng (John: yes, Adrian: yes)
-0. $.fn.goomaps.latlngbounds -> $.goomaps.latlngbounds (John: yes, Adrian: yes)
-0. $.fn.goomaps.geocoder -> $.goomaps.geocoder (John: yes, Adrian: yes)
-0. $.fn.goomaps.geocode -> $.goomaps.geocode (John: yes, Adrian: yes)
-0. $.fn.goomaps.markerimage -> $.goomaps.markerimage (John: yes, Adrian: yes)
-0. $.fn.goomaps.infowindow -> $.goomaps.infowindow (John: yes, Adrian: yes)
-0. $.fn.goomaps.setevents -> $.goomaps.setevents (John: yes, Adrian: yes)
-0. $.fn.goomaps.mapconstants -> $.goomaps.mapconstants (John: yes, Adrian: yes)
-0. $.fn.goomaps.constants -> $.goomaps.constants (John: yes, Adrian: yes)
-0. $.fn.goomaps.defaults -> $.goomaps.defaults (John: yes, Adrian: yes)
-0. $.fn.goomaps.EARTH_RADIUS -> $.goomaps.EARTH_RADIUS (John: yes, Adrian: yes)
-0. $.fn.goomaps.DEBUG -> $.goomaps.DEBUG (John: yes, Adrian: yes)
-0. $.fn.goomaps.PLUGIN_VERSION -> $.goomaps.PLUGIN_VERSION (John: yes, Adrian: yes)
-0. $.fn.goomaps.API_VERSION -> $.goomaps.API_VERSION (John: yes, Adrian: yes)
-
-####jquery.circles.js
-####jquery.layers.js
-####jquery.customcontrols.js
+<del>We need to discuss which functions should be defined in `$.fn.goomaps.*` and `$.goomaps.*` before the first release. Currently all functions are in `$.fn.goomaps.*`</del> done
 
 ###jquery.goomaps.js
 
