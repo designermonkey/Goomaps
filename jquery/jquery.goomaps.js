@@ -1,13 +1,12 @@
 /*!
- *	@name					jQuery Goomaps (https://github.com/designermonkey/Goomaps)
- *								based on Google Maps APIv3
+ *	@name			jQuery Goomaps (https://github.com/designermonkey/Goomaps) based on Google Maps APIv3
  *
- *	@author				John Porter 		https://github.com/designermonkey
- *	@author				Adrian Weimann	https://github.com/awde
+ *	@author			John Porter		https://github.com/designermonkey
+ *	@author			Adrian Weimann	https://github.com/awde
  *	@description	Makes using the Google Maps API easier with jQuery
- *	@version			Alpha-0.0.1
+ *	@version		Alpha-0.0.1
  *
- *	@license			Dual licensed under MIT and GPLv2
+ *	@license		Dual licensed under MIT and GPLv2
  */
 (function($) {
 	/**
@@ -136,36 +135,46 @@
 				if(!$.isArray(markers)) markers = [markers];
 				var map = $(this).data('goomaps').map;
 				var add = {markers:[]};
-				$.each(markers, function(i, marker){
-					marker.options.map = map;
-					// Animation
-					if(marker.options.animation){
-						if(marker.options.animation == 'drop') marker.options.animation = google.maps.Animation.DROP;
-						if(marker.options.animation == 'bounce') marker.options.animation = google.maps.Animation.BOUNCE;
-					}
+				$.each(markers, function(i, marker)
+				{
+					markers[i].options.map = map;
 					// Custom Icon
 					if(marker.options.icon){
-						marker.options.icon = $.goomaps.markerimage(marker.options.icon);
+						markers[i].options.icon = $.goomaps.markerimage(marker.options.icon);
+						if($.goomaps.DEBUG && window.console) console.log('marker'+i+' icon:', markers[i].options.icon);
 					}
 					// Custom Shadow
 					if(marker.options.shadow){
-						marker.options.shadow = $.goomaps.markerimage(marker.options.shadow);
+						markers[i].options.shadow = $.goomaps.markerimage(marker.options.shadow);
+						if($.goomaps.DEBUG && window.console) console.log('marker'+i+' shadow:', markers[i].options.shadow);
 					}
-					// Position
+					// Animation
+					if(marker.options.animation){
+						if(marker.options.animation == 'drop'){
+							animation = google.maps.Animation.DROP;
+						}else if(marker.options.animation == 'bounce'){
+							animation = google.maps.Animation.BOUNCE;
+						}else{
+							if(window.console) console.warn("'Goomaps setmarkers method': Supplied animation type not supported.");
+						}
+					}
+					// Position (required, or fail)
 					if(marker.options.position && $.isArray(marker.options.position)){
-						marker.options.position = $.goomaps.latlng(marker.options.position);
-						add.markers[i] = new google.maps.Marker(marker.options);
-						ExtendMarker(map, add.markers[i]);
+						markers[i].options.position = $.goomaps.latlng(marker.options.position);
+						if($.goomaps.DEBUG && window.console) console.log('marker'+i+' position:', markers[i].options.position);
+						add.markers[i] = new google.maps.Marker(markers[i].options);
+					}else if(marker.options.position && !$.isArray(marker.options.position)){
+						if(window.console) console.error("'Goomaps setmarkers method': The position provided is not an array.");
 					}else{
-						if($.goomaps.DEBUG && window.console) console.log('Markers must be provided with a position.');
+						if(window.console) console.error("'Goomaps setmarkers method': A position must be provided as an array. None provided.");
 					}
-					// Events
+					// Events, requires the marker to be set
 					if(marker.events){
-						$.goomaps.setevents(add.markers[i], marker.events);
+						$.goomaps.setevents(add.markers[i], markers[i].events);
 					}
-					// Infowindow
+					// Infowindow, requires the marker to be set
 					if(marker.options.info){
-						$.goomaps.infowindow(add.markers[i], marker.options.info, map);
+						$.goomaps.infowindow(add.markers[i], markers[i].options.info, map);
 						// Open the info window straight away
 						if(marker.options.initialopen == true){
 							google.maps.event.trigger(add.markers[i], 'click');
@@ -331,36 +340,6 @@
 	};
 
 	/**
-	 *	Extends a Marker with several functions:
-	 *		- getInfoWindow(): gets the infowindow which is assigned to a marker; if there is no infowindow, an infowindow will be created first.
-	 *
-	 *	Note: This is an internal function and will be used in:
-	 *		- $.fn.goomaps.methods.setmarkers
-	 *
-	 *	@param	{Map}			the Google Map Object
-	 *	@param	{Marker}	the Marker which will be extended
-	 */
-	var ExtendMarker = function(map, marker){
-
-		marker.getInfoWindow = function(){
-			// Return the markers infowindow if it exists.
-			// If there is no infowindow create one first, append it to the marker and return the newly created.
-			// with this it's possible to reuse an infowindow
-			if(this.infowindow){
-				return this.infowindow;
-			} else {
-				this.infowindow = new google.maps.InfoWindow();
-
-				$.goomaps.setevents(this, {'click': function(){
-					this.infowindow.open(map, this);
-				}});
-
-				return this.infowindow;
-			}
-		};
-	}
-
-	/**
 	 * Create a Google Maps LatLng object from array of coordinates
 	 *
 	 * @param   {Array} coords   Array of coordinates as [lat,lng]
@@ -424,21 +403,29 @@
 	/**
 	 * Create a MarkerImage for use on a Google Maps Marker
 	 *
-	 * @param   {Object} options   Google Maps MarkerImage options
+	 * @param   {Object|String} options   Google Maps MarkerImage options, or string of path to image
 	 *
 	 * @returns {MarkerImage}   Google Maps MarkerImage object
 	 */
 	$.goomaps.markerimage = function(options){
-		if(options.size){
-			options.size = new google.maps.Size(options.size[0], options.size[1]);
+		if(typeof options !== 'string'){
+			var size, scaledSize, anchor, origin;
+			if(options.size){
+				size = new google.maps.Size(options.size[0], options.size[1]);
+			}
+			if(options.scaledSize){
+				scaledSize = new google.maps.Size(options.scaledSize[0], options.scaledSize[1]);
+			}
+			if(options.anchor){
+				anchor = new google.maps.Point(options.anchor[0], options.anchor[1]);
+			}
+			if(options.origin){
+				origin = new google.maps.Point(options.origin[0], options.origin[1]);
+			}
+			return new google.maps.MarkerImage(options.url, size, origin, anchor, scaledSize);
+		}else{
+			return new google.maps.MarkerImage(options);
 		}
-		if(options.anchor){
-			options.anchor = new google.maps.Point(options.anchor[0], options.anchor[1]);
-		}
-		if(options.origin){
-			options.origin = new google.maps.Point(options.origin[0], options.origin[1]);
-		}
-		return new google.maps.MarkerImage(options);
 	};
 	/**
 	 * Create a Google Maps InfoWindow attached to the provided Marker
@@ -452,12 +439,12 @@
 		var infowindow;
 		if(typeof info === 'string' && info.match('^#')){
 			$(info).hide();
-			marker.getInfoWindow().setContent($(info).html());
+			infowindow = new google.maps.InfoWindow({content: $(info).html()});
 		}else{
-			marker.getInfoWindow().setContent(info);
+			infowindow = new google.maps.InfoWindow({content: info});
 		}
 		$.goomaps.setevents(marker, {'click': function(){
-			marker.getInfoWindow().open(map, marker);
+			infowindow.open(map, marker);
 		}});
 	};
 	/**

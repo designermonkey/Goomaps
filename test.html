@@ -49,8 +49,6 @@
 				clickable: true,
 				draggable: true,
 				info: 'Oakington Marker',
-				initialopen: false,
-				animation: 'drop'
 			}},
 			{options: {
 				uid: 'girton',
@@ -60,11 +58,9 @@
 				clickable: true,
 				draggable: true,
 				info: 'Girton Marker',
-				initialopen: false,
-				animation: 'drop'
 			}}
 		];
-		var layer = {
+	/*	var layer = {
 			options: {
 				type: 'kml',
 				url: 'http://www.bgs.ac.uk/feeds/MhSeismology.kml',
@@ -99,9 +95,9 @@
 					console.log(event);
 				},
 			}
-		}
+		}*/
 		$(document).ready(function(){
-			$('#map').goomaps(options).goomaps('setlayers', layer);
+			$('#map').goomaps(options).goomaps('setmarkers', markers);
 
 		});
 	</script>
