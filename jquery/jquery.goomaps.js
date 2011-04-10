@@ -9,6 +9,7 @@
  *	@license		Dual licensed under MIT and GPLv2
  */
 (function($) {
+	if(window.console) $.error = console.error;
 	/**
 	 * Goomaps function. Checks for method and applies the correct method. Falls
 	 * back to init method.
@@ -55,9 +56,7 @@
 						options.center = $.goomaps.latlng(options.center);
 						map.setOptions(options);
 					}else{
-						if($.goomaps.DEBUG && window.console){
-							console.log('init: options.center must be either type Array or String');
-						}
+						$.error('Goomaps init: options.center must be either type Array or String');
 					}
 				}
 				if(options && options.events){
@@ -91,16 +90,24 @@
 						options.center = $.goomaps.latlng(options.center);
 						map.setOptions(options);
 					}else{
-						// Expand the error console logging
-						if($.goomaps.DEBUG && window.console){
-							console.log('options.center must be either type Array or String');
-						}
+						$.error('Goomaps init: options.center must be either type Array or String');
 					}
 				}
 				if(options && options.events){
 					$.goomaps.setevents(map, options.events);
 				}
+				var add = {
+					map: map
+				}
+				$(this).data('goomaps', add);
 			});
+		},
+		/**
+		 *	Returns the Google Map of the element
+		 *	@returns The Google Map of the selected element
+		 */
+		getmap: function(){
+			return $(this).data('goomaps').map;
 		},
 		/**
 		 * Remove data from the elment.
@@ -141,12 +148,10 @@
 					// Custom Icon
 					if(marker.options.icon){
 						markers[i].options.icon = $.goomaps.markerimage(marker.options.icon);
-						if($.goomaps.DEBUG && window.console) console.log('marker'+i+' icon:', markers[i].options.icon);
 					}
 					// Custom Shadow
 					if(marker.options.shadow){
 						markers[i].options.shadow = $.goomaps.markerimage(marker.options.shadow);
-						if($.goomaps.DEBUG && window.console) console.log('marker'+i+' shadow:', markers[i].options.shadow);
 					}
 					// Animation
 					if(marker.options.animation){
@@ -211,7 +216,7 @@
 				if(data.position && $.isArray(data.position)){
 					position = $.goomaps.latlng(data.position); // Get LatLng of position array
 				}else if(!$.isArray(data.position)){
-					if($.goomaps.DEBUG && window.console) console.log('getmarkers: Matching on position requires an array of coordinates');
+					if(window.console) console.warn('Goomaps getmarkers: Matching on position requires an array of coordinates');
 					position = false;
 				}
 				$.each(markers, function(i, marker){
@@ -229,13 +234,6 @@
 			// Check for no data, also check that a number of 0 isn't passed
 			if(data !== 0 && !data) results.push(markers);
 			return $(results);
-		},
-		/**
-		 *	Returns the Google Map of the element
-		 *	@returns The Google Map of the selected element
-		 */
-		getmap: function(){
-			return $(this).data('goomaps').map;
 		}
 	};
 
@@ -245,7 +243,6 @@
 	 *	The Goomaps-Namespace
 	 */
 	$.goomaps = {};
-
 	/**
 	 * Checks if all properties in needle exists in haystack and are of the same value
 	 * @param 	{Object} 	needle
@@ -298,7 +295,6 @@
 			return false;
 		}
 	};
-
 	/**
 	 *	Calculates the distance between two points
 	 *
@@ -350,7 +346,7 @@
 		if($.isArray(coords)){
 			return new google.maps.LatLng(coords[0], coords[1]);
 		}else{
-			if($.goomaps.DEBUG && window.console) console.log('latlng must be provided with an array of coordinates.');
+			if(window.console) console.error("'Goomaps latlng function': Must be provided with an array of coordinates.");
 			return false;
 		}
 	};
