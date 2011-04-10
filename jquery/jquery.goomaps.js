@@ -460,187 +460,157 @@
 		});
 	};
 	/**
-	 *	Convert all values in mapOptions to the corresponding Google Maps Constants
-	 *	@param	{Object}	the options provided for the map
+	 * Converts given constant strings into Google Maps Constants
+	 *
+	 * @param   {object} options   Object of map options to search for strings within
+	 *
+	 * @returns {Constant} Google Maps Constant
 	 */
-	$.goomaps.mapconstants = function(mapOptions){
-		if(mapOptions){
-			// MapTypeId:
-			if(mapOptions.MapTypeId) mapOptions.MapTypeId = $.goomaps.constants.MapTypeId(mapOptions.MapTypeId);
-
-			// NavigationControlOptions:
-			if(mapOptions.navigationControlOptions){
-				with(mapOptions.navigationControlOptions){
-					if(position)	position 	= $.goomaps.constants.ControlPosition(position);
-					if(style)			style			= $.goomaps.constants.NavigationControlStyle(style);
-				}
-			}
+	$.goomaps.mapconstants = function(options){
+		if(options){
+			// MapTypeId
+			if(options.MapTypeId) options.MapTypeId = $.goomaps.constants.MapTypeId(options.MapTypeId);
 
 			// MapTypeControlOptions:
-			if(mapOptions.mapTypeControlOptions){
-				with(mapOptions.mapTypeControlOptions){
+			if(options.mapTypeControlOptions){
+				with(options.mapTypeControlOptions){
 					if(position)	position	= $.goomaps.constants.ControlPosition(position);
-					if(style)			style			= $.goomaps.constants.MapTypeControlStyle(style);
+					if(style)		style		= $.goomaps.constants.MapTypeControlStyle(style);
 				}
 			}
 
 			// ScaleControlOptions:
-			if(mapOptions.scaleControlOptions){
-				with(mapOptions.scaleControlOptions){
+			if(options.scaleControlOptions){
+				with(options.scaleControlOptions){
 					if(position)	position	= $.goomaps.constants.ControlPosition(position);
-					if(style)			style			= $.goomaps.constants.ScaleControlStyle(style);
+					if(style)		style		= $.goomaps.constants.ScaleControlStyle(style);
 				}
 			}
 
 			// ZoomControlOptions:
-			if(mapOptions.zoomControlOptions){
-				with(mapOptions.zoomControlOptions){
+			if(options.zoomControlOptions){
+				with(options.zoomControlOptions){
 					if(position)	position	= $.goomaps.constants.ControlPosition(position);
-					if(style)			style			= $.goomaps.constants.ZoomControlStyle(style);
+					if(style)		style		= $.goomaps.constants.ZoomControlStyle(style);
 				}
 			}
 		}
 	};
 	/**
-	 *	Functions to convert values into Google Maps Constants
+	 * Extendable object containing Constant conversion functions
 	 */
 	$.goomaps.constants = {
 		/**
-		 *	Converts a given string into google.maps.ControlPosition-Constants
-		 *	@param		{string}	the value to convert into the constant
-		 *	@returns	{google.maps.ControlPosition}	the ControlPosition-Constant for the given string-value; undefined if there is no match
-		 */
-		ControlPosition: function(val){
-			switch(val.toUpperCase()){
-				case 'BOTTOM_CENTER':
-					return google.maps.ControlPosition.BOTTOM_CENTER;
-				case 'BOTTOM_LEFT':
-					return google.maps.ControlPosition.BOTTOM_LEFT;
-				case 'BOTTOM_RIGHT':
-					return google.maps.ControlPosition.BOTTOM_RIGHT;
-				case 'LEFT_BOTTOM':
-					return google.maps.ControlPosition.LEFT_BOTTOM;
-				case 'LEFT_CENTER':
-					return google.maps.ControlPosition.LEFT_CENTER;
-				case 'LEFT_TOP':
-					return google.maps.ControlPosition.LEFT_TOP;
-				case 'RIGHT_BOTTOM':
-					return google.maps.ControlPosition.RIGHT_BOTTOM;
-				case 'RIGHT_CENTER':
-					return google.maps.ControlPosition.RIGHT_CENTER;
-				case 'RIGHT_TOP':
-					return google.maps.ControlPosition.RIGHT_TOP;
-				case 'TOP_CENTER':
-					return google.maps.ControlPosition.TOP_CENTER;
-				case 'TOP_LEFT':
-					return google.maps.ControlPosition.TOP_LEFT;
-				case 'TOP_RIGHT':
-					return google.maps.ControlPosition.TOP_RIGHT;
-			}
-		},
-		/**
-		 *	Converts a given string into google.maps.NavigationControlStyle-Constants
-		 *	@param		{string}	the value to convert into the constant
-		 *	@returns	{google.maps.NavigationControlStyle}	the NavigationControlStyle-Constant for the given string-value
-		 */
-		NavigationControlStyle: function(val){
-			switch(val.toUpperCase()){
-				case 'ANDROID':
-					return google.maps.NavigationControlStyle.ANDROID;
-				case 'SMALL':
-					return google.maps.NavigationControlStyle.SMALL;
-				case 'ZOOM_PAN':
-					return google.maps.NavigationControlStyle.ZOOM_PAN;
-				default:
-					return google.maps.NavigationControlStyle.DEFAULT;
-			}
-		},
-		/**
-		 *	Converts a given string into google.maps.MapTypeControlStyle-Constants
-		 *	@param		{string}	the value to convert into the constant
-		 *	@returns	{google.maps.MapTypeControlStyle}	the MapTypeControlStyle-Constant for the given string-value
-		 */
-		MapTypeControlStyle: function(val){
-			switch(val.toUpperCase()){
-				case 'DROPDOWN_MENU':
-					return google.maps.MapTypeControlStyle.DROPDOWN_MENU;
-				case 'HORIZONTAL_BAR':
-					return google.maps.MapTypeControlStyle.HORIZONTAL_BAR;
-				default:
-					return google.maps.MapTypeControlStyle.DEFAULT;
-			}
-		},
-		/**
-		 *	Converts a given string into google.maps.MapTypeId-Constants
-		 *	@param		{string}	the value to convert into the constant
-		 *	@returns	{google.maps.MapTypeId}	the MapTypeId-Constant for the given string-value
+		 * Converts the given string into a Google Maps MapTypeId Constant
+		 *
+		 * @param   {String} val   The string to convert
+		 *
+		 * @returns {Constant} Google Maps Constant
 		 */
 		MapTypeId: function(val){
 			switch(val.toUpperCase()){
-				case 'HYBRID':
-					return google.maps.MapTypeId.HYBRID;
-				case 'SATELLITE':
-					return google.maps.MapTypeId.SATELLITE;
-				case 'TERRAIN':
-					return google.maps.MapTypeId.TERRAIN;
-				default:
-					return google.maps.MapTypeId.ROADMAP;
+				case 'HYBRID':			return google.maps.MapTypeId.HYBRID; break;
+				case 'SATELLITE':		return google.maps.MapTypeId.SATELLITE; break;
+				case 'TERRAIN':			return google.maps.MapTypeId.TERRAIN; break;
+				case 'ROADMAP':
+				default:				return google.maps.MapTypeId.ROADMAP; break;
 			}
 		},
 		/**
-		 *	Converts a given string into google.maps.DirectionsTravelMode
-		 *	@param		{string}	the value to convert into the constant
-		 *	@returns	{google.maps.DirectionTravelMode}	the DirectionsTravelMode-Constant for the given string-value
+		 * Converts the given string into a Google Maps ControlPosition Constant
+		 *
+		 * @param   {String} val   The string to convert
+		 *
+		 * @returns {Constant} Google Maps Constant
 		 */
-		DirectionsTravelMode: function(val){
+		ControlPosition: function(val){
 			switch(val.toUpperCase()){
-				case 'BICYCLING':
-					return google.maps.DirectionsTravelMode.BICYCLING;
-				case 'WALKING':
-					return google.maps.DirectionsTravelMode.WALKING;
-				default:
-					return google.maps.DirectionsTravelMode.DRIVING;
+				case 'BOTTOM_CENTER':	return google.maps.ControlPosition.BOTTOM_CENTER; break;
+				case 'BOTTOM_LEFT':		return google.maps.ControlPosition.BOTTOM_LEFT; break;
+				case 'BOTTOM_RIGHT':	return google.maps.ControlPosition.BOTTOM_RIGHT; break;
+				case 'LEFT_BOTTOM':		return google.maps.ControlPosition.LEFT_BOTTOM; break;
+				case 'LEFT_CENTER':		return google.maps.ControlPosition.LEFT_CENTER; break;
+				case 'LEFT_TOP':		return google.maps.ControlPosition.LEFT_TOP; break;
+				case 'RIGHT_BOTTOM':	return google.maps.ControlPosition.RIGHT_BOTTOM; break;
+				case 'RIGHT_CENTER':	return google.maps.ControlPosition.RIGHT_CENTER; break;
+				case 'RIGHT_TOP':		return google.maps.ControlPosition.RIGHT_TOP; break;
+				case 'TOP_CENTER':		return google.maps.ControlPosition.TOP_CENTER; break;
+				case 'TOP_LEFT':		return google.maps.ControlPosition.TOP_LEFT; break;
+				case 'TOP_RIGHT':		return google.maps.ControlPosition.TOP_RIGHT; break;
 			}
 		},
 		/**
-		 *	Converts a given string into google.maps.DirectionsUnitSystem
-		 *	@param		{string}	the value to convert into the constant
-		 *	@returns	{google.maps.DirectionsUnitSystem}	the DirectionsUnitSystem-Constant for the given string-value
+		 * Converts the given string into a Google Maps MapTypeControlStyle Constant
+		 *
+		 * @param   {String} val   The string to convert
+		 *
+		 * @returns {Constant} Google Maps Constant
 		 */
-		DirectionsUnitSystem: function(val){
+		MapTypeControlStyle: function(val){
 			switch(val.toUpperCase()){
-				case 'IMPERIAL':
-					return google.maps.DirectionsUnitSystem.IMPERIAL;
-				default:
-					return google.maps.DirectionsUnitSystem.METRIC;
+				case 'DROPDOWN_MENU':	return google.maps.MapTypeControlStyle.DROPDOWN_MENU; break;
+				case 'HORIZONTAL_BAR':	return google.maps.MapTypeControlStyle.HORIZONTAL_BAR; break;
+				case 'DEFAULT':
+				default:				return google.maps.MapTypeControlStyle.DEFAULT; break;
 			}
 		},
 		/**
-		 *	Converts a given string into google.maps.ScaleControlStyle
-		 *	@param		{string}	the value to convert into the constant
-		 *	@returns	{google.maps.ScaleControlStyle}	the ScaleControlStyle-Constant for the given string-value
+		 * Converts the given string into a Google Maps ScaleControlStyle Constant
+		 *
+		 * @param   {String} val   The string to convert
+		 *
+		 * @returns {Constant} Google Maps Constant
 		 */
 		ScaleControlStyle: function(val){
 			switch(val.toUpperCase()){
-				default:
-					return google.maps.ScaleControlStyle.DEFAULT;
+				case 'DEFAULT':
+				default:				return google.maps.ScaleControlStyle.DEFAULT; break;
 			}
 		},
 		/**
-		 *	Converts a given string into google.maps.ZoomControlStyle
-		 *	@param		{string}	the value to convert into the constant
-		 *	@returns	{google.maps.ZoomControlStyle} the ZoomControlStyle-Constant for the given string-value
+		 * Converts the given string into a Google Maps ZoomControlStyle Constant
+		 *
+		 * @param   {String} val   The string to convert
+		 *
+		 * @returns {Constant} Google Maps Constant
 		 */
 		ZoomControlStyle: function(val){
 			switch(val.toUpperCase()){
-				case 'LARGE':
-					return google.maps.ZoomControlStyle.LARGE;
-				case 'SMALL':
-					return google.maps.ZoomControlStyle.SMALL;
-				default:
-					return google.maps.ZoomControlStyle.DEFAULT;
+				case 'LARGE':			return google.maps.ZoomControlStyle.LARGE; break;
+				case 'SMALL':			return google.maps.ZoomControlStyle.SMALL; break;
+				case 'DEFAULT':
+				default:				return google.maps.ZoomControlStyle.DEFAULT; break;
 			}
-		}
+		},
+		/**
+		 * Converts the given string into a Google Maps DirectionsTravelMode Constant
+		 *
+		 * @param   {String} val   The string to convert
+		 *
+		 * @returns {Constant} Google Maps Constant
+		 */
+		DirectionsTravelMode: function(val){
+			switch(val.toUpperCase()){
+				case 'BICYCLING':		return google.maps.DirectionsTravelMode.BICYCLING; break;
+				case 'WALKING':			return google.maps.DirectionsTravelMode.WALKING; break;
+				case 'DRIVING':
+				default:				return google.maps.DirectionsTravelMode.DRIVING; break;
+			}
+		},
+		/**
+		 * Converts the given string into a Google Maps DirectionsUnitSystem Constant
+		 *
+		 * @param   {String} val   The string to convert
+		 *
+		 * @returns {Constant} Google Maps Constant
+		 */
+		DirectionsUnitSystem: function(val){
+			switch(val.toUpperCase()){
+				case 'IMPERIAL':		return google.maps.DirectionsUnitSystem.IMPERIAL; break;
+				case 'METRIC':
+				default:				return google.maps.DirectionsUnitSystem.METRIC; break;
+			}
+		},
 	};
 	/**
 	 * Goomaps Default options for initialisation of the map
