@@ -469,34 +469,26 @@
 
 			// MapTypeControlOptions:
 			if(options.mapTypeControlOptions){
-				with(options.mapTypeControlOptions){
-					if(position)	position	= $.goomaps.constants.ControlPosition(position);
-					if(style)		style		= $.goomaps.constants.MapTypeControlStyle(style);
-				}
+				if(options.mapTypeControlOptions.position)	options.mapTypeControlOptions.position	= $.goomaps.constants.ControlPosition(options.mapTypeControlOptions.position);
+				if(options.mapTypeControlOptions.style)		options.mapTypeControlOptions.style		= $.goomaps.constants.MapTypeControlStyle(options.mapTypeControlOptions.style);
 			}
 
 			// NavigationControlOptions:
 			if(options.navigationControlOptions){
-				with(options.navigationControlOptions){
-					if(position)	position	= $.goomaps.constants.ControlPosition(position);
-					if(style)		style		= $.goomaps.constants.NavigationControlStyle(style);
-				}
+				if(options.navigationControlOptions.position)	options.navigationControlOptions.position	= $.goomaps.constants.ControlPosition(options.navigationControlOptions.position);
+				if(options.navigationControlOptions.style)		options.navigationControlOptions.style		= $.goomaps.constants.NavigationControlStyle(options.navigationControlOptions.style);
 			}
 
 			// ScaleControlOptions:
 			if(options.scaleControlOptions){
-				with(options.scaleControlOptions){
-					if(position)	position	= $.goomaps.constants.ControlPosition(position);
-					if(style)		style		= $.goomaps.constants.ScaleControlStyle(style);
-				}
+				if(options.scaleControlOptions.position)	options.scaleControlOptions.position	= $.goomaps.constants.ControlPosition(options.scaleControlOptions.position);
+				if(options.scaleControlOptions.style)		options.scaleControlOptions.style		= $.goomaps.constants.ScaleControlStyle(options.scaleControlOptions.style);
 			}
 
 			// ZoomControlOptions:
 			if(options.zoomControlOptions){
-				with(options.zoomControlOptions){
-					if(position)	position	= $.goomaps.constants.ControlPosition(position);
-					if(style)		style		= $.goomaps.constants.ZoomControlStyle(style);
-				}
+				if(options.zoomControlOptions.position)		options.zoomControlOptions.position		= $.goomaps.constants.ControlPosition(options.zoomControlOptions.position);
+				if(options.zoomControlOptions.style)		options.zoomControlOptions.style		= $.goomaps.constants.ZoomControlStyle(options.zoomControlOptions.style);
 			}
 		}
 	};
