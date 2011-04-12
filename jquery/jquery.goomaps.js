@@ -475,6 +475,14 @@
 				}
 			}
 
+			// NavigationControlOptions:
+			if(options.navigationControlOptions){
+				with(options.navigationControlOptions){
+					if(position)	position	= $.goomaps.constants.ControlPosition(position);
+					if(style)		style		= $.goomaps.constants.NavigationControlStyle(style);
+				}
+			}
+
 			// ScaleControlOptions:
 			if(options.scaleControlOptions){
 				with(options.scaleControlOptions){
@@ -561,6 +569,22 @@
 			switch(val.toUpperCase()){
 				case 'DEFAULT':
 				default:				return google.maps.ScaleControlStyle.DEFAULT; break;
+			}
+		},
+		/**
+		 * Converts the given string into a Google Maps NavigationControlStyle Constant
+		 *
+		 * @param   {String} val   The string to convert
+		 *
+		 * @returns {Constant} Google Maps Constant
+		 */
+		NavigationControlStyle: function(val){
+			switch(val.toUpperCase()){
+				case 'ANDROID':		return google.maps.NavigationControlStyle.ANDROID;
+				case 'SMALL':			return google.maps.NavigationControlStyle.SMALL;
+				case 'ZOOM_PAN':	return google.maps.NavigationControlStyle.ZOOM_PAN;
+				case 'DEFAULT':
+				default:					return google.maps.NavigationControlStyle.DEFAULT;
 			}
 		},
 		/**
