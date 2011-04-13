@@ -215,7 +215,7 @@
 				var position;
 				if(data.position && $.isArray(data.position)){
 					position = $.goomaps.latlng(data.position); // Get LatLng of position array
-				}else if(!$.isArray(data.position)){
+				}else if(data.position && !$.isArray(data.position)){
 					if(window.console) console.warn('Goomaps getmarkers: Matching on position requires an array of coordinates');
 					position = false;
 				}
