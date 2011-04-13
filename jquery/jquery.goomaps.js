@@ -473,12 +473,6 @@
 				if(options.mapTypeControlOptions.style)		options.mapTypeControlOptions.style		= $.goomaps.constants.MapTypeControlStyle(options.mapTypeControlOptions.style);
 			}
 
-			// NavigationControlOptions:
-			if(options.navigationControlOptions){
-				if(options.navigationControlOptions.position)	options.navigationControlOptions.position	= $.goomaps.constants.ControlPosition(options.navigationControlOptions.position);
-				if(options.navigationControlOptions.style)		options.navigationControlOptions.style		= $.goomaps.constants.NavigationControlStyle(options.navigationControlOptions.style);
-			}
-
 			// ScaleControlOptions:
 			if(options.scaleControlOptions){
 				if(options.scaleControlOptions.position)	options.scaleControlOptions.position	= $.goomaps.constants.ControlPosition(options.scaleControlOptions.position);
@@ -489,6 +483,16 @@
 			if(options.zoomControlOptions){
 				if(options.zoomControlOptions.position)		options.zoomControlOptions.position		= $.goomaps.constants.ControlPosition(options.zoomControlOptions.position);
 				if(options.zoomControlOptions.style)		options.zoomControlOptions.style		= $.goomaps.constants.ZoomControlStyle(options.zoomControlOptions.style);
+			}
+
+			// PanControlOptions:
+			if(options.panControlOptions){
+				if(options.panControlOptions.position)		options.panControlOptions.position	= $.goomaps.constants.ControlPosition(options.panControlOptions.position);
+			}
+
+			// RotateControlOptions:
+			if(options.rotateControlOptions){
+				if(options.rotateControlOptions.position)		options.rotateControlOptions.position		= $.goomaps.constants.ControlPosition(options.rotateControlOptions.position);
 			}
 		}
 	};
@@ -561,22 +565,6 @@
 			switch(val.toUpperCase()){
 				case 'DEFAULT':
 				default:				return google.maps.ScaleControlStyle.DEFAULT; break;
-			}
-		},
-		/**
-		 * Converts the given string into a Google Maps NavigationControlStyle Constant
-		 *
-		 * @param   {String} val   The string to convert
-		 *
-		 * @returns {Constant} Google Maps Constant
-		 */
-		NavigationControlStyle: function(val){
-			switch(val.toUpperCase()){
-				case 'ANDROID':		return google.maps.NavigationControlStyle.ANDROID;
-				case 'SMALL':			return google.maps.NavigationControlStyle.SMALL;
-				case 'ZOOM_PAN':	return google.maps.NavigationControlStyle.ZOOM_PAN;
-				case 'DEFAULT':
-				default:					return google.maps.NavigationControlStyle.DEFAULT;
 			}
 		},
 		/**

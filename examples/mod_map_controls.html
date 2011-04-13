@@ -4,9 +4,8 @@
 			center: [52.257347,0.054988],
 			zoom: 6,
 			type: 'roadmap',
-			navigationControlOptions: {
-				position: "bottom_center",
-				style: "android"
+			zoomControlOptions: {
+				position: "right_center"
 			},
 			mapTypeControlOptions: {
 				position: "top_left",
@@ -16,7 +15,7 @@
 	});
 </script>
 <h2>Map with modified Map-Controls</h2>
-<p>Positioning and styling the navigation-controls and maptype-controls</p>
+<p>Positioning and styling the Google Maps Controls</p>
 <div id="canvas" style="height: 400px;"></div>
 <h3>Code:</h3>
 <pre class="code">
@@ -24,9 +23,8 @@ $('#canvas').goomaps({
 	center: [52.257347,0.054988],
 	zoom: 6,
 	type: 'roadmap',
-	navigationControlOptions: {
-		position: "bottom_center",
-		style: "android"
+	zoomControlOptions: {
+		position: "right_center"
 	},
 	mapTypeControlOptions: {
 		position: "top_left",
