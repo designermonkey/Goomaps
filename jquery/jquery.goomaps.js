@@ -548,11 +548,11 @@
 		 */
 		MapTypeId: function(val){
 			switch(val.toUpperCase()){
-				case 'HYBRID':			return google.maps.MapTypeId.HYBRID; break;
-				case 'SATELLITE':		return google.maps.MapTypeId.SATELLITE; break;
-				case 'TERRAIN':			return google.maps.MapTypeId.TERRAIN; break;
+				case 'HYBRID':			return google.maps.MapTypeId.HYBRID;
+				case 'SATELLITE':		return google.maps.MapTypeId.SATELLITE;
+				case 'TERRAIN':			return google.maps.MapTypeId.TERRAIN;
 				case 'ROADMAP':
-				default:				return google.maps.MapTypeId.ROADMAP; break;
+				default:				return google.maps.MapTypeId.ROADMAP;
 			}
 		},
 		/**
@@ -564,18 +564,18 @@
 		 */
 		ControlPosition: function(val){
 			switch(val.toUpperCase()){
-				case 'BOTTOM_CENTER':	return google.maps.ControlPosition.BOTTOM_CENTER; break;
-				case 'BOTTOM_LEFT':		return google.maps.ControlPosition.BOTTOM_LEFT; break;
-				case 'BOTTOM_RIGHT':	return google.maps.ControlPosition.BOTTOM_RIGHT; break;
-				case 'LEFT_BOTTOM':		return google.maps.ControlPosition.LEFT_BOTTOM; break;
-				case 'LEFT_CENTER':		return google.maps.ControlPosition.LEFT_CENTER; break;
-				case 'LEFT_TOP':		return google.maps.ControlPosition.LEFT_TOP; break;
-				case 'RIGHT_BOTTOM':	return google.maps.ControlPosition.RIGHT_BOTTOM; break;
-				case 'RIGHT_CENTER':	return google.maps.ControlPosition.RIGHT_CENTER; break;
-				case 'RIGHT_TOP':		return google.maps.ControlPosition.RIGHT_TOP; break;
-				case 'TOP_CENTER':		return google.maps.ControlPosition.TOP_CENTER; break;
-				case 'TOP_LEFT':		return google.maps.ControlPosition.TOP_LEFT; break;
-				case 'TOP_RIGHT':		return google.maps.ControlPosition.TOP_RIGHT; break;
+				case 'BOTTOM_CENTER':	return google.maps.ControlPosition.BOTTOM_CENTER;
+				case 'BOTTOM_LEFT':		return google.maps.ControlPosition.BOTTOM_LEFT;
+				case 'BOTTOM_RIGHT':	return google.maps.ControlPosition.BOTTOM_RIGHT;
+				case 'LEFT_BOTTOM':		return google.maps.ControlPosition.LEFT_BOTTOM;
+				case 'LEFT_CENTER':		return google.maps.ControlPosition.LEFT_CENTER;
+				case 'LEFT_TOP':		return google.maps.ControlPosition.LEFT_TOP;
+				case 'RIGHT_BOTTOM':	return google.maps.ControlPosition.RIGHT_BOTTOM;
+				case 'RIGHT_CENTER':	return google.maps.ControlPosition.RIGHT_CENTER;
+				case 'RIGHT_TOP':		return google.maps.ControlPosition.RIGHT_TOP;
+				case 'TOP_CENTER':		return google.maps.ControlPosition.TOP_CENTER;
+				case 'TOP_LEFT':		return google.maps.ControlPosition.TOP_LEFT;
+				case 'TOP_RIGHT':		return google.maps.ControlPosition.TOP_RIGHT;
 			}
 		},
 		/**
@@ -587,10 +587,10 @@
 		 */
 		MapTypeControlStyle: function(val){
 			switch(val.toUpperCase()){
-				case 'DROPDOWN_MENU':	return google.maps.MapTypeControlStyle.DROPDOWN_MENU; break;
-				case 'HORIZONTAL_BAR':	return google.maps.MapTypeControlStyle.HORIZONTAL_BAR; break;
+				case 'DROPDOWN_MENU':	return google.maps.MapTypeControlStyle.DROPDOWN_MENU;
+				case 'HORIZONTAL_BAR':	return google.maps.MapTypeControlStyle.HORIZONTAL_BAR;
 				case 'DEFAULT':
-				default:				return google.maps.MapTypeControlStyle.DEFAULT; break;
+				default:				return google.maps.MapTypeControlStyle.DEFAULT;
 			}
 		},
 		/**
@@ -603,7 +603,7 @@
 		ScaleControlStyle: function(val){
 			switch(val.toUpperCase()){
 				case 'DEFAULT':
-				default:				return google.maps.ScaleControlStyle.DEFAULT; break;
+				default:				return google.maps.ScaleControlStyle.DEFAULT;
 			}
 		},
 		/**
@@ -615,10 +615,10 @@
 		 */
 		ZoomControlStyle: function(val){
 			switch(val.toUpperCase()){
-				case 'LARGE':			return google.maps.ZoomControlStyle.LARGE; break;
-				case 'SMALL':			return google.maps.ZoomControlStyle.SMALL; break;
+				case 'LARGE':			return google.maps.ZoomControlStyle.LARGE;
+				case 'SMALL':			return google.maps.ZoomControlStyle.SMALL;
 				case 'DEFAULT':
-				default:				return google.maps.ZoomControlStyle.DEFAULT; break;
+				default:				return google.maps.ZoomControlStyle.DEFAULT;
 			}
 		},
 		/**
@@ -630,10 +630,10 @@
 		 */
 		DirectionsTravelMode: function(val){
 			switch(val.toUpperCase()){
-				case 'BICYCLING':		return google.maps.DirectionsTravelMode.BICYCLING; break;
-				case 'WALKING':			return google.maps.DirectionsTravelMode.WALKING; break;
+				case 'BICYCLING':		return google.maps.DirectionsTravelMode.BICYCLING;
+				case 'WALKING':			return google.maps.DirectionsTravelMode.WALKING;
 				case 'DRIVING':
-				default:				return google.maps.DirectionsTravelMode.DRIVING; break;
+				default:				return google.maps.DirectionsTravelMode.DRIVING;
 			}
 		},
 		/**
@@ -645,9 +645,9 @@
 		 */
 		DirectionsUnitSystem: function(val){
 			switch(val.toUpperCase()){
-				case 'IMPERIAL':		return google.maps.DirectionsUnitSystem.IMPERIAL; break;
+				case 'IMPERIAL':		return google.maps.DirectionsUnitSystem.IMPERIAL;
 				case 'METRIC':
-				default:				return google.maps.DirectionsUnitSystem.METRIC; break;
+				default:				return google.maps.DirectionsUnitSystem.METRIC;
 			}
 		},
 	};
