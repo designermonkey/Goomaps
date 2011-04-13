@@ -142,7 +142,7 @@
 				if(!$.isArray(markers)) markers = [markers];
 				var map = $(this).data('goomaps').map;
 				var add = {markers:[]};
-				add.markers = $.goomaps.generatemarker(markers, map);
+				add.markers = $.goomaps.generatemarker(markers, map, $this);
 				$.extend($this.data('goomaps'), add);
 			});
 		},
@@ -160,11 +160,11 @@
 				$this = $(this);
 				if(!$.isArray(markers)) markers = [markers];
 				var map = $(this).data('goomaps').map;
-				var extender = $.goomaps.generatemarker(markers, map);
+				var extender = $.goomaps.generatemarker(markers, map, $this);
 				if(!$this.data('goomaps').markers) $this.data('goomaps', {markers:[]});
 				$.extend($this.data('goomaps').markers, extender);
 			});
-		}
+		},
 		/**
 		 * Filter all markers on supplied parameters to return matched results
 		 *
@@ -319,18 +319,18 @@
 	 *
 	 * @returns {Array} Array of Google Maps Marker objects
 	 */
-	$.goomaps.generatemarker = function(input, map){
+	$.goomaps.generatemarker = function(input, map, datastore){
 		var output = new Array();
 		$.each(input, function(i, marker)
 		{
-			markers[i].options.map = map;
+			input[i].options.map = map;
 			// Custom Icon
 			if(marker.options.icon){
-				markers[i].options.icon = $.goomaps.markerimage(marker.options.icon);
+				input[i].options.icon = $.goomaps.markerimage(marker.options.icon);
 			}
 			// Custom Shadow
 			if(marker.options.shadow){
-				markers[i].options.shadow = $.goomaps.markerimage(marker.options.shadow);
+				input[i].options.shadow = $.goomaps.markerimage(marker.options.shadow);
 			}
 			// Animation
 			if(marker.options.animation){
@@ -344,9 +344,9 @@
 			}
 			// Position (required, or fail)
 			if(marker.options.position && $.isArray(marker.options.position)){
-				markers[i].options.position = $.goomaps.latlng(marker.options.position);
-				if($.goomaps.DEBUG && window.console) console.log('marker'+i+' position:', markers[i].options.position);
-				output[i] = new google.maps.Marker(markers[i].options);
+				input[i].options.position = $.goomaps.latlng(marker.options.position);
+				if($.goomaps.DEBUG && window.console) console.log('marker'+i+' position:', input[i].options.position);
+				output[i] = new google.maps.Marker(input[i].options);
 			}else if(marker.options.position && !$.isArray(marker.options.position)){
 				if(window.console) console.error("'Goomaps generatemarker function': The position provided is not an array.");
 			}else{
@@ -354,11 +354,17 @@
 			}
 			// Events, requires the marker to be set
 			if(marker.events){
-				$.goomaps.setevents(output[i], markers[i].events);
+				$.goomaps.setevents(output[i], input[i].events);
 			}
 			// Infowindow, requires the marker to be set
 			if(marker.options.info){
-				$.goomaps.infowindow(output[i], markers[i].options.info, map);
+				if(datastore){
+					if(!datastore.data('goomaps').infowindows) datastore.data('goomaps', {infowindows:[]});
+					var iwextender = $.goomaps.infowindow(output[i], input[i].options.info, map);
+					$.extend(datastore.data('goomaps').infowindows, iwextender);
+				}else{
+					$.goomaps.infowindow(output[i], input[i].options.info, map);
+				}
 				// Open the info window straight away
 				if(marker.options.initialopen == true){
 					google.maps.event.trigger(output[i], 'click');
@@ -474,6 +480,7 @@
 		$.goomaps.setevents(marker, {'click': function(){
 			infowindow.open(map, marker);
 		}});
+		return infowindow;
 	};
 	/**
 	 * Set events from an object containing event callbacks
