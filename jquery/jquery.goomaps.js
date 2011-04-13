@@ -163,7 +163,7 @@
 				if(!$.isArray(marker)) marker = [marker];
 				var map = $(this).data('goomaps').map;
 				var extender = $.goomaps.generatemarker(marker, map, $this);
-				$this.data('goomaps').markers.push(extender);
+				$.extend($this.data('goomaps').markers, extender);
 			});
 		},
 		/**
