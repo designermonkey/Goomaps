@@ -43,6 +43,8 @@
 			return this.each(function(){
 				// Remove any map data for this element
 				$(this).goomaps('destroy');
+				// Initialise a new data store
+				$(this).data('goomaps', {map:{},markers:[],infowindows:[]});
 				// Initialise a map, attach it to the element itself
 				var map = new google.maps.Map(this, $.goomaps.defaults);
 				$.goomaps.mapconstants(options);
@@ -65,7 +67,7 @@
 				var add = {
 					map: map
 				}
-				$(this).data('goomaps', add);
+				$.extend($(this).data('goomaps'), add);
 			});
 		},
 		/**
@@ -99,7 +101,7 @@
 				var add = {
 					map: map
 				}
-				$(this).data('goomaps', add);
+				$.extend($(this).data('goomaps'), add);
 			});
 		},
 		/**
@@ -143,7 +145,7 @@
 				var map = $(this).data('goomaps').map;
 				var add = {markers:[]};
 				add.markers = $.goomaps.generatemarker(markers, map, $this);
-				$.extend($this.data('goomaps'), add);
+				$this.data('goomaps').markers = add.markers;
 			});
 		},
 		/**
@@ -158,11 +160,10 @@
 		addmarker: function(marker){
 			return this.each(function(){
 				$this = $(this);
-				if(!$.isArray(markers)) markers = [markers];
+				if(!$.isArray(marker)) marker = [marker];
 				var map = $(this).data('goomaps').map;
-				var extender = $.goomaps.generatemarker(markers, map, $this);
-				if(!$this.data('goomaps').markers) $this.data('goomaps', {markers:[]});
-				$.extend($this.data('goomaps').markers, extender);
+				var extender = $.goomaps.generatemarker(marker, map, $this);
+				$this.data('goomaps').markers.push(extender);
 			});
 		},
 		/**
@@ -359,9 +360,9 @@
 			// Infowindow, requires the marker to be set
 			if(marker.options.info){
 				if(datastore){
-					if(!datastore.data('goomaps').infowindows) datastore.data('goomaps', {infowindows:[]});
-					var iwextender = $.goomaps.infowindow(output[i], input[i].options.info, map);
-					$.extend(datastore.data('goomaps').infowindows, iwextender);
+					var extender = $.goomaps.infowindow(output[i], input[i].options.info, map);
+					//console.log(datastore.data('goomaps').infowindows)
+					datastore.data('goomaps').infowindows.push(extender);
 				}else{
 					$.goomaps.infowindow(output[i], input[i].options.info, map);
 				}
