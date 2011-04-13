@@ -142,53 +142,29 @@
 				if(!$.isArray(markers)) markers = [markers];
 				var map = $(this).data('goomaps').map;
 				var add = {markers:[]};
-				$.each(markers, function(i, marker)
-				{
-					markers[i].options.map = map;
-					// Custom Icon
-					if(marker.options.icon){
-						markers[i].options.icon = $.goomaps.markerimage(marker.options.icon);
-					}
-					// Custom Shadow
-					if(marker.options.shadow){
-						markers[i].options.shadow = $.goomaps.markerimage(marker.options.shadow);
-					}
-					// Animation
-					if(marker.options.animation){
-						if(marker.options.animation == 'drop'){
-							animation = google.maps.Animation.DROP;
-						}else if(marker.options.animation == 'bounce'){
-							animation = google.maps.Animation.BOUNCE;
-						}else{
-							if(window.console) console.warn("'Goomaps setmarkers method': Supplied animation type not supported.");
-						}
-					}
-					// Position (required, or fail)
-					if(marker.options.position && $.isArray(marker.options.position)){
-						markers[i].options.position = $.goomaps.latlng(marker.options.position);
-						if($.goomaps.DEBUG && window.console) console.log('marker'+i+' position:', markers[i].options.position);
-						add.markers[i] = new google.maps.Marker(markers[i].options);
-					}else if(marker.options.position && !$.isArray(marker.options.position)){
-						if(window.console) console.error("'Goomaps setmarkers method': The position provided is not an array.");
-					}else{
-						if(window.console) console.error("'Goomaps setmarkers method': A position must be provided as an array. None provided.");
-					}
-					// Events, requires the marker to be set
-					if(marker.events){
-						$.goomaps.setevents(add.markers[i], markers[i].events);
-					}
-					// Infowindow, requires the marker to be set
-					if(marker.options.info){
-						$.goomaps.infowindow(add.markers[i], markers[i].options.info, map);
-						// Open the info window straight away
-						if(marker.options.initialopen == true){
-							google.maps.event.trigger(add.markers[i], 'click');
-						}
-					}
-				});
+				add.markers = $.goomaps.generatemarker(markers, map);
 				$.extend($this.data('goomaps'), add);
 			});
 		},
+		/**
+		 * Add Markers to an existing Google Map object.
+		 *
+		 * Markers are stored with the element containing the map, as an array of Google Maps Marker objects.
+		 *
+		 * @param   {Array} marker   Array containing a Marker object
+		 *
+		 * @returns {Object}   Returns the object passed in, for chainability
+		 */
+		addmarker: function(marker){
+			return this.each(function(){
+				$this = $(this);
+				if(!$.isArray(markers)) markers = [markers];
+				var map = $(this).data('goomaps').map;
+				var extender = $.goomaps.generatemarker(markers, map);
+				if(!$this.data('goomaps').markers) $this.data('goomaps', {markers:[]});
+				$.extend($this.data('goomaps').markers, extender);
+			});
+		}
 		/**
 		 * Filter all markers on supplied parameters to return matched results
 		 *
@@ -335,6 +311,62 @@
 		return -1.0; // failure
 	};
 
+	/**
+	 * Generate Google Maps Markers objects using provided options
+	 *
+	 * @param   {Array} input   Array of markers options
+	 * @param   {Map} map   Google Map object
+	 *
+	 * @returns {Array} Array of Google Maps Marker objects
+	 */
+	$.goomaps.generatemarker = function(input, map){
+		var output = new Array();
+		$.each(input, function(i, marker)
+		{
+			markers[i].options.map = map;
+			// Custom Icon
+			if(marker.options.icon){
+				markers[i].options.icon = $.goomaps.markerimage(marker.options.icon);
+			}
+			// Custom Shadow
+			if(marker.options.shadow){
+				markers[i].options.shadow = $.goomaps.markerimage(marker.options.shadow);
+			}
+			// Animation
+			if(marker.options.animation){
+				if(marker.options.animation == 'drop'){
+					animation = google.maps.Animation.DROP;
+				}else if(marker.options.animation == 'bounce'){
+					animation = google.maps.Animation.BOUNCE;
+				}else{
+					if(window.console) console.warn("'Goomaps generatemarker function': Supplied animation type not supported.");
+				}
+			}
+			// Position (required, or fail)
+			if(marker.options.position && $.isArray(marker.options.position)){
+				markers[i].options.position = $.goomaps.latlng(marker.options.position);
+				if($.goomaps.DEBUG && window.console) console.log('marker'+i+' position:', markers[i].options.position);
+				output[i] = new google.maps.Marker(markers[i].options);
+			}else if(marker.options.position && !$.isArray(marker.options.position)){
+				if(window.console) console.error("'Goomaps generatemarker function': The position provided is not an array.");
+			}else{
+				if(window.console) console.error("'Goomaps generatemarker function': A position must be provided as an array. None provided.");
+			}
+			// Events, requires the marker to be set
+			if(marker.events){
+				$.goomaps.setevents(output[i], markers[i].events);
+			}
+			// Infowindow, requires the marker to be set
+			if(marker.options.info){
+				$.goomaps.infowindow(output[i], markers[i].options.info, map);
+				// Open the info window straight away
+				if(marker.options.initialopen == true){
+					google.maps.event.trigger(output[i], 'click');
+				}
+			}
+		});
+		return output;
+	}
 	/**
 	 * Create a Google Maps LatLng object from array of coordinates
 	 *
