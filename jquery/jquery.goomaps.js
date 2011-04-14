@@ -149,7 +149,7 @@
 			});
 		},
 		/**
-		 * Add Markers to an existing Google Map object.
+		 * Append Markers to an existing Google Map object.
 		 *
 		 * Markers are stored with the element containing the map, as an array of Google Maps Marker objects.
 		 *
@@ -382,20 +382,32 @@
 	 * @returns {LatLng}   Google Maps LatLng object
 	 */
 	$.goomaps.latlng = function(coords){
-		if($.isArray(coords)){
+		if(coords && $.isArray(coords)){
 			return new google.maps.LatLng(coords[0], coords[1]);
-		}else{
+		}else if(!coords || !$.isArray(coords)){
 			if(window.console) console.error("'Goomaps latlng function': Must be provided with an array of coordinates.");
 			return false;
 		}
 	};
 	/**
-	 * Create a Google Maps LatLngBounds object from array of coordinates
+	 * Create a Google Maps LatLngBounds object
+	 * If no coords are set, returns an empty LatLngBounds object
+	 *
+	 * @param   {Array} coords   Array of coordinate arrays
+	 *
+	 * @returns {LatLngBounds} Google Maps LatLngBounds object
 	 */
 	$.goomaps.latlngbounds = function(coords){
-		var a = $.goomaps.latlng(coords[0]);
-		var b = $.goomaps.latlng(coords[1]);
-		return new google.maps.LatLngBounds(a, b);
+		if(coords && $.isArray(coords)){
+			var a = $.goomaps.latlng(coords[0]);
+			var b = $.goomaps.latlng(coords[1]);
+			return new google.maps.LatLngBounds(a, b);
+		}else if(coords && !$.isArray(coords)){
+			if(window.console) console.error("'Goomaps latlngbounds function': Coords provided are not an array.");
+			return false;
+		}else{
+			return new google.maps.LatLngBounds();
+		}
 	};
 	/**
 	 * Google Maps Geocoder object
