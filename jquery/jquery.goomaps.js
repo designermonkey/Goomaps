@@ -44,7 +44,7 @@
 				// Remove any map data for this element
 				$(this).goomaps('destroy');
 				// Initialise a new data store
-				$(this).data('goomaps', {map:{},markers:[],infowindows:[]});
+				$(this).data('goomaps', {map:{},markers:[],infowindow: new google.maps.InfoWindow()});
 				// Initialise a map, attach it to the element itself
 				var map = new google.maps.Map(this, $.goomaps.defaults);
 				$.goomaps.mapconstants(options);
@@ -320,7 +320,7 @@
 	 *
 	 * @returns {Array} Array of Google Maps Marker objects
 	 */
-	$.goomaps.generatemarker = function(input, map, datastore){
+	$.goomaps.generatemarker = function(input, map, data){
 		var output = new Array();
 		$.each(input, function(i, marker)
 		{
@@ -353,23 +353,17 @@
 			}else{
 				if(window.console) console.error("'Goomaps generatemarker function': A position must be provided as an array. None provided.");
 			}
-			// Events, requires the marker to be set
-			if(marker.events){
-				$.goomaps.setevents(output[i], input[i].events);
-			}
 			// Infowindow, requires the marker to be set
 			if(marker.options.info){
-				if(datastore){
-					var extender = $.goomaps.infowindow(output[i], input[i].options.info, map);
-					//console.log(datastore.data('goomaps').infowindows)
-					datastore.data('goomaps').infowindows.push(extender);
-				}else{
-					$.goomaps.infowindow(output[i], input[i].options.info, map);
-				}
+				$.goomaps.infowindow(output[i], input[i].options.info, map, data.data('goomaps').infowindow);
 				// Open the info window straight away
 				if(marker.options.initialopen == true){
 					google.maps.event.trigger(output[i], 'click');
 				}
+			}
+			// Events, requires the marker to be set
+			if(marker.events){
+				$.goomaps.setevents(output[i], input[i].events);
 			}
 		});
 		return output;
@@ -479,21 +473,23 @@
 	 *
 	 * @param   {Marker} marker   Google Maps Marker object
 	 * @param   {String} info   Either a selector or string of data
+	 * @param	{Object} map   The map object
+	 * @param	{Object} infowindow   The maps infowindow object
 	 *
 	 * @returns {InfoWindow}   Google Maps InfoWindow object
 	 */
-	$.goomaps.infowindow = function(marker, info, map){
-		var infowindow;
-		if(typeof info === 'string' && info.match('^#')){
-			$(info).hide();
-			infowindow = new google.maps.InfoWindow({content: $(info).html()});
-		}else{
-			infowindow = new google.maps.InfoWindow({content: info});
-		}
+	$.goomaps.infowindow = function(marker, info, map, infowindow){
+		console.log(infowindow);
 		$.goomaps.setevents(marker, {'click': function(){
+			infowindow.close();
+			if(typeof info === 'string' && info.match('^#')){
+				$(info).hide();
+				infowindow.setContent($(info).html());
+			}else{
+				infowindow.setContent(info);
+			}
 			infowindow.open(map, marker);
 		}});
-		return infowindow;
 	};
 	/**
 	 * Set events from an object containing event callbacks
@@ -504,7 +500,7 @@
 	 */
 	$.goomaps.setevents = function(target, events){
 		$.each(events, function(event, callback){
-			google.maps.event.addListener(target, event, callback);
+			google.maps.event.addDomListener(target, event, callback);
 		});
 	};
 	/**
