@@ -479,7 +479,6 @@
 	 * @returns {InfoWindow}   Google Maps InfoWindow object
 	 */
 	$.goomaps.infowindow = function(marker, info, map, infowindow){
-		console.log(infowindow);
 		$.goomaps.setevents(marker, {'click': function(){
 			infowindow.close();
 			if(typeof info === 'string' && info.match('^#')){
