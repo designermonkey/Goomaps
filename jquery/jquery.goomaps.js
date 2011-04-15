@@ -39,15 +39,18 @@
 		 * @returns {Object} Returns the object passed in, for chainability.
 		 */
 		init: function(options){
-			if(options && options.debug) $.goomaps.DEBUG = options.debug;
 			return this.each(function(){
-				// Remove any map data for this element
+
+				// Destroy any map data for this element
 				$(this).goomaps('destroy');
-				// Initialise a new data store
-				$(this).data('goomaps', {map:{},markers:[],infowindow: new google.maps.InfoWindow()});
-				// Initialise a map, attach it to the element itself
+
+				// Initialise a map, attach it to the element itself (this)
 				var map = new google.maps.Map(this, $.goomaps.defaults);
+
+				// Map any constant strings to Google Map Constants
 				$.goomaps.mapconstants(options);
+
+				// Set the map center
 				if(options && options.center){
 					if(typeof options.center === 'string'){
 						$.goomaps.geocode(options.center, function(result){
@@ -61,13 +64,16 @@
 						$.error('Goomaps init: options.center must be either type Array or String');
 					}
 				}
+
+				// Set any events
 				if(options && options.events){
 					$.goomaps.setevents(map, options.events);
 				}
-				var add = {
-					map: map
-				}
-				$.extend($(this).data('goomaps'), add);
+
+				// Move the map to the element data
+				$(this).data('goomaps', {
+					"map": map
+				});
 			});
 		},
 		/**
@@ -78,10 +84,15 @@
 		 * @returns {Object}   Returns the object passed in, for chainability
 		 */
 		update: function(options){
-			if(options && options.debug === true) $.goomaps.DEBUG = options.debug;
 			return this.each(function(){
+
+				// Get the map from the data for this element
 				var map = $(this).data('goomaps').map;
+
+				// Map any constant strings to Google Map Constants
 				$.goomaps.mapconstants(options);
+
+				// Set the map center
 				if(options && options.center){
 					if(typeof options.center === 'string'){
 						$.goomaps.geocode(options.center, function(result){
@@ -95,17 +106,21 @@
 						$.error('Goomaps init: options.center must be either type Array or String');
 					}
 				}
+
+				// Set any events
 				if(options && options.events){
 					$.goomaps.setevents(map, options.events);
 				}
-				var add = {
-					map: map
-				}
-				$.extend($(this).data('goomaps'), add);
+
+				// Update the stored map
+				$.extend($(this).data('goomaps'), {
+					"map": map
+				});
 			});
 		},
 		/**
 		 *	Returns the Google Map of the element
+		 *
 		 *	@returns The Google Map of the selected element
 		 */
 		getmap: function(){
@@ -140,12 +155,20 @@
 		 */
 		setmarkers: function(markers){
 			return this.each(function(){
+
+				// Create a variable to pass along
 				$this = $(this);
+
+				// Wrap the markers in array if not an array already
 				if(!$.isArray(markers)) markers = [markers];
-				var map = $(this).data('goomaps').map;
-				var add = {markers:[]};
-				add.markers = $.goomaps.generatemarker(markers, map, $this);
-				$this.data('goomaps').markers = add.markers;
+
+				// Collect the markers from the generating function
+				var output = $.goomaps.generatemarker(markers, $this);
+
+				// Add the output markers to the element data
+				$.extend($(this).data('goomaps'), {
+					"markers": output
+				});
 			});
 		},
 		/**
@@ -153,17 +176,24 @@
 		 *
 		 * Markers are stored with the element containing the map, as an array of Google Maps Marker objects.
 		 *
-		 * @param   {Array} marker   Array containing a Marker object
+		 * @param   {Array} markers   Array of Marker objects
 		 *
 		 * @returns {Object}   Returns the object passed in, for chainability
 		 */
-		addmarker: function(marker){
+		addmarkers: function(markers){
 			return this.each(function(){
+
+				// Create a variable to pass along
 				$this = $(this);
-				if(!$.isArray(marker)) marker = [marker];
-				var map = $(this).data('goomaps').map;
-				var extender = $.goomaps.generatemarker(marker, map, $this);
-				$.extend($this.data('goomaps').markers, extender);
+
+				// Wrap the markers in array if not an array already
+				if(!$.isArray(markers)) markers = [markers];
+
+				// Collect the markers from the generating function
+				var output = $.goomaps.generatemarker(markers, $this);
+
+				// Add the output markers to the element data
+				$.extend($(this).data('goomaps').markers, output);
 			});
 		},
 		/**
@@ -182,13 +212,23 @@
 		 * @returns {Array}   Array of matched markers, or empty Array
 		 */
 		getmarkers: function(data){
+
+			// Collect any extra arguments
 			var args = arguments;
+
+			// Create an empty array to collect the results
 			var results = [];
+
+			// Collect the markers
 			var markers = $(this).data('goomaps').markers;
-			// Check for array number
+
+			// Check whether a single array index is being requested
 			if(data === 0 || typeof data === 'number'){
 				results.push(markers[data]);
-			}else if($.isPlainObject(data) || $.isFunction(data)){
+			}
+
+			// Check if a dataset is being used, or a boolean function
+			else if($.isPlainObject(data) || $.isFunction(data)){
 				var position;
 				if(data.position && $.isArray(data.position)){
 					position = $.goomaps.latlng(data.position); // Get LatLng of position array
@@ -208,8 +248,11 @@
 					}
 				});
 			}
+
 			// Check for no data, also check that a number of 0 isn't passed
 			if(data !== 0 && !data) results.push(markers);
+
+			// Wrap the results in jQuery for jQuery iteration with .each()
 			return $(results);
 		}
 	};
@@ -222,24 +265,22 @@
 	$.goomaps = {};
 	/**
 	 * Checks if all properties in needle exists in haystack and are of the same value
-	 * @param 	{Object} 	needle
-	 * @param 	{Object} 	haystack
-	 * @returns {Boolean}	true if haystack contains all values of needle
+	 *
+	 * @param 	{Object} 	data
+	 * @param 	{Object} 	marker
+	 * @returns {Boolean}	true if the Marker contains all values of the data
 	 */
-	var isin = function(needle, haystack){
-		for(prop in needle){
-			if (typeof(haystack[prop]) == 'undefined'){
-				return false;
+	var isin = function(data, marker){
+		$.each(data, function(property){
+			// Return false if the property doesn't exist in the marker, or if it doesn't match the marker's property
+			if((typeof marker[property] == 'undefined') || (property != marker[property])) return false;
+			// If
+			if(typeof property == 'object'){
+				if(!isin(property, marker[property])) return false;
 			}
-			if(typeof(needle[prop]) == 'object'){
-				if(!isin(needle[prop], haystack[prop])) {
-					return false;
-				}
-			}
-			if(needle[prop] != haystack[prop]) { return false; }
-		}
+		});
 		return true;
-	};
+	}
 	/**
 	 *	Is a given marker within a circle?
 	 *	Note: This is a filter-function for the getmarkers-method.
@@ -320,11 +361,13 @@
 	 *
 	 * @returns {Array} Array of Google Maps Marker objects
 	 */
-	$.goomaps.generatemarker = function(input, map, data){
+	$.goomaps.generatemarker = function(input, element){
+
+		// Create the output array
 		var output = new Array();
-		$.each(input, function(i, marker)
-		{
-			input[i].options.map = map;
+
+		$.each(input, function(i, marker){
+			input[i].options.map = element.data('goomaps').map;
 			// Custom Icon
 			if(marker.options.icon){
 				input[i].options.icon = $.goomaps.markerimage(marker.options.icon);
@@ -354,9 +397,15 @@
 			}
 			// Infowindow, requires the marker to be set
 			if(marker.options.info){
-				$.goomaps.infowindow(output[i], input[i].options.info, map, data.data('goomaps').infowindow);
+				if(!element.data('goomaps').infowindow){
+					$.extend(element.data('goomaps'), {
+						"infowindow": new google.maps.InfoWindow()
+					});
+				}
+				var iw = element.data('goomaps').infowindow;
+				$.goomaps.infowindow(output[i], input[i].options.info, input[i].options.map, iw);
 				// Open the info window straight away
-				if(marker.options.initialopen == true){
+				if(marker.options.windowopen == true){
 					google.maps.event.trigger(output[i], 'click');
 				}
 			}
@@ -478,28 +527,37 @@
 	 * @returns {InfoWindow}   Google Maps InfoWindow object
 	 */
 	$.goomaps.infowindow = function(marker, info, map, infowindow){
-		$.goomaps.setevents(marker, {'click': function(){
-			infowindow.close();
-			if(typeof info === 'string' && info.match('^#')){
-				$(info).hide();
-				infowindow.setContent($(info).html());
-			}else{
-				infowindow.setContent(info);
+		$.goomaps.setevents(marker, {
+			'click': function(){
+				infowindow.close();
+				if(typeof info === 'string' && info.match('^#')){
+					$(info).hide();
+					infowindow.setContent($(info).html());
+				}else{
+					infowindow.setContent(info);
+				}
+				infowindow.open(map, marker);
 			}
-			infowindow.open(map, marker);
-		}});
+		});
 	};
 	/**
 	 * Set events from an object containing event callbacks
 	 *
 	 * @param   {Object} target   The object to attach the event listener to
 	 * @param   {Object} events   The event callbacks
+	 * @param	{String} method   Method of event: normal = DOM event listener, once = DOM event listener that fires only once
 	 *
 	 */
-	$.goomaps.setevents = function(target, events){
-		$.each(events, function(event, callback){
-			google.maps.event.addDomListener(target, event, callback);
-		});
+	$.goomaps.setevents = function(target, events, method){
+		if(method && method == 'once'){
+			$.each(events, function(event, callback){
+				google.maps.event.addDomListenerOnce(target, event, callback);
+			});
+		}else if(!method || (method && method == 'normal')){
+			$.each(events, function(event, callback){
+				google.maps.event.addDomListener(target, event, callback);
+			});
+		}
 	};
 	/**
 	 * Converts given constant strings into Google Maps Constants
@@ -667,13 +725,9 @@
 		MapTypeId: 'roadmap'
 	};
 	/**
-	 * Goomaps Earth Radius
+	 * Goomaps Earth Radius in kilometers
 	 */
 	$.goomaps.EARTH_RADIUS = 6371;
-	/**
-	 * Goomaps debugger switch
-	 */
-	$.goomaps.DEBUG = false;
 	/**
 	 * Goomaps plugin version number
 	 */
