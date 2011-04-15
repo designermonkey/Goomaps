@@ -336,17 +336,16 @@
 			// Animation
 			if(marker.options.animation){
 				if(marker.options.animation == 'drop'){
-					animation = google.maps.Animation.DROP;
+					input[i].options.animation = google.maps.Animation.DROP;
 				}else if(marker.options.animation == 'bounce'){
-					animation = google.maps.Animation.BOUNCE;
+					input[i].options.animation = google.maps.Animation.BOUNCE;
 				}else{
-					if(window.console) console.warn("'Goomaps generatemarker function': Supplied animation type not supported.");
+					if(window.console) console.warn("'Goomaps generatemarker function': "+input[i].options.animation+" animation type not supported.");
 				}
 			}
 			// Position (required, or fail)
 			if(marker.options.position && $.isArray(marker.options.position)){
 				input[i].options.position = $.goomaps.latlng(marker.options.position);
-				if($.goomaps.DEBUG && window.console) console.log('marker'+i+' position:', input[i].options.position);
 				output[i] = new google.maps.Marker(input[i].options);
 			}else if(marker.options.position && !$.isArray(marker.options.position)){
 				if(window.console) console.error("'Goomaps generatemarker function': The position provided is not an array.");
