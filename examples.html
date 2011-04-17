@@ -41,6 +41,7 @@
 			<li><a title="Map with modified Map-Controls" href="examples/mod_map_controls.html">Map with modified Map-Controls</a></li>
 			<li><a title="Map with custom control" href="examples/map_with_custom_control.html">Map with custom control</a></li>
 			<li><a title="Calculate distance (as the crow flies) between two markers" href="examples/calc_distance_between_two_markers.html">Calculate distance (as the crow flies) between two markers</a></li>
+			<li><a title="Drop markers onto map with a staggered timeout" href="examples/staggered_drop_markers.html">Drop markers onto map with a staggered timeout</a></li>
 			<!--
 			<li><a title="" href="examples/.html"></a></li>
 			-->
@@ -49,12 +50,12 @@
 
 	<div id="map"></div>
 
-  <script type="text/javascript">
+	<script type="text/javascript">
 		$(function(){
 			$('#examplenav ul li a').bind('click',	function(){
-																								$('#map').load(this.href);
-																								return false;
-																							});
+				$('#map').load(this.href);
+				return false;
+			});
 		});
 	</script>
 </body>
