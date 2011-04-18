@@ -714,7 +714,7 @@
 				case 'METRIC':
 				default:				return google.maps.DirectionsUnitSystem.METRIC;
 			}
-		},
+		}
 	};
 	/**
 	 * Goomaps Default options for initialisation of the map
