@@ -225,14 +225,14 @@
 			var args = arguments;
 
 			// Create an empty array to collect the results
-			var results = [];
+			var results = new Array();
 
 			// Collect the markers
 			var markers = $(this).data('goomaps').markers;
 
 			// Check whether a single array index is being requested
 			if(data === 0 || typeof data === 'number'){
-				results.push(markers[data]);
+				results.push(markers[0][data]);
 			}
 
 			// Check if a dataset is being used, or a boolean function
@@ -274,21 +274,24 @@
 	/**
 	 * Checks if all properties in needle exists in haystack and are of the same value
 	 *
-	 * @param 	{Object} 	data
-	 * @param 	{Object} 	marker
-	 * @returns {Boolean}	true if the Marker contains all values of the data
+	 * @param 	{Object} 	needle
+	 * @param 	{Object} 	haystack
+	 * @returns {Boolean}	true if haystack contains all values of needle
 	 */
-	var isin = function(data, marker){
-		$.each(data, function(property){
-			// Return false if the property doesn't exist in the marker, or if it doesn't match the marker's property
-			if((typeof marker[property] == 'undefined') || (property != marker[property])) return false;
-			// If
-			if(typeof property == 'object'){
-				if(!isin(property, marker[property])) return false;
+	var isin = function(needle, haystack){
+		for(prop in needle){
+			if (typeof(haystack[prop]) == 'undefined'){
+				return false;
 			}
-		});
+			if(typeof(needle[prop]) == 'object'){
+				if(!isin(needle[prop], haystack[prop])) {
+					return false;
+				}
+			}
+			if(needle[prop] != haystack[prop]) { return false; }
+		}
 		return true;
-	}
+	};
 	/**
 	 *	Is a given marker within a circle?
 	 *	Note: This is a filter-function for the getmarkers-method.
