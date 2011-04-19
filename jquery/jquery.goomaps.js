@@ -477,7 +477,13 @@
 	$.goomaps.geocode = function(address, callback){
 		if($.isEmptyObject($.goomaps.geocoder)) $.goomaps.geocoder = new google.maps.Geocoder();
 		if(typeof address === 'string' && $.isFunction(callback)){
-			$.goomaps.geocoder.geocode({address: address}, function(results, status){
+			if($.goomaps.defaults.region){
+				console.log(region);
+				var region = $.goomaps.defaults.region;
+			}else{
+				var region = null;
+			}
+			$.goomaps.geocoder.geocode({address: address, region: region}, function(results, status){
 				if(status == google.maps.GeocoderStatus.OK){
 					callback(results[0].geometry.location);
 					return true;
