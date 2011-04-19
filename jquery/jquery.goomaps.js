@@ -193,7 +193,15 @@
 				var output = $.goomaps.generatemarker(markers, $this);
 
 				// Add the output markers to the element data
-				$.extend($(this).data('goomaps').markers, output);
+				if($(this).data('goomaps').markers){
+					$(this).data('goomaps').markers.push(output[0]);
+				}
+				else{
+					$.extend($(this).data('goomaps'), {
+						"markers": output
+					});
+				}
+
 			});
 		},
 		/**
