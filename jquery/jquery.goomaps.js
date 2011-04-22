@@ -270,7 +270,7 @@
 
 			// Wrap the results in jQuery for jQuery iteration with .each()
 			return $(results);
-		}
+		},
 		/**
 		 * Returns the Google Maps Infowindow of the element
 		 *
