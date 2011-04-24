@@ -38,39 +38,28 @@
 <div id="canvas" style="height: 400px;"></div>
 <h3>Code:</h3>
 <pre class="code">
-	var markers = [
+	var thecontent = function(){
+		return "This is dynamically generated content!";
+	};
+	var results = [
 		{
-			"options" => {
-				"uid" => "longstanton",
-				"position" => [52.29633,0.05004],
-				"title" => "Longstanton Marker",
-				"clickable" => true,
-				"draggable" => true,
-				"info" => "Longstanton Marker",
-				"animation" => "drop"
-			}
-		},
-		{
-			"options" => {
-				"uid" => "oakington",
-				"position" => [52.260170,0.068300],
-				"title" => "Oakington Marker",
-				"clickable" => true,
-				"draggable" => true,
-				"info" => "Oakington Marker",
-				"animation" => "drop"
-			}
-		},
-		{
-			"options" => {
-				"uid" => "girton",
-				"position" => [52.24226,0.08179],
-				"title" => "Girton Marker",
-				"clickable" => true,
-				"draggable" => true,
-				"info" => "Girton Marker",
-				"initialopen" => false,
-				"animation" => "drop"
+			"options": {
+				"uid": "longstanton",
+				"position": [52.29633,0.05004],
+				"title": "Longstanton Marker",
+				"clickable": true,
+				"draggable": false,
+				"animation": "drop"
+			},
+			"events": {
+				"click": function(ev){
+					var iw = $('#canvas').goomaps('getinfowindow');
+					var map = $('#canvas').goomaps('getmap');
+					var content = "<p>"+thecontent()+"</p>";
+					iw.close();
+					iw.setContent(content);
+					iw.open(map, this);
+				}
 			}
 		}
 	];
@@ -80,14 +69,6 @@
 			"MapTypeId":"roadmap",
 			"zoom":10
 		});
-		$.goomaps.setevents($('#goomap').goomaps('getmap'),{
-			'tilesloaded': function(ev){
-				$.each(results, function(i, result){
-					setTimeout(function(){
-						$('#goomap').goomaps('addmarkers', result);
-					}, (i + 1) * 200);
-				});
-			}
-		}, 'once');
+		$('#canvas').goomaps('setmarkers', results);
 	});
 </pre>
