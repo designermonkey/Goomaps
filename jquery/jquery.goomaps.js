@@ -240,7 +240,7 @@
 
 			// Check whether a single array index is being requested
 			if(data === 0 || typeof data === 'number'){
-				results.push(markers[0][data]);
+				results.push(markers[data]);
 			}
 
 			// Check if a dataset is being used, or a boolean function
@@ -595,11 +595,11 @@
 	$.goomaps.setevents = function(target, events, method){
 		if(method && method == 'once'){
 			$.each(events, function(event, callback){
-				google.maps.event.addDomListenerOnce(target, event, callback);
+				google.maps.event.addDomListenerOnce(target, event, callback, true);
 			});
 		}else if(!method || (method && method == 'normal')){
 			$.each(events, function(event, callback){
-				google.maps.event.addDomListener(target, event, callback);
+				google.maps.event.addDomListener(target, event, callback, true);
 			});
 		}
 	};
