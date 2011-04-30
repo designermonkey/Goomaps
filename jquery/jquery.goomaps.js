@@ -428,6 +428,12 @@
 			// Infowindow, requires the marker to be set
 			if(marker.options.info){
 				var infowindow = $(element).goomaps('getinfowindow');
+
+				// initially hide the infowindow-content-element:
+				if(typeof marker.options.info === 'string' && marker.options.info.match('^#')){
+					$(marker.options.info).hide();
+				}
+
 				$.goomaps.setevents(output[i], {
 					'click': function(){
 						infowindow.close();
