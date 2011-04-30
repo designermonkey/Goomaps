@@ -431,11 +431,11 @@
 				$.goomaps.setevents(output[i], {
 					'click': function(){
 						infowindow.close();
-						if(typeof info === 'string' && info.match('^#')){
-							$(info).hide();
-							infowindow.setContent($(info).html());
+						if(typeof marker.options.info === 'string' && marker.options.info.match('^#')){
+							$(marker.options.info).hide();
+							infowindow.setContent($(marker.options.info).html());
 						}else{
-							infowindow.setContent(info);
+							infowindow.setContent(marker.options.info);
 						}
 						infowindow.open(map, output[i]);
 					}

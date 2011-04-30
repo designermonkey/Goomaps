@@ -1,0 +1,96 @@
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('#canvas').goomaps({
+			center: [52.25,0.05],
+			zoom: 6,
+			mapTypeId: 'roadmap'
+		});
+
+		var fclick = function(ev){
+			marker = this;
+
+			var map = $('#canvas').goomaps('getmap');
+
+			marker.infowindow = marker.infowindow || new google.maps.InfoWindow();
+
+			$.get('examples/ajax.html', function(data){
+				marker.infowindow.setContent(data);
+				marker.infowindow.open(map, marker);
+			});
+		};
+
+		var markers = [
+			{
+				options: {
+					position: [52.11,0.01],
+					title: "Marker1",
+					clickable: true
+				},
+				events: {
+					click: fclick
+				}
+			},
+			{
+				options: {
+					position: [52.89,0.71],
+					title: "Marker2",
+					clickable: true
+				},
+				events: {
+					click: fclick
+				}
+			}
+		];
+
+		$('#canvas').goomaps('setmarkers', markers);
+
+	});
+</script>
+<h2>Multiple opened InfoWindows</h2>
+<div id="canvas" style="height: 400px;"></div>
+<h3>Code:</h3>
+<pre class="code">
+$('#canvas').goomaps({
+	center: [52.25,0.05],
+	zoom: 6,
+	mapTypeId: 'roadmap'
+});
+
+var fclick = function(ev){
+	marker = this;
+
+	var map = $('#canvas').goomaps('getmap');
+
+	marker.infowindow = marker.infowindow || new google.maps.InfoWindow();
+
+	$.get('examples/ajax.html', function(data){
+		marker.infowindow.setContent(data);
+		marker.infowindow.open(map, marker);
+	});
+};
+
+var markers = [
+	{
+		options: {
+			position: [52.11,0.01],
+			title: "Marker1",
+			clickable: true
+		},
+		events: {
+			click: fclick
+		}
+	},
+	{
+		options: {
+			position: [52.89,0.71],
+			title: "Marker2",
+			clickable: true
+		},
+		events: {
+			click: fclick
+		}
+	}
+];
+
+$('#canvas').goomaps('setmarkers', markers);
+</pre>
