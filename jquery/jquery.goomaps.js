@@ -587,6 +587,7 @@
 					infowindow.setContent(info);
 				}
 				infowindow.open(map, marker);
+				infowindow.setIndex(google.maps.Marker.MAX_ZINDEX+1);
 			}
 		});
 	};
