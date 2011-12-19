@@ -266,7 +266,7 @@
 			}
 
 			// Check for no data, also check that a number of 0 isn't passed
-			if(data !== 0 && !data) results.push(markers);
+			if(data !== 0 && !data) results.concat(markers);
 
 			// Wrap the results in jQuery for jQuery iteration with .each()
 			return $(results);
