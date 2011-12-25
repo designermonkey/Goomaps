@@ -1,7 +1,11 @@
+function isNumber(n) {
+  return !isNaN(parseFloat(n)) && isFinite(n);
+}
 
 (function($){
 
-	if($.fn.goomaps && $.fn.goomaps.methods){
+	if($.fn.goomaps && $.fn.goomaps.methods)
+	{
 		var circlemethods = {
 			/**
 			 * Add circles to an existing Google Map object.
@@ -12,30 +16,35 @@
 			 *
 			 * @returns {Object}   Returns the object passed in, for chainability
 			 */
-			setcircles: function(circles){
+			setcircles: function(circles)
+			{
 				return this.each(function(){
+
+					// Create a variable to pass along
 					$this = $(this);
+
+					// Wrap the markers in array if not an array already
 					if(!$.isArray(circles)) circles = [circles];
-					var map = $(this).data('goomaps').map;
-					var add = {circles:[]};
-					$.each(circles, function(i, circle){
-						add.circles[i] = new google.maps.Circle();
-						add.circles[i].setMap(map);
-						if(circle.center && $.isArray(circle.center)){
-							add.circles[i].setCenter($.goomaps.latlng(circle.center));
-						}else{
-							if($.goomaps.debug && window.console) console.log('setcircle: must be provided with a center.');
-						}
-						if(circle.options){
-							add.circles[i].setOptions(circle.options);
-						}else{
-							if($.goomaps.debug && window.console) console.log('setcircle: must be provided with required options.');
-						}
-						if(circle.events){
-							$.goomaps.setevents(add.circles[i], circle.events);
-						}
-					});
-					$.extend($this.data('goomaps'), add);
+
+					// Add the output markers to the element data
+					if($this.data('goomaps').circles && $this.data('goomaps').circles.length)
+					{
+						$.each(circles, function(i, circle){
+							var current = $this.goomaps('getcircles', circle.options);
+							if(!current.length)
+							{
+								var output = $.goomaps.generatecircle(circle, $this);
+								$this.data('goomaps').circles.push(output[0]);
+							}
+						});
+					}
+					else
+					{
+						var output = $.goomaps.generatecircle(circles, $this);
+						$.extend($this.data('goomaps'), {
+							"circles": output
+						});
+					}
 				});
 			},
 			/**
@@ -53,7 +62,8 @@
 			 *
 			 * @returns {Array}   Array of matched circles, or empty Array
 			 */
-			getcircles: function(data){
+			getcircles: function(data)
+			{
 				var args = arguments;
 				var results = [];
 				var circles = $(this).data('goomaps').circles;
@@ -87,8 +97,83 @@
 		};
 
 		$.extend($.fn.goomaps.methods, circlemethods);
+		/**
+		 * Generate Google Maps Circle objects using provided options
+		 *
+		 * @param   {Array} input   Array of circles options
+		 * @param   {Map} map   Google Map object
+		 *
+		 * @returns {Array} Array of Google Maps Circle objects
+		 */
+		$.goomaps.generatecircle = function(input, element)
+		{
+			// Create the output array
+			var output = new Array();
 
+			// Get the map
+			var map = $(element).goomaps('getmap');
+			
+			$.each(input, function(i, circle){
+				input[i].options.map = map;
 
+				if(circle.options.radius && !isNumber(circle.options.radius))
+				{
+					if(window.console) console.error("'Goomaps generatecircle function': The radius provided is not a number.");
+				}
+				else if(!circle.options.radius)
+				{
+					if(window.console) console.error("'Goomaps generatecircle function': A radius must be provided as a number.");
+				}
+
+				if(circle.options.strokeWeight && !isNumber(circle.options.strokeWeight))
+				{
+					if(window.console) console.error("'Goomaps generatecircle function': The strokeWeight provided is not a number.");
+				}
+				else if(!circle.options.strokeWeight)
+				{
+					if(window.console) console.error("'Goomaps generatecircle function': A strokeWeight must be provided as a number.");
+				}
+
+				if(!circle.options.fillColor)
+				{
+					if(window.console) console.error("'Goomaps generatecircle function': A fillColor must be provided.");
+				}
+
+				if(!circle.options.strokeColor)
+				{
+					if(window.console) console.error("'Goomaps generatecircle function': A strokeColor must be provided.");
+				}
+
+				if(!circle.options.fillOpacity)
+				{
+					if(window.console) console.error("'Goomaps generatecircle function': A fillOpacity must be provided.");
+				}
+
+				if(!circle.options.strokeOpacity)
+				{
+					if(window.console) console.error("'Goomaps generatecircle function': A strokeOpacity must be provided.");
+				}
+
+				if(circle.options.center && $.isArray(circle.options.center))
+				{
+					input[i].options.center = $.goomaps.latlng(circle.options.center);
+					output[i] = new google.maps.Circle(input[i].options);
+				}
+				else if(circle.options.center && !$.isArray(circle.options.center))
+				{
+					if(window.console) console.error("'Goomaps generatecircle function': The center provided is not an array.");
+				}
+				else
+				{
+					if(window.console) console.error("'Goomaps generatecircle function': A center must be provided as an array. None provided.");
+				}
+
+				if(marker.events)
+				{
+					$.goomaps.setevents(output[i], input[i].events);
+				}
+			});
+			return output;
+		}
 	}
-
 })(jQuery);

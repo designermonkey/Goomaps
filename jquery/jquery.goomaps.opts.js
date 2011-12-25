@@ -209,15 +209,15 @@ var layers = [
 	{}
 ];
 // Function returning either Array or Object
-var leyersfunc = function(){}
+var layersfunc = function(){}
 
 // Options to add circles to a map
 // Single circle
 var circle = {
 	// Required
-	center: [52.257347,0.054988],
 	options: {
 		// Required
+		center: [52.257347,0.054988],
 		radius: 5, // meters
 		fillColor: '',
 		fillOpacity: 1,

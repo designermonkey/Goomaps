@@ -182,7 +182,7 @@
 			});
 		},
 		/**
-		 * Append Markers to an existing Google Map object.
+		 * Add Markers to an existing Google Map object.
 		 *
 		 * Markers are stored with the element containing the map, as an array of Google Maps Marker objects.
 		 *
@@ -190,7 +190,8 @@
 		 *
 		 * @returns {Object}   Returns the object passed in, for chainability
 		 */
-		addmarkers: function(markers){
+		setmarkers: function(markers)
+		{
 			return this.each(function(){
 
 				// Create a variable to pass along
@@ -218,7 +219,6 @@
 						"markers": output
 					});
 				}
-
 			});
 		},
 		/**
@@ -236,7 +236,8 @@
 		 *
 		 * @returns {Array}   Array of matched markers, or empty Array
 		 */
-		getmarkers: function(data){
+		getmarkers: function(data)
+		{
 
 			// Collect any extra arguments
 			var args = arguments;
@@ -285,7 +286,8 @@
 		 *
 		 * @returns {InfoWindow}   Google Maps Infowindow object
 		 */
-		getinfowindow: function(){
+		getinfowindow: function()
+		{
 			return $(this).data('goomaps').infowindow;
 		}
 	};
@@ -303,17 +305,24 @@
 	 * @param 	{Object} 	haystack
 	 * @returns {Boolean}	true if haystack contains all values of needle
 	 */
-	var isin = function(needle, haystack){
-		for(prop in needle){
-			if (typeof(haystack[prop]) == 'undefined'){
+	var isin = function(needle, haystack)
+	{
+		for(prop in needle)
+		{
+			if(typeof(haystack[prop]) == 'undefined')
+			{
 				return false;
 			}
-			if(typeof(needle[prop]) == 'object'){
+			if(typeof(needle[prop]) == 'object')
+			{
 				if(!isin(needle[prop], haystack[prop])) {
 					return false;
 				}
 			}
-			if(needle[prop] != haystack[prop]) { return false; }
+			if(needle[prop] != haystack[prop])
+			{
+				return false;
+			}
 		}
 		return true;
 	};
@@ -329,22 +338,33 @@
 	 *	@param	{google.maps.Marker}	marker
 	 *	@param	{Object}							circle
 	 */
-	$.goomaps.incircle = function(marker, circle){
-		if(marker && circle){
+	$.goomaps.incircle = function(marker, circle)
+	{
+		if(marker && circle)
+		{
 			r = 0;
-			with(circle.radius){
-				if(indexOf('km') > 0) {
+			with(circle.radius)
+			{
+				if(indexOf('km') > 0)
+				{
 					r = parseFloat(circle.radius);
-				} else if(indexOf('m') > 0) {
+				}
+				else if(indexOf('m') > 0)
+				{
 					r = parseFloat(circle.radius) / 1000;
-				} else {
+				}
+				else
+				{
 					r = parseFloat(circle.radius);
 				}
 			}
 			var lat = marker.getPosition().lat(),
 				lng = marker.getPosition().lng();
+
 			return $.goomaps.distance(circle.center, [lat, lng]) <= r;
-		}else{
+		}
+		else
+		{
 			// Add console message here
 			return false;
 		}
@@ -356,13 +376,20 @@
 	 *	@param		{LatLng|Array}	p2	second point; [lat, lng]
 	 *	@returns	{float}					the distance in km between the given points
 	 */
-	$.goomaps.distance = function(p1, p2){
+	$.goomaps.distance = function(p1, p2)
+	{
 		// for the mathematical background of this routine have a look at spherical trigonometry (law of cosines)
 		var conv = function(p){
 			var lat = undefined,
 				lng = undefined;
-			if(p.lat) { lat = p.lat(); }
-			if(p.lng) { lng = p.lng(); }
+			if(p.lat)
+			{
+				lat = p.lat();
+			}
+			if(p.lng)
+			{
+				lng = p.lng();
+			}
 			return 	[
 				lat || p[0] || 0,
 				lng || p[1] || 0
@@ -397,8 +424,8 @@
 	 *
 	 * @returns {Array} Array of Google Maps Marker objects
 	 */
-	$.goomaps.generatemarker = function(input, element){
-
+	$.goomaps.generatemarker = function(input, element)
+	{
 		// Create the output array
 		var output = new Array();
 
@@ -408,60 +435,80 @@
 		$.each(input, function(i, marker){
 			input[i].options.map = map;
 			// Custom Icon
-			if(marker.options.icon){
+			if(marker.options.icon)
+			{
 				input[i].options.icon = $.goomaps.markerimage(marker.options.icon);
 			}
 			// Custom Shadow
-			if(marker.options.shadow){
+			if(marker.options.shadow)
+			{
 				input[i].options.shadow = $.goomaps.markerimage(marker.options.shadow);
 			}
 			// Animation
-			if(marker.options.animation){
-				if(marker.options.animation == 'drop'){
+			if(marker.options.animation)
+			{
+				if(marker.options.animation == 'drop')
+				{
 					input[i].options.animation = google.maps.Animation.DROP;
-				}else if(marker.options.animation == 'bounce'){
+				}
+				else if(marker.options.animation == 'bounce')
+				{
 					input[i].options.animation = google.maps.Animation.BOUNCE;
-				}else{
+				}
+				else
+				{
 					if(window.console) console.warn("'Goomaps generatemarker function': "+input[i].options.animation+" animation type not supported.");
 				}
 			}
 			// Position (required, or fail)
-			if(marker.options.position && $.isArray(marker.options.position)){
+			if(marker.options.position && $.isArray(marker.options.position))
+			{
 				input[i].options.position = $.goomaps.latlng(marker.options.position);
 				output[i] = new google.maps.Marker(input[i].options);
-			}else if(marker.options.position && !$.isArray(marker.options.position)){
+			}
+			else if(marker.options.position && !$.isArray(marker.options.position))
+			{
 				if(window.console) console.error("'Goomaps generatemarker function': The position provided is not an array.");
-			}else{
+			}
+			else
+			{
 				if(window.console) console.error("'Goomaps generatemarker function': A position must be provided as an array. None provided.");
 			}
 			// Infowindow, requires the marker to be set
-			if(marker.options.info){
+			if(marker.options.info)
+			{
 				var infowindow = $(element).goomaps('getinfowindow');
 
 				// initially hide the infowindow-content-element:
-				if(typeof marker.options.info === 'string' && marker.options.info.match('^#')){
+				if(typeof marker.options.info === 'string' && marker.options.info.match('^#'))
+				{
 					$(marker.options.info).hide();
 				}
 
 				$.goomaps.setevents(output[i], {
 					'click': function(){
 						infowindow.close();
-						if(typeof marker.options.info === 'string' && marker.options.info.match('^#')){
+						if(typeof marker.options.info === 'string' && marker.options.info.match('^#'))
+						{
 							$(marker.options.info).hide();
 							infowindow.setContent($(marker.options.info).html());
-						}else{
+						}
+						else
+						{
 							infowindow.setContent(marker.options.info);
 						}
 						infowindow.open(map, output[i]);
 					}
 				});
 				// Open the info window straight away
-				if(marker.options.windowopen == true){
+				if(marker.options.windowopen == true)
+				{
 					google.maps.event.trigger(output[i], 'click');
 				}
 			}
 			// Events, requires the marker to be set
-			if(marker.events){
+			if(marker.events)
+			{
 				$.goomaps.setevents(output[i], input[i].events);
 			}
 		});
@@ -474,10 +521,14 @@
 	 *
 	 * @returns {LatLng}   Google Maps LatLng object
 	 */
-	$.goomaps.latlng = function(coords){
-		if(coords && $.isArray(coords)){
+	$.goomaps.latlng = function(coords)
+	{
+		if(coords && $.isArray(coords))
+		{
 			return new google.maps.LatLng(coords[0], coords[1]);
-		}else if(!coords || !$.isArray(coords)){
+		}
+		else if(!coords || !$.isArray(coords))
+		{
 			if(window.console) console.error("'Goomaps latlng function': Must be provided with an array of coordinates.");
 			return false;
 		}
@@ -490,15 +541,21 @@
 	 *
 	 * @returns {LatLngBounds} Google Maps LatLngBounds object
 	 */
-	$.goomaps.latlngbounds = function(coords){
-		if(coords && $.isArray(coords)){
+	$.goomaps.latlngbounds = function(coords)
+	{
+		if(coords && $.isArray(coords))
+		{
 			var a = $.goomaps.latlng(coords[0]);
 			var b = $.goomaps.latlng(coords[1]);
 			return new google.maps.LatLngBounds(a, b);
-		}else if(coords && !$.isArray(coords)){
+		}
+		else if(coords && !$.isArray(coords))
+		{
 			if(window.console) console.error("'Goomaps latlngbounds function': Coords provided are not an array.");
 			return false;
-		}else{
+		}
+		else
+		{
 			return new google.maps.LatLngBounds();
 		}
 	};
@@ -514,32 +571,47 @@
 	 *
 	 * @returns {LatLng}   Google Maps LatLng object
 	 */
-	$.goomaps.geocode = function(address, callback){
+	$.goomaps.geocode = function(address, callback)
+	{
 		if($.isEmptyObject($.goomaps.geocoder)) $.goomaps.geocoder = new google.maps.Geocoder();
-		if(typeof address === 'string' && $.isFunction(callback)){
-			if($.goomaps.defaults.region){
+		if(typeof address === 'string' && $.isFunction(callback))
+		{
+			if($.goomaps.defaults.region)
+			{
 				console.log(region);
 				var region = $.goomaps.defaults.region;
-			}else{
+			}
+			else
+			{
 				var region = null;
 			}
 			$.goomaps.geocoder.geocode({address: address, region: region}, function(results, status){
-				if(status == google.maps.GeocoderStatus.OK){
+				if(status == google.maps.GeocoderStatus.OK)
+				{
 					callback(results[0].geometry.location);
 					return true;
-				}else{
+				}
+				else
+				{
 					if($.goomaps.DEBUG && window.console) console.log('Geocoder status returned: '+status);
 					callback(results);
 					return false;
 				}
 			});
 			return true;
-		}else{
-			if(typeof address != 'string' && !$.isFunction(callback)){
+		}
+		else
+		{
+			if(typeof address != 'string' && !$.isFunction(callback))
+			{
 				if($.goomaps.DEBUG && window.console) return console.log('Geocoder requires an address string, and a callback function');
-			}else if(typeof address != 'string'){
+			}
+			else if(typeof address != 'string')
+			{
 				if($.goomaps.DEBUG && window.console) return console.log('Geocoder requires an address string');
-			}else if(!$.isFunction(callback)){
+			}
+			else if(!$.isFunction(callback))
+			{
 				if($.goomaps.DEBUG && window.console) return console.log('Geocoder requires a callback function');
 			}
 			return false;
@@ -553,23 +625,31 @@
 	 *
 	 * @returns {MarkerImage}   Google Maps MarkerImage object
 	 */
-	$.goomaps.markerimage = function(options){
-		if(typeof options !== 'string'){
+	$.goomaps.markerimage = function(options)
+	{
+		if(typeof options !== 'string')
+		{
 			var size, scaledSize, anchor, origin;
-			if(options.size){
+			if(options.size)
+			{
 				size = new google.maps.Size(options.size[0], options.size[1]);
 			}
-			if(options.scaledSize){
+			if(options.scaledSize)
+			{
 				scaledSize = new google.maps.Size(options.scaledSize[0], options.scaledSize[1]);
 			}
-			if(options.anchor){
+			if(options.anchor)
+			{
 				anchor = new google.maps.Point(options.anchor[0], options.anchor[1]);
 			}
-			if(options.origin){
+			if(options.origin)
+			{
 				origin = new google.maps.Point(options.origin[0], options.origin[1]);
 			}
 			return new google.maps.MarkerImage(options.url, size, origin, anchor, scaledSize);
-		}else{
+		}
+		else
+		{
 			return new google.maps.MarkerImage(options);
 		}
 	};
@@ -585,14 +665,18 @@
 	 *
 	 * @deprecated
 	 */
-	$.goomaps.infowindow = function(marker, info, map, infowindow){
+	$.goomaps.infowindow = function(marker, info, map, infowindow)
+	{
 		$.goomaps.setevents(marker, {
 			'click': function(){
 				infowindow.close();
-				if(typeof info === 'string' && info.match('^#')){
+				if(typeof info === 'string' && info.match('^#'))
+				{
 					$(info).hide();
 					infowindow.setContent($(info).html());
-				}else{
+				}
+				else
+				{
 					infowindow.setContent(info);
 				}
 				infowindow.open(map, marker);
@@ -608,12 +692,17 @@
 	 * @param	{String} method   Method of event: normal = DOM event listener, once = DOM event listener that fires only once
 	 *
 	 */
-	$.goomaps.setevents = function(target, events, method){
-		if(method && method == 'once'){
-			$.each(events, function(event, callback){
+	$.goomaps.setevents = function(target, events, method)
+	{
+		if(method && method == 'once')
+		{
+			$.each(events, function(event, callback)
+			{
 				google.maps.event.addDomListenerOnce(target, event, callback, true);
 			});
-		}else if(!method || (method && method == 'normal')){
+		}
+		else if(!method || (method && method == 'normal'))
+		{
 			$.each(events, function(event, callback){
 				google.maps.event.addDomListener(target, event, callback, true);
 			});
@@ -626,37 +715,70 @@
 	 *
 	 * @returns {Constant} Google Maps Constant
 	 */
-	$.goomaps.mapconstants = function(options){
+	$.goomaps.mapconstants = function(options)
+	{
 		if(options){
 			// MapTypeId
-			if(options.MapTypeId) options.MapTypeId = $.goomaps.constants.MapTypeId(options.MapTypeId);
+			if(options.MapTypeId)
+			{
+				options.MapTypeId = $.goomaps.constants.MapTypeId(options.MapTypeId);
+			}
 
 			// MapTypeControlOptions:
-			if(options.mapTypeControlOptions){
-				if(options.mapTypeControlOptions.position)	options.mapTypeControlOptions.position	= $.goomaps.constants.ControlPosition(options.mapTypeControlOptions.position);
-				if(options.mapTypeControlOptions.style)		options.mapTypeControlOptions.style		= $.goomaps.constants.MapTypeControlStyle(options.mapTypeControlOptions.style);
+			if(options.mapTypeControlOptions)
+			{
+				if(options.mapTypeControlOptions.position)
+				{
+					options.mapTypeControlOptions.position = $.goomaps.constants.ControlPosition(options.mapTypeControlOptions.position);
+				}
+				if(options.mapTypeControlOptions.style)
+				{
+					options.mapTypeControlOptions.style	= $.goomaps.constants.MapTypeControlStyle(options.mapTypeControlOptions.style);
+				}
 			}
 
 			// ScaleControlOptions:
-			if(options.scaleControlOptions){
-				if(options.scaleControlOptions.position)	options.scaleControlOptions.position	= $.goomaps.constants.ControlPosition(options.scaleControlOptions.position);
-				if(options.scaleControlOptions.style)		options.scaleControlOptions.style		= $.goomaps.constants.ScaleControlStyle(options.scaleControlOptions.style);
+			if(options.scaleControlOptions)
+			{
+				if(options.scaleControlOptions.position)
+				{
+					options.scaleControlOptions.position = $.goomaps.constants.ControlPosition(options.scaleControlOptions.position);
+				}
+				if(options.scaleControlOptions.style)
+				{
+					options.scaleControlOptions.style = $.goomaps.constants.ScaleControlStyle(options.scaleControlOptions.style);
+				}
 			}
 
 			// ZoomControlOptions:
-			if(options.zoomControlOptions){
-				if(options.zoomControlOptions.position)		options.zoomControlOptions.position		= $.goomaps.constants.ControlPosition(options.zoomControlOptions.position);
-				if(options.zoomControlOptions.style)		options.zoomControlOptions.style		= $.goomaps.constants.ZoomControlStyle(options.zoomControlOptions.style);
+			if(options.zoomControlOptions)
+			{
+				if(options.zoomControlOptions.position)
+				{
+					options.zoomControlOptions.position = $.goomaps.constants.ControlPosition(options.zoomControlOptions.position);
+				}
+				if(options.zoomControlOptions.style)
+				{
+					options.zoomControlOptions.style = $.goomaps.constants.ZoomControlStyle(options.zoomControlOptions.style);
+				}
 			}
 
 			// PanControlOptions:
-			if(options.panControlOptions){
-				if(options.panControlOptions.position)		options.panControlOptions.position	= $.goomaps.constants.ControlPosition(options.panControlOptions.position);
+			if(options.panControlOptions)
+			{
+				if(options.panControlOptions.position)
+				{
+					options.panControlOptions.position = $.goomaps.constants.ControlPosition(options.panControlOptions.position);
+				}
 			}
 
 			// RotateControlOptions:
-			if(options.rotateControlOptions){
-				if(options.rotateControlOptions.position)		options.rotateControlOptions.position		= $.goomaps.constants.ControlPosition(options.rotateControlOptions.position);
+			if(options.rotateControlOptions)
+			{
+				if(options.rotateControlOptions.position)
+				{
+					options.rotateControlOptions.position = $.goomaps.constants.ControlPosition(options.rotateControlOptions.position);
+				}
 			}
 		}
 	};
