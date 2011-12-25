@@ -8,7 +8,8 @@
  *
  *	@license		Dual licensed under MIT and GPLv2
  */
-(function($) {
+(function($){
+
 	if(window.console) $.error = console.error;
 	/**
 	 * Goomaps function. Checks for method and applies the correct method. Falls
@@ -18,15 +19,22 @@
 	 *
 	 * @returns {Object}   Returns the passed in jQuery object for chainability
 	 */
-	$.fn.goomaps = function(method){
-		if($.fn.goomaps.methods[method]){
+	$.fn.goomaps = function(method)
+	{
+		if($.fn.goomaps.methods[method])
+		{
 			return $.fn.goomaps.methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
-		}else if(typeof method === 'object' || !method){
+		}
+		else if(typeof method === 'object' || !method)
+		{
 			return $.fn.goomaps.methods.init.apply(this, arguments);
-		}else{
+		}
+		else
+		{
 			return $.error('Method ' + method + ' does not exist on jQuery.goomaps');
 		}
 	};
+
 	$.fn.goomaps.methods = {
 		/**
 		 * Initialise the Google Map and store it in the element. If there are options
@@ -38,7 +46,8 @@
 		 *
 		 * @returns {Object} Returns the object passed in, for chainability.
 		 */
-		init: function(options){
+		init: function(options)
+		{
 			return this.each(function(){
 
 				// Destroy any map data for this element
@@ -57,22 +66,29 @@
 				$.goomaps.mapconstants(options);
 
 				// Set the map center
-				if(options && options.center){
-					if(typeof options.center === 'string'){
+				if(options && options.center)
+				{
+					if(typeof options.center === 'string')
+					{
 						$.goomaps.geocode(options.center, function(result){
 							options.center = result;
 							map.setOptions(options);
 						});
-					}else if($.isArray(options.center)){
+					}
+					else if($.isArray(options.center))
+					{
 						options.center = $.goomaps.latlng(options.center);
 						map.setOptions(options);
-					}else{
+					}
+					else
+					{
 						$.error('Goomaps init: options.center must be either type Array or String');
 					}
 				}
 
 				// Set any events
-				if(options && options.events){
+				if(options && options.events)
+				{
 					$.goomaps.setevents(map, options.events);
 				}
 
@@ -91,7 +107,8 @@
 		 *
 		 * @returns {Object}   Returns the object passed in, for chainability
 		 */
-		update: function(options){
+		update: function(options)
+		{
 			return this.each(function(){
 
 				// Get the map from the data for this element
@@ -101,22 +118,29 @@
 				$.goomaps.mapconstants(options);
 
 				// Set the map center
-				if(options && options.center){
-					if(typeof options.center === 'string'){
+				if(options && options.center)
+				{
+					if(typeof options.center === 'string')
+					{
 						$.goomaps.geocode(options.center, function(result){
 							options.center = result;
 							map.setOptions(options);
 						});
-					}else if($.isArray(options.center)){
+					}
+					else if($.isArray(options.center))
+					{
 						options.center = $.goomaps.latlng(options.center);
 						map.setOptions(options);
-					}else{
+					}
+					else
+					{
 						$.error('Goomaps init: options.center must be either type Array or String');
 					}
 				}
 
 				// Set any events
-				if(options && options.events){
+				if(options && options.events)
+				{
 					$.goomaps.setevents(map, options.events);
 				}
 
@@ -131,7 +155,8 @@
 		 *
 		 *	@returns The Google Map of the selected element
 		 */
-		getmap: function(){
+		getmap: function()
+		{
 			return $(this).data('goomaps').map;
 		},
 		/**
@@ -143,40 +168,17 @@
 		 *
 		 * @returns {Object}   Returns the object passed in, for chainablity
 		 */
-		destroy: function(key){
+		destroy: function(key)
+		{
 			return this.each(function(){
-				if($(this).data(key)){
-					$(this).removeData(key);
-				}else{
-					$(this).empty();
+				if(key)
+				{
+					delete $(this).data('goomaps')[key];
 				}
-			});
-		},
-		/**
-		 * Add Markers to an existing Google Map object.
-		 *
-		 * Markers are stored with the element containing the map, as an array of Google Maps Marker objects.
-		 *
-		 * @param   {Array} markers   Array of Marker objects
-		 *
-		 * @returns {Object}   Returns the object passed in, for chainability
-		 */
-		setmarkers: function(markers){
-			return this.each(function(){
-
-				// Create a variable to pass along
-				$this = $(this);
-
-				// Wrap the markers in array if not an array already
-				if(!$.isArray(markers)) markers = [markers];
-
-				// Collect the markers from the generating function
-				var output = $.goomaps.generatemarker(markers, $this);
-
-				// Add the output markers to the element data
-				$.extend($(this).data('goomaps'), {
-					"markers": output
-				});
+				else
+				{
+					$(this).removeData('goomaps');
+				}
 			});
 		},
 		/**
@@ -197,15 +199,22 @@
 				// Wrap the markers in array if not an array already
 				if(!$.isArray(markers)) markers = [markers];
 
-				// Collect the markers from the generating function
-				var output = $.goomaps.generatemarker(markers, $this);
-
 				// Add the output markers to the element data
-				if($(this).data('goomaps').markers){
-					$(this).data('goomaps').markers.push(output[0]);
+				if($this.data('goomaps').markers.length)
+				{
+					$.each(markers, function(i, marker){
+						var current = $this.goomaps('getmarkers', marker.options);
+						if(!current.length)
+						{
+							var output = $.goomaps.generatemarker(markers, $this);
+							$this.data('goomaps').markers.push(output[0]);
+						}
+					});
 				}
-				else{
-					$.extend($(this).data('goomaps'), {
+				else
+				{
+					var output = $.goomaps.generatemarker(markers, $this);
+					$.extend($this.data('goomaps'), {
 						"markers": output
 					});
 				}
