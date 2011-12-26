@@ -1,8 +1,9 @@
-function isNumber(n) {
-  return !isNaN(parseFloat(n)) && isFinite(n);
-}
-
 (function($){
+
+	function isNumber(n)
+	{
+		return !isNaN(parseFloat(n)) && isFinite(n);
+	}
 
 	if($.fn.goomaps && $.fn.goomaps.methods)
 	{
@@ -168,7 +169,7 @@ function isNumber(n) {
 					if(window.console) console.error("'Goomaps generatecircle function': A center must be provided as an array. None provided.");
 				}
 
-				if(marker.events)
+				if(circle.events)
 				{
 					$.goomaps.setevents(output[i], input[i].events);
 				}
