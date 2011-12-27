@@ -139,13 +139,13 @@ var polylinefunc = function(){}
 // Options to add Polygons to a map
 // Single Polygon
 var polygon = {
-	points: [
-		[15.12345, 1.12345],
-		[16.12345, 2.12345],
-		[17.12345, 3.12345]
-	],
 	options: {
 		// Required
+		paths: [
+			[15.12345, 1.12345],
+			[16.12345, 2.12345],
+			[17.12345, 3.12345]
+		],
 		fillColor: '',
 		fillOpacity: 1,
 		strokeColor: '',
