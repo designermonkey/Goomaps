@@ -10,7 +10,6 @@
  */
 (function($){
 
-	if(window.console) $.error = console.error;
 	/**
 	 * Goomaps function. Checks for method and applies the correct method. Falls
 	 * back to init method.
@@ -31,7 +30,7 @@
 		}
 		else
 		{
-			return $.error('Method ' + method + ' does not exist on jQuery.goomaps');
+			if($.goomaps.debug && window.console) console.error('Method ' + method + ' does not exist on jQuery.goomaps');
 		}
 	};
 
@@ -56,14 +55,8 @@
 				// Initialise a map, attach it to the element itself (this)
 				var map = new google.maps.Map(this, $.goomaps.defaults);
 
-				// Initialise an infowindow
-				var infowindow = new google.maps.InfoWindow();
-
-				// Initialise the markers array
-				var markers = new Array();
-
 				// Map any constant strings to Google Map Constants
-				$.goomaps.mapconstants(options);
+				$.goomaps.mapConstants(options);
 
 				// Set the map center
 				if(options && options.center)
@@ -77,26 +70,26 @@
 					}
 					else if($.isArray(options.center))
 					{
-						options.center = $.goomaps.latlng(options.center);
+						options.center = $.goomaps.latLng(options.center);
 						map.setOptions(options);
 					}
 					else
 					{
-						$.error('Goomaps init: options.center must be either type Array or String');
+						if($.goomaps.debug && window.console) console.error('Goomaps init: options.center must be either type Array or String');
 					}
 				}
 
 				// Set any events
 				if(options && options.events)
 				{
-					$.goomaps.setevents(map, options.events);
+					$.goomaps.setEvents(map, options.events);
 				}
 
 				// Move the map, markers and infowindow to the element data
 				$(this).data('goomaps', {
 					"map": map,
-					"markers": markers,
-					"infowindow": infowindow
+					"markers": new Array(),
+					"infoWindow": new google.maps.InfoWindow()
 				});
 			});
 		},
@@ -115,7 +108,7 @@
 				var map = $(this).data('goomaps').map;
 
 				// Map any constant strings to Google Map Constants
-				$.goomaps.mapconstants(options);
+				$.goomaps.mapConstants(options);
 
 				// Set the map center
 				if(options && options.center)
@@ -129,19 +122,19 @@
 					}
 					else if($.isArray(options.center))
 					{
-						options.center = $.goomaps.latlng(options.center);
+						options.center = $.goomaps.latLng(options.center);
 						map.setOptions(options);
 					}
 					else
 					{
-						$.error('Goomaps init: options.center must be either type Array or String');
+						if($.goomaps.debug && window.console) console.error('Goomaps init: options.center must be either type Array or String');
 					}
 				}
 
 				// Set any events
 				if(options && options.events)
 				{
-					$.goomaps.setevents(map, options.events);
+					$.goomaps.setEvents(map, options.events);
 				}
 
 				// Update the stored map
@@ -155,7 +148,7 @@
 		 *
 		 *	@returns The Google Map of the selected element
 		 */
-		getmap: function()
+		getMap: function()
 		{
 			return $(this).data('goomaps').map;
 		},
@@ -190,7 +183,7 @@
 		 *
 		 * @returns {Object}   Returns the object passed in, for chainability
 		 */
-		setmarkers: function(markers)
+		setMarkers: function(markers)
 		{
 			return this.each(function(){
 
@@ -204,17 +197,20 @@
 				if($this.data('goomaps').markers.length)
 				{
 					$.each(markers, function(i, marker){
-						var current = $this.goomaps('getmarkers', marker.options);
+						var current = $this.goomaps('getMarkers', marker.options);
+
+						if($.goomaps.debug && window.console) console.warn("'Goomaps setMarkers': The following marker already exists:", marker);
+
 						if(!current.length)
 						{
-							var output = $.goomaps.generatemarker(markers, $this);
+							var output = $.goomaps.generateMarker(markers, $this);
 							$this.data('goomaps').markers.push(output[0]);
 						}
 					});
 				}
 				else
 				{
-					var output = $.goomaps.generatemarker(markers, $this);
+					var output = $.goomaps.generateMarker(markers, $this);
 					$.extend($this.data('goomaps'), {
 						"markers": output
 					});
@@ -236,7 +232,7 @@
 		 *
 		 * @returns {Array}   Array of matched markers, or empty Array
 		 */
-		getmarkers: function(data)
+		getMarkers: function(data)
 		{
 
 			// Collect any extra arguments
@@ -254,21 +250,33 @@
 			}
 
 			// Check if a dataset is being used, or a boolean function
-			else if($.isPlainObject(data) || $.isFunction(data)){
+			else if($.isPlainObject(data) || $.isFunction(data))
+			{
 				var position;
-				if(data.position && $.isArray(data.position)){
-					position = $.goomaps.latlng(data.position); // Get LatLng of position array
-				}else if(data.position && !$.isArray(data.position)){
-					if(window.console) console.warn('Goomaps getmarkers: Matching on position requires an array of coordinates');
+
+				if(data.position && $.isArray(data.position))
+				{
+					position = $.goomaps.latLng(data.position); // Get LatLng of position array
+				}
+				else if(data.position && !$.isArray(data.position))
+				{
+					if($.goomaps.debug && window.console) console.warn('Goomaps getMarkers: Matching on position requires an array of coordinates');
+
 					position = false;
 				}
 				$.each(markers, function(i, marker){
-					if(position){
+					if(position)
+					{
 						var mpos = marker.getPosition(); // Get marker position LatLng
+
 						if(mpos.equals(position)) results.push(marker); // check it equals position, add to results
-					}else if(isin(data, marker)){
+					}
+					else if(isin(data, marker))
+					{
 						results.push(marker); // check supplied data object
-					}else if($.isFunction(data) && data(marker, args)){
+					}
+					else if($.isFunction(data) && data(marker, args))
+					{
 						// use data as a filter-function (the filter function must be defined as 'function(marker, args)' and must return a boolean-value
 						results.push(marker);
 					}
@@ -286,9 +294,9 @@
 		 *
 		 * @returns {InfoWindow}   Google Maps Infowindow object
 		 */
-		getinfowindow: function()
+		getInfoWindow: function()
 		{
-			return $(this).data('goomaps').infowindow;
+			return $(this).data('goomaps').infoWindow;
 		}
 	};
 
@@ -309,7 +317,7 @@
 	{
 		for(prop in needle)
 		{
-			if(typeof(haystack[prop]) == 'undefined')
+			if((typeof(haystack[prop]) == 'undefined') || (needle[prop] != haystack[prop]))
 			{
 				return false;
 			}
@@ -319,7 +327,7 @@
 					return false;
 				}
 			}
-			if(needle[prop] != haystack[prop])
+			if()
 			{
 				return false;
 			}
@@ -338,7 +346,7 @@
 	 *	@param	{google.maps.Marker}	marker
 	 *	@param	{Object}							circle
 	 */
-	$.goomaps.incircle = function(marker, circle)
+	$.goomaps.inCircle = function(marker, circle)
 	{
 		if(marker && circle)
 		{
@@ -424,25 +432,25 @@
 	 *
 	 * @returns {Array} Array of Google Maps Marker objects
 	 */
-	$.goomaps.generatemarker = function(input, element)
+	$.goomaps.generateMarker = function(input, element)
 	{
 		// Create the output array
 		var output = new Array();
 
 		// Get the map
-		var map = $(element).goomaps('getmap');
+		var map = $(element).data('goomaps').map;
 
 		$.each(input, function(i, marker){
 			input[i].options.map = map;
 			// Custom Icon
 			if(marker.options.icon)
 			{
-				input[i].options.icon = $.goomaps.markerimage(marker.options.icon);
+				input[i].options.icon = $.goomaps.markerImage(marker.options.icon);
 			}
 			// Custom Shadow
 			if(marker.options.shadow)
 			{
-				input[i].options.shadow = $.goomaps.markerimage(marker.options.shadow);
+				input[i].options.shadow = $.goomaps.markerImage(marker.options.shadow);
 			}
 			// Animation
 			if(marker.options.animation)
@@ -457,27 +465,28 @@
 				}
 				else
 				{
-					if(window.console) console.warn("'Goomaps generatemarker function': "+input[i].options.animation+" animation type not supported.");
+					if($.goomaps.debug && window.console) console.warn("'Goomaps generatemarker function': "+input[i].options.animation+" animation type not supported.");
 				}
 			}
 			// Position (required, or fail)
 			if(marker.options.position && $.isArray(marker.options.position))
 			{
-				input[i].options.position = $.goomaps.latlng(marker.options.position);
+				input[i].options.position = $.goomaps.latLng(marker.options.position);
+
 				output[i] = new google.maps.Marker(input[i].options);
 			}
 			else if(marker.options.position && !$.isArray(marker.options.position))
 			{
-				if(window.console) console.error("'Goomaps generatemarker function': The position provided is not an array.");
+				if($.goomaps.debug && window.console) console.error("'Goomaps generateMarker function': The position provided is not an array.");
 			}
 			else
 			{
-				if(window.console) console.error("'Goomaps generatemarker function': A position must be provided as an array. None provided.");
+				if($.goomaps.debug && window.console) console.error("'Goomaps generateMarker function': A position must be provided as an array. None provided.");
 			}
 			// Infowindow, requires the marker to be set
 			if(marker.options.info)
 			{
-				var infowindow = $(element).goomaps('getinfowindow');
+				var infowindow = $(element).data('goomaps').infoWindow;
 
 				// initially hide the infowindow-content-element:
 				if(typeof marker.options.info === 'string' && marker.options.info.match('^#'))
@@ -485,12 +494,13 @@
 					$(marker.options.info).hide();
 				}
 
-				$.goomaps.setevents(output[i], {
+				$.goomaps.setEvents(output[i], {
 					'click': function(){
 						infowindow.close();
 						if(typeof marker.options.info === 'string' && marker.options.info.match('^#'))
 						{
 							$(marker.options.info).hide();
+
 							infowindow.setContent($(marker.options.info).html());
 						}
 						else
@@ -509,11 +519,11 @@
 			// Events, requires the marker to be set
 			if(marker.events)
 			{
-				$.goomaps.setevents(output[i], input[i].events);
+				$.goomaps.setEvents(output[i], input[i].events);
 			}
 		});
 		return output;
-	}
+	};
 	/**
 	 * Create a Google Maps LatLng object from array of coordinates
 	 *
@@ -521,7 +531,7 @@
 	 *
 	 * @returns {LatLng}   Google Maps LatLng object
 	 */
-	$.goomaps.latlng = function(coords)
+	$.goomaps.latLng = function(coords)
 	{
 		if(coords && $.isArray(coords))
 		{
@@ -529,7 +539,7 @@
 		}
 		else if(!coords || !$.isArray(coords))
 		{
-			if(window.console) console.error("'Goomaps latlng function': Must be provided with an array of coordinates.");
+			if($.goomaps.debug && window.console) console.error("'Goomaps latLng function': Must be provided with an array of coordinates.");
 			return false;
 		}
 	};
@@ -541,17 +551,17 @@
 	 *
 	 * @returns {LatLngBounds} Google Maps LatLngBounds object
 	 */
-	$.goomaps.latlngbounds = function(coords)
+	$.goomaps.latLngBounds = function(coords)
 	{
 		if(coords && $.isArray(coords))
 		{
-			var a = $.goomaps.latlng(coords[0]);
-			var b = $.goomaps.latlng(coords[1]);
+			var a = $.goomaps.latLng(coords[0]);
+			var b = $.goomaps.latLng(coords[1]);
 			return new google.maps.LatLngBounds(a, b);
 		}
 		else if(coords && !$.isArray(coords))
 		{
-			if(window.console) console.error("'Goomaps latlngbounds function': Coords provided are not an array.");
+			if($.goomaps.debug && window.console) console.error("'Goomaps latLngBounds function': Coords provided are not an array.");
 			return false;
 		}
 		else
@@ -578,7 +588,6 @@
 		{
 			if($.goomaps.defaults.region)
 			{
-				console.log(region);
 				var region = $.goomaps.defaults.region;
 			}
 			else
@@ -593,7 +602,7 @@
 				}
 				else
 				{
-					if($.goomaps.DEBUG && window.console) console.log('Geocoder status returned: '+status);
+					if($.goomaps.debug && window.console) console.log('Geocoder status returned: '+status);
 					callback(results);
 					return false;
 				}
@@ -604,15 +613,15 @@
 		{
 			if(typeof address != 'string' && !$.isFunction(callback))
 			{
-				if($.goomaps.DEBUG && window.console) return console.log('Geocoder requires an address string, and a callback function');
+				if($.goomaps.debug && window.console) console.error('Geocoder requires an address string, and a callback function');
 			}
 			else if(typeof address != 'string')
 			{
-				if($.goomaps.DEBUG && window.console) return console.log('Geocoder requires an address string');
+				if($.goomaps.debug && window.console) console.error('Geocoder requires an address string');
 			}
 			else if(!$.isFunction(callback))
 			{
-				if($.goomaps.DEBUG && window.console) return console.log('Geocoder requires a callback function');
+				if($.goomaps.debug && window.console) console.error('Geocoder requires a callback function');
 			}
 			return false;
 		}
@@ -625,7 +634,7 @@
 	 *
 	 * @returns {MarkerImage}   Google Maps MarkerImage object
 	 */
-	$.goomaps.markerimage = function(options)
+	$.goomaps.markerImage = function(options)
 	{
 		if(typeof options !== 'string')
 		{
@@ -665,9 +674,9 @@
 	 *
 	 * @deprecated
 	 */
-	$.goomaps.infowindow = function(marker, info, map, infowindow)
+	$.goomaps.infoWindow = function(marker, info, map, infowindow)
 	{
-		$.goomaps.setevents(marker, {
+		$.goomaps.setEvents(marker, {
 			'click': function(){
 				infowindow.close();
 				if(typeof info === 'string' && info.match('^#'))
@@ -692,7 +701,7 @@
 	 * @param	{String} method   Method of event: normal = DOM event listener, once = DOM event listener that fires only once
 	 *
 	 */
-	$.goomaps.setevents = function(target, events, method)
+	$.goomaps.setEvents = function(target, events, method)
 	{
 		if(method && method == 'once')
 		{
@@ -715,7 +724,7 @@
 	 *
 	 * @returns {Constant} Google Maps Constant
 	 */
-	$.goomaps.mapconstants = function(options)
+	$.goomaps.mapConstants = function(options)
 	{
 		if(options){
 			// MapTypeId
@@ -909,14 +918,16 @@
 	/**
 	 * Goomaps Earth Radius in kilometers
 	 */
-	$.goomaps.EARTH_RADIUS = 6371;
+	$.goomaps.EARTH_RADIUS = parseFloat('6371');
 	/**
 	 * Goomaps plugin version number
 	 */
-	$.goomaps.PLUGIN_VERSION = "1.0";
+	$.goomaps.PLUGIN_VERSION = parseFloat('1.0');
 	/**
 	 * Google Maps API version number
 	 */
-	$.goomaps.API_VERSION = "3.4";
+	$.goomaps.API_VERSION = parseFloat('3.4');
+
+	$.goomaps.debug = false;
 
 })(jQuery);
