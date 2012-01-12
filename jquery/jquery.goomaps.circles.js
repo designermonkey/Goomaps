@@ -17,7 +17,7 @@
 			 *
 			 * @returns {Object}   Returns the object passed in, for chainability
 			 */
-			setcircles: function(circles)
+			setCircles: function(circles)
 			{
 				return this.each(function(){
 
@@ -31,17 +31,21 @@
 					if($this.data('goomaps').circles && $this.data('goomaps').circles.length)
 					{
 						$.each(circles, function(i, circle){
-							var current = $this.goomaps('getcircles', circle.options);
+							var current = $this.goomaps('getCircles', circle.options);
 							if(!current.length)
 							{
-								var output = $.goomaps.generatecircle(circle, $this);
+								var output = $.goomaps.generateCircle(circle, $this);
 								$this.data('goomaps').circles.push(output[0]);
+							}
+							else
+							{
+								if($.goomaps.debug && window.console) console.warn("'Goomaps setCircles': The following circle already exists:", circle);
 							}
 						});
 					}
 					else
 					{
-						var output = $.goomaps.generatecircle(circles, $this);
+						var output = $.goomaps.generateCircle(circles, $this);
 						$.extend($this.data('goomaps'), {
 							"circles": output
 						});
@@ -63,29 +67,44 @@
 			 *
 			 * @returns {Array}   Array of matched circles, or empty Array
 			 */
-			getcircles: function(data)
+			getCircles: function(data)
 			{
 				var args = arguments;
+
 				var results = [];
+				
 				var circles = $(this).data('goomaps').circles;
+				
 				// Check for array number
-				if(data === 0 || typeof data === 'number'){
+				if(data === 0 || typeof data === 'number')
+				{
 					results.push(circles[data]);
-				}else if($.isPlainObject(data) || $.isFunction(data)){
+				}
+				else if($.isPlainObject(data) || $.isFunction(data))
+				{
 					var center;
-					if(data.center && $.isArray(data.center)){
+
+					if(data.center && $.isArray(data.center))
+					{
 						center = $.goomaps.latlng(data.center); // Get LatLng of position array
-					}else if(!$.isArray(data.position)){
-						if($.goomaps.debug && window.console) console.log('getcircles: Matching on center requires an array of coordinates');
+					}
+					else if(!$.isArray(data.position))
+					{
+						if($.goomaps.debug && $.goomaps.debug && window.console) console.log('Goomaps getCircles: Matching on center requires an array of coordinates');
 						center = false;
 					}
 					$.each(circles, function(i, circle){
-						if(center){
+						if(center)
+						{
 							var cpos = circle.getCenter(); // Get circle center LatLng
 							if(cpos.equals(center)) results.push(circle); // check it equals position, add to results
-						}else if(isin(data, circle)){
+						}
+						else if(isin(data, circle))
+						{
 							results.push(circle); // check supplied data object
-						}else if($.isFunction(data) && data(circle, args)){
+						}
+						else if($.isFunction(data) && data(circle, args))
+						{
 							// use data as a filter-function (the filter function must be defined as 'function(circle, ...)' and must return a boolean-value
 							results.push(circle);
 						}
@@ -119,40 +138,40 @@
 
 				if(circle.options.radius && !isNumber(circle.options.radius))
 				{
-					if(window.console) console.error("'Goomaps generatecircle function': The radius provided is not a number.");
+					if($.goomaps.debug && window.console) console.error("'Goomaps generatecircle function': The radius provided is not a number.");
 				}
 				else if(!circle.options.radius)
 				{
-					if(window.console) console.error("'Goomaps generatecircle function': A radius must be provided as a number.");
+					if($.goomaps.debug && window.console) console.error("'Goomaps generatecircle function': A radius must be provided as a number.");
 				}
 
 				if(circle.options.strokeWeight && !isNumber(circle.options.strokeWeight))
 				{
-					if(window.console) console.error("'Goomaps generatecircle function': The strokeWeight provided is not a number.");
+					if($.goomaps.debug && window.console) console.error("'Goomaps generatecircle function': The strokeWeight provided is not a number.");
 				}
 				else if(!circle.options.strokeWeight)
 				{
-					if(window.console) console.error("'Goomaps generatecircle function': A strokeWeight must be provided as a number.");
+					if($.goomaps.debug && window.console) console.error("'Goomaps generatecircle function': A strokeWeight must be provided as a number.");
 				}
 
 				if(!circle.options.fillColor)
 				{
-					if(window.console) console.error("'Goomaps generatecircle function': A fillColor must be provided.");
+					if($.goomaps.debug && window.console) console.error("'Goomaps generatecircle function': A fillColor must be provided.");
 				}
 
 				if(!circle.options.strokeColor)
 				{
-					if(window.console) console.error("'Goomaps generatecircle function': A strokeColor must be provided.");
+					if($.goomaps.debug && window.console) console.error("'Goomaps generatecircle function': A strokeColor must be provided.");
 				}
 
 				if(!circle.options.fillOpacity)
 				{
-					if(window.console) console.error("'Goomaps generatecircle function': A fillOpacity must be provided.");
+					if($.goomaps.debug && window.console) console.error("'Goomaps generatecircle function': A fillOpacity must be provided.");
 				}
 
 				if(!circle.options.strokeOpacity)
 				{
-					if(window.console) console.error("'Goomaps generatecircle function': A strokeOpacity must be provided.");
+					if($.goomaps.debug && window.console) console.error("'Goomaps generatecircle function': A strokeOpacity must be provided.");
 				}
 
 				if(circle.options.center && $.isArray(circle.options.center))
@@ -162,16 +181,16 @@
 				}
 				else if(circle.options.center && !$.isArray(circle.options.center))
 				{
-					if(window.console) console.error("'Goomaps generatecircle function': The center provided is not an array.");
+					if($.goomaps.debug && window.console) console.error("'Goomaps generatecircle function': The center provided is not an array.");
 				}
 				else
 				{
-					if(window.console) console.error("'Goomaps generatecircle function': A center must be provided as an array. None provided.");
+					if($.goomaps.debug && window.console) console.error("'Goomaps generatecircle function': A center must be provided as an array. None provided.");
 				}
 
 				if(circle.events)
 				{
-					$.goomaps.setevents(output[i], input[i].events);
+					$.goomaps.setEvents(output[i], input[i].events);
 				}
 			});
 			return output;
