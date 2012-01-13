@@ -199,7 +199,7 @@
 					$.each(markers, function(i, marker){
 						var current = $this.goomaps('getMarkers', marker.options);
 
-						if($.goomaps.debug && window.console) console.warn("'Goomaps setMarkers': The following marker already exists:", marker);
+						if(current.length && $.goomaps.debug && window.console) console.warn("'Goomaps setMarkers': The following marker already exists:", marker);
 
 						if(!current.length)
 						{
@@ -284,7 +284,7 @@
 			}
 
 			// Check for no data, also check that a number of 0 isn't passed
-			if(data !== 0 && !data) results.concat(markers);
+			if(data !== 0 && !data) results = markers;
 
 			// Wrap the results in jQuery for jQuery iteration with .each()
 			return $(results);
